@@ -4,9 +4,7 @@
 {% block content %}
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tabla con Filtro, Edición y Operaciones</title>
+  <title>Consultar Usuario</title>
 
   <!--Script Contenido Estilos de Tailwindcss-->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -61,18 +59,17 @@
 <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
   <thead>
     <tr>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Nombres</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Apellidos</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Tipo Doc</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Numero ID</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Correo Sena</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Celular</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Rol</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Tipo Cuentadante</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Tipo Contrato</th>
-      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Duracion Contrato</th>
-      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Estado Usuario</th>
-      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Acciones</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Fecha</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Nombre</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Categoría</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Estado</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Cant</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Vlr Unid</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Vlr Total</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Descripción</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Observación</th>
+      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Factura</th>
+      
     </tr>
   </thead>
   <tbody class="bg-white">
@@ -80,53 +77,62 @@
       <td class="text-[0.7rem] text-center leading-5 truncate  text-gray-900 px-3 py-2 whitespace-no-wrap border-b border-gray-200" contenteditable="true">Chris Andrews
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">Hay Murillo
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.fechaElemento }}
         </div>
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">CC
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.nombreElemento }}
 
         </div>
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">1099ss8777
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.categoriaElemento }}
 
         </div>
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">analss236@gmail.com
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.estadoElemento }}
 
         </div>
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">32384847
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.cantidadElemento }}
 
         </div>
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">Instructor
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.valorUnidadElemento }}
 
         </div>
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">SU ADMIN
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.valorTotalElemento }}
 
         </div>
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">Planta
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.descripcionElemento }}
 
         </div>
       </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">6 meses
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.observacionElemento }}
 
         </div>
       </td>
+
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
+        <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.facturaElemento }}
+
+        </div>
+      </td>
+
+
+      <!--Tener el sibolo de active -->
+      <!--<td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
         <span
             class="inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-green-800 bg-green-100 rounded-full">Active</span>
-      </td>
+      </td>-->
 
       <!--Botones de Visualizar Editar y ELiminar-->
 
