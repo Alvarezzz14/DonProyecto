@@ -33,6 +33,7 @@ urlpatterns = [
     path('listarPrestamos/', views.listar_prestamos, name='listar_prestamos'),
     path('formElementos/', views.formElementos_view, name='formElementos_view'),
     path('listarElementos/', views.listar_elementos, name='listar_elementos'),
+    path('eliminar_registro/<int:id>/', views.eliminar_registro, name='eliminar_registro'), #eliminar registro de la base de datos desde consultar elementos 
 
 ]
 

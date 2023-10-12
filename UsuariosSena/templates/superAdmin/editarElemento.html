@@ -1,19 +1,18 @@
 {% extends '../superAdmin/basesuadmin.html' %}
 
 {% load static %}
-{% block content %}
 
 
-<head>
-    <link rel="stylesheet" href="{% static 'css/superAdmin/stylesEditarElemento.css' %}">
-    <title>Formulario Editar Elemento</title>
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/superAdmin/stylesEditarElemento.css' %}">
+{% endblock extrastyle %}
     
-</head>
-
-    <section class="section">
-        
+    {% block title %}
+        Editar Elemento
+    {% endblock title %}
+    
         <!-- Inicio del Forumlario-->
-    
+        {% block content %}    
            
         <div class="signupFrm">
             <form action="" class="form">
