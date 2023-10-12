@@ -83,6 +83,8 @@
         </aside>  
 
         <!-- Cotenido principal -->
+        
+
         {% block content %}
 
         {% endblock %}
@@ -92,6 +94,22 @@
     </section>
 
     <script src="{% static 'js/scriptBaseSuAdmin.js' %}"></script>
+
+    <!-- alert sweet2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    {% if messages %}
+            {% for m in messages %}
+            <script>
+            Swal.fire({
+                title: 'alerta!',
+                text: '{{m}}',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              })
+        </script>
+            {% endfor %}
+    {% endif %}
+    <!-- fin  alert sweet2 -->
 
 </body>
 </html>
