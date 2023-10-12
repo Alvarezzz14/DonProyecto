@@ -29,3 +29,9 @@ boton de buscar elemento en plantilla crear prestamo
 
 logica nombre elemento en plantilla crear prestamo
 
+Error en los choices de estado elemento 
+
+preguntar por prestamos es un estado...... 
+
+consumibles tambine salen como prestamo sin fecha de regreso 
+
