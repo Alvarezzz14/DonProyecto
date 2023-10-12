@@ -96,4 +96,7 @@ def listar_elementos(request):
     elementos = Elementos.objects.all()
     return render(request, 'superAdmin/listarElemento.html', {'elementos': elementos})
 
+def consultarElementos(request):
+    elementos = Elementos.objects.all()
+    return render(request, 'superAdmin/consultarElementos.html', {'elementos': elementos})
 

@@ -29,6 +29,7 @@ urlpatterns = [
     path('formPrestamos/', views.formPrestamos_view, name='formPrestamos_view'),
     path('formElementos/', views.formElementos_view, name='formElementos_view'),
     path('consultarUsuario/', views.consultarUsuario_view, name='consultarUsuario_view'),
+    path('consultarElementos/', views.consultarElementos, name='consultarElementos_view'),
     path('listarPrestamos/', views.listar_prestamos, name='listar_prestamos'),
     path('formElementos/', views.formElementos_view, name='formElementos_view'),
     path('listarElementos/', views.listar_elementos, name='listar_elementos'),

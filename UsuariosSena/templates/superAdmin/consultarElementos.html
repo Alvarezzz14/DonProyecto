@@ -73,9 +73,8 @@
     </tr>
   </thead>
   <tbody class="bg-white">
+    {% for elemento in elementos %}
     <tr>
-      <td class="text-[0.7rem] text-center leading-5 truncate  text-gray-900 px-3 py-2 whitespace-no-wrap border-b border-gray-200" contenteditable="true">Chris Andrews
-      </td>
       <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
         <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.fechaElemento }}
         </div>
@@ -153,77 +152,7 @@
         </button>
       </td>
     </tr>
-    <tr>
-      <td class="text-[0.7rem] text-center leading-5 truncate  text-gray-900 px-3 py-2 whitespace-no-wrap border-b border-gray-200" contenteditable="true">Chris Andrews
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">Cramp Murillo
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">CC
-
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">10998777
-
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">anal236@gmail.com
-
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">32384847
-
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">Instructor
-
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">SU ADMIN
-
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">Planta
-
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-[0.7rem] leading-5 text-gray-500">6 meses
-
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-        <span
-            class="inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-green-800 bg-green-100 rounded-full">Active</span>
-      </td>
-
-      <!--Botones de Visualizar Editar y ELiminar-->
-
-      <td class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
-        <button onclick="eliminarFila(1)"><svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20"/><path d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z" fill="#fff"/><path d="m45.4 32c0 7.5-6 13.5-13.5 13.5s-13.5-6-13.5-13.5 6-13.5 13.5-13.5 13.5 6 13.5 13.5" fill="#42ade2"/><path d="m39.4 32c0 4.1-3.4 7.5-7.5 7.5s-7.5-3.4-7.5-7.5 3.4-7.5 7.5-7.5 7.5 3.4 7.5 7.5" fill="#231f20"/>
-        </svg>
-      </button>
-        <button onclick="editarFila(this)"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400" fill="none"
-          viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-      </svg></button>
-        <button onclick="guardarEdicion(this)"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400" fill="none"
-          viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-           </svg>
-        </button>
-      </td>
-    </tr>
+    {% endfor %}
   </tbody>
 </table>
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
