@@ -1,0 +1,31 @@
+Task -- FrontEnd
+
+
+- Mnesajes Modal ---- Darwineta
+
+Calendario  ---- Karim Cala
+
+Dashboard  --- Miguelo
+
+consultar elementos esta saliendo la inicial en categoria y en estado y no el nombre compelto ---- Backend
+
+tamaño fuente forularios y intensidad input ----- AA
+
+tamaño boton cargar imagen en resposnive se ve muy poco -- AA
+
+aside salir se le monta  --- MIGO
+
+footer --- AA
+
+link de la base --- 
+
+Botones de visualizar y eliminar qeu afecte base de datos y editar -- AA
+
+template de editar Prestamo - Usuarios - Elemntos --- 
+
+template Visualizar (individual) Prestamo - Elemento - usuario 
+
+boton de buscar elemento en plantilla crear prestamo
+
+logica nombre elemento en plantilla crear prestamo
+
