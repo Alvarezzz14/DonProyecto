@@ -69,11 +69,10 @@ function filtrarTabla() {
     cell5.innerHTML = '<button onclick="editarFila(this)">Editar</button><button onclick="guardarEdicion(this)">Guardar</button>';
   } */
   
-  function eliminarFila(index) {
+  /*function eliminarFila(index) {
     const table = document.getElementById('tablaPersonas').getElementsByTagName('tbody')[0];
     if (table.rows.length > 0) {
       table.deleteRow(index);
     }
-  }
+  }*/
 
-  

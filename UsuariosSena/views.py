@@ -1,13 +1,18 @@
-from django.shortcuts import render, HttpResponseRedirect, redirect
+from django.shortcuts import render, HttpResponseRedirect, redirect, get_object_or_404
 from .forms import UsuariosSenaForm, LoginForm, ElementosForm, PrestamosForm
 from .models import UsuariosSena, Prestamo, Elementos
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 
 # Create your views here.
 
 def login_view(request):
     return render(request, 'indexLogin.html')
+
+def homedash(request):
+    return render(request, 'superAdmin/basedashboard.html')
 
 def consultarUsuario_view(request):
     return render(request, 'superAdmin/consultarUsuario.html')
@@ -101,30 +106,20 @@ def consultarElementos(request):
     return render(request, 'superAdmin/consultarElementos.html', {'elementos': elementos})
 
 
+def eliminar_registro(request, id):
+    try:
+        # Busca el objeto con el ID especificado o devuelve un error 404 si no existe
+        objeto = get_object_or_404(Elementos, id=id)
 
+        # Realiza la eliminación del objeto
+        objeto.delete()
 
+        # Si se elimina correctamente, devuelve una respuesta JSON con un mensaje de éxito
+        response_data = {'mensaje': 'Registro eliminado correctamente'}
+        return JsonResponse(response_data)
 
+    except Exception as e:
+        # Si se produce un error, devuelve una respuesta JSON con un mensaje de error
+        response_data = {'error': str(e)}
+        return JsonResponse(response_data, status=400)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def homedash(request):
-    return render(request, 'superAdmin/basedashboard.html')
