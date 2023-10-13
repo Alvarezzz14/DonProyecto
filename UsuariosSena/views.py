@@ -100,3 +100,5 @@ def consultarElementos(request):
     elementos = Elementos.objects.all()
     return render(request, 'superAdmin/consultarElementos.html', {'elementos': elementos})
 
+def homedash(request):
+    return render(request, 'superAdmin/basedashboard.html')

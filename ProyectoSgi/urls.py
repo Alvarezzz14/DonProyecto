@@ -33,6 +33,7 @@ urlpatterns = [
     path('listarPrestamos/', views.listar_prestamos, name='listar_prestamos'),
     path('formElementos/', views.formElementos_view, name='formElementos_view'),
     path('listarElementos/', views.listar_elementos, name='listar_elementos'),
+    path('dashboard/', views.homedash, name='homedash'),
 
 ]
 
