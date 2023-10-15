@@ -18,24 +18,27 @@ def consultarUsuario_view(request):
     return render(request, 'superAdmin/consultarUsuario.html')
 
 def registroUsuario_view(request):
-    registro_exitoso = False  # Variable de estado para el registro exitoso
-    nombreVar=request.POST.get('nombre')
-    apellidoVar=request.POST.get('apellidoo')
-    tipoIdentificacionVar=request.POST.get('tipoIdentificacion')
-    numeroIdentificacionVar=request.POST.get('numeroIdentificacion')
-    correoSenaVar=request.POST.get('correoSena')
-    celularVar=request.POST.get('celular')
-    rolVar=request.POST.get('rol')
-    cuentadanteVar=request.POST.get('cuentadante')
-    tipoContratoVar=request.POST.get('tipoContrato')
-    duracionContratoVar=request.POST.get('cantidad')
-    contraSenaVar=request.POST.get('contraSena')
-    validacionContraSenaVar = request.POST.get('validacionContraSena')
-    fotoUsuarioVar=request.FILES.get('fotoUsuario')
+    
+    if request.method == 'POST':
+        registro_exitoso = False  # Variable de estado para el registro exitoso
+        nombreVar=request.POST.get('nombre')
+        apellidoVar=request.POST.get('apellidoo')
+        tipoIdentificacionVar=request.POST.get('tipoIdentificacion')
+        numeroIdentificacionVar=request.POST.get('numeroIdentificacion')
+        correoSenaVar=request.POST.get('correoSena')
+        celularVar=request.POST.get('celular')
+        rolVar=request.POST.get('rol')
+        cuentadanteVar=request.POST.get('cuentadante')
+        tipoContratoVar=request.POST.get('tipoContrato')
+        duracionContratoVar=request.POST.get('duracionContrato')
+        contraSenaVar=request.POST.get('contraSena')
+        validacionContraSenaVar = request.POST.get('validacionContraSena')
+        fotoUsuarioVar=request.FILES.get('fotoUsuario')
 
-    user= UsuariosSena(nombre=nombreVar, apellidoo=apellidoVar, tipoIdentificacion=tipoIdentificacionVar, numeroIdentificacion=numeroIdentificacionVar, correoSena=correoSenaVar, celular=celularVar, rol=rolVar, cuentadante=cuentadanteVar, tipoContrato=tipoContratoVar, duracionContrato=duracionContratoVar, contraSena=contraSenaVar, validacionContraSena=validacionContraSenaVar, fotoUsuario=fotoUsuarioVar)
-    user.save()
-    messages.success(request,"Usuario Registrado con Exito")#mensaje de alerta
+        user= UsuariosSena(nombre=nombreVar, apellidoo=apellidoVar, tipoIdentificacion=tipoIdentificacionVar, numeroIdentificacion=numeroIdentificacionVar, correoSena=correoSenaVar, celular=celularVar, rol=rolVar, cuentadante=cuentadanteVar, tipoContrato=tipoContratoVar, duracionContrato=duracionContratoVar, contraSena=contraSenaVar, validacionContraSena=validacionContraSenaVar, fotoUsuario=fotoUsuarioVar)
+        user.save()
+        messages.success(request,"Usuario Registrado con Exito")#mensaje de alerta
+    
 
     return render(request, 'superAdmin/registroUsuario.html')
 
