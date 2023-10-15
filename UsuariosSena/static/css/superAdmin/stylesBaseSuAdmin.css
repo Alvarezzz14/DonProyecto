@@ -200,6 +200,9 @@ aside{
     margin-left: calc(1rem- 3px);
 }
 
+.contenidoExtra{
+    box-shadow:  2px 5px 5px 4px #b3b3b3;
+}
 
 @media screen and (max-width:768px){
     #hambur{
