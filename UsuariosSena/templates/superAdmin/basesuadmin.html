@@ -119,17 +119,64 @@
     <!-- alert sweet2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     {% if messages %}
-            {% for m in messages %}
-            <script>
-            Swal.fire({
-                title: 'alerta!',
-                text: '{{m}}',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
-              })
+    {% for message in messages %}
+        <script>
+            var messageType = "{{ message.tags }}";
+            var messageText = "{{ message }}";
+            var confirmButtonText = "Aceptar";
+            
+            if (messageType === "success") {
+                Swal.fire({
+                    title: 'Éxito',
+                    text: messageText,
+                    icon: 'success',
+                    confirmButtonText: confirmButtonText
+                });
+            } else if (messageType === "warning") {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: messageText,
+                    icon: 'warning',
+                    confirmButtonText: confirmButtonText,
+                    showCancelButton: true,
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                          Swal.fire(
+                            'Eliminado!',
+                            'Eliminado Correctamente.',
+                            'success'
+                          )
+                        }
+                      });
+                
+            } else if (messageType === "error") {
+                Swal.fire({
+                    title: 'Error',
+                    text: messageText,
+                    icon: 'error',
+                    confirmButtonText: confirmButtonText
+                });
+            } else if (messageType === "info") {
+                Swal.fire({
+                    title: 'Información',
+                    text: messageText,
+                    icon: 'info',
+                    confirmButtonText: confirmButtonText
+                });
+            } else {
+                // Mensaje personalizado para cualquier otro tipo
+                Swal.fire({
+                    title: 'Mensaje personalizado',
+                    text: messageText,
+                    icon: 'info',
+                    confirmButtonText: confirmButtonText
+                });
+            }
         </script>
-            {% endfor %}
-    {% endif %}
+    {% endfor %}
+{% endif %}
+
     <!-- fin  alert sweet2 -->
     
 

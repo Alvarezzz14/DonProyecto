@@ -202,6 +202,7 @@ aside{
 
 .contenidoExtra{
     box-shadow:  2px 5px 5px 4px #b3b3b3;
+    background-color: white;
 }
 
 @media screen and (max-width:768px){

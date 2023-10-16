@@ -1,7 +1,3 @@
-.section{
-  width: 98%;
-  box-shadow:  2px 5px 5px 4px #b3b3b3;
-}
 
 
 /*Estilos del Formulario Registro Usuarios*/
@@ -23,8 +19,8 @@ box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
 }
 
 .title {
-font-size: 3rem;
-font-weight: 900;
+font-size: 2rem;
+font-weight: 800;
 margin-bottom: 2rem;
 text-align: center;
 }
@@ -139,6 +135,7 @@ margin-bottom: 17px;
   cursor: pointer;
   font-size: 1rem;
   margin-top: 30px;
+  
 }
 
 .submitBtn:hover {
@@ -298,7 +295,7 @@ color: rgb(0, 0, 0);
     
 }
   .title{
-      font-size: 2rem;
+      font-size: 1.8rem;
       
   }
   .container-1{

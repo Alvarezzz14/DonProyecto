@@ -98,6 +98,8 @@ def formElementos_view(request):
 
         elementos= Elementos(fechaElemento=fechaElementoVar, nombreElemento=nombreElementoVar, categoriaElemento=categoriaElementoVar, estadoElemento=estadoElementoVar, cantidadElemento=cantidadElementoVar, valorUnidadElemento=valorUnidadElementoVar, valorTotalElemento=valorTotalElementoVar, serialSenaElemento=serialSenaElementoVar, descripcionElemento=descripcionElementoVar, observacionElemento=observacionElementoVar, facturaElemento=facturaElementoVar)
         elementos.save()
+        messages.success(request,'Elemento Guardado Exitosamente')
+        
     return render(request, 'superAdmin/formElementos.html')
 
 def listar_elementos(request):
@@ -116,13 +118,18 @@ def eliminarElemento(request, id):
 
         # Realiza la eliminación del objeto
         objeto.delete()
+        
+        messages.warning(request,"¿Esta Seguro Que Desea Eliminar el Elemento?")#mensaje de alerta
 
         # Si se elimina correctamente, devuelve una respuesta JSON con un mensaje de éxito
-        response_data = {'mensaje': 'Registro eliminado correctamente'}
-        return JsonResponse(response_data)
+        #response_data = {'mensaje': 'Registro eliminado correctamente'}
+        #return JsonResponse(response_data)
 
     except Exception as e:
         # Si se produce un error, devuelve una respuesta JSON con un mensaje de error
-        response_data = {'error': str(e)}
-        return JsonResponse(response_data, status=400)
+        messages.error(request, "No se encontro el Elemento Seleccionado")
+        
+        return redirect('consultarElementos')
+    
+    return redirect('consultarElementos')
 
