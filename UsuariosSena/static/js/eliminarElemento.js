@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const botonesEliminar = document.querySelectorAll(".eliminar-registro");
+    const botonesEliminar = document.querySelectorAll(".eliminarElemento");
   
     botonesEliminar.forEach(boton => {
       boton.addEventListener("click", function() {
         const registroId = this.getAttribute("data-id");
   
         // Realiza una solicitud al servidor para eliminar el registro utilizando Fetch, Axios u otra biblioteca
-        fetch(`/eliminar_registro/${registroId}/`, {
+        fetch(`/eliminarElemento/${registroId}/`, {
           method: "POST",
           headers: {
             "X-CSRFToken": getCookie("csrftoken") // Asegúrate de obtener la cookie CSRF

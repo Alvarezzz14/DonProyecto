@@ -109,7 +109,7 @@ def consultarElementos(request):
     return render(request, 'superAdmin/consultarElementos.html', {'elementos': elementos})
 
 
-def eliminar_registro(request, id):
+def eliminarElemento(request, id):
     try:
         # Busca el objeto con el ID especificado o devuelve un error 404 si no existe
         objeto = get_object_or_404(Elementos, id=id)
