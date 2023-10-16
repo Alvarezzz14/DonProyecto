@@ -45,9 +45,9 @@ margin-bottom: 17px;
   left: 0px;
   height: 100%;
   width: 110%;
-  border: 1px solid #DADCE0;
+  border: 1px solid #b6b8bc;
   border-radius: 7px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   padding: 0 20px;
   outline: none;
   background: none;
@@ -69,8 +69,8 @@ margin-bottom: 17px;
   left: 15px;
   padding: 0 4px;
   background-color: white;
-  color: #DADCE0;
-  font-size: 0.6rem;
+  color: #8d94a1;
+  font-size: 0.9rem;
   transition: 0.5s;
   z-index: 0;
 }
@@ -87,12 +87,13 @@ margin-bottom: 17px;
   margin: 0 10px;
   padding: 15px 30px;
   border: none;
-  color: #fc7323;
+  color: #ffffff;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 800;
   margin-top: 30px;
+  background-color: #238276;
 }
 
 .submitBtn:hover {
@@ -244,6 +245,15 @@ margin-bottom: 1rem;
   .labelform{
       font-size: 0.5rem;
   }
+  .inputform:focus + .labelform {
+    font-size: 0.7rem;
+    
+    
+  }
+  .selectorimagen{
+    width: 100%;
+  }
+  
 }
 
 @media (max-width: 768px) {
@@ -259,6 +269,13 @@ margin-bottom: 1rem;
       .signupFrm{
           font-size: 0.4rem;
       }
-      
+      .selectorimagen{
+        width: 50%;
+      }
+      .inputform:focus + .labelform {
+        font-size: 0.7rem;
+        
+        
+      }
 
 }
