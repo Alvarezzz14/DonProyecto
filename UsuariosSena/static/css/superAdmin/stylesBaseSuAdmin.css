@@ -200,6 +200,11 @@ aside{
     margin-left: calc(1rem- 3px);
 }
 
+.contenidoExtra{
+    
+    
+    margin: 1px;
+}
 
 @media screen and (max-width:768px){
     #hambur{

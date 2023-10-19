@@ -25,15 +25,16 @@ from UsuariosSena import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login_view, name='login_view'),
+    path('dashboard/', views.homedash, name='homedash'),
     path('regUsuario/', views.registroUsuario_view, name='registroUsuario_view'),
     path('formPrestamos/', views.formPrestamos_view, name='formPrestamos_view'),
     path('formElementos/', views.formElementos_view, name='formElementos_view'),
     path('consultarUsuario/', views.consultarUsuario_view, name='consultarUsuario_view'),
-    path('consultarElementos/', views.consultarElementos, name='consultarElementos_view'),
+    path('consultarElementos/', views.consultarElementos, name='consultarElementos'),
     path('listarPrestamos/', views.listar_prestamos, name='listar_prestamos'),
     path('formElementos/', views.formElementos_view, name='formElementos_view'),
     path('listarElementos/', views.listar_elementos, name='listar_elementos'),
-    path('eliminar_registro/<int:id>/', views.eliminar_registro, name='eliminar_registro'), #eliminar registro de la base de datos desde consultar elementos 
+    path('eliminarElemento/<int:id>/', views.eliminarElemento, name='eliminarElemento'), #eliminar registro de la base de datos desde consultar elementos 
 
 ]
 

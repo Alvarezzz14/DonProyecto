@@ -11,28 +11,34 @@ from django.views.decorators.http import require_POST
 def login_view(request):
     return render(request, 'indexLogin.html')
 
+def homedash(request):
+    return render(request, 'superAdmin/basedashboard.html')
+
 def consultarUsuario_view(request):
     return render(request, 'superAdmin/consultarUsuario.html')
 
 def registroUsuario_view(request):
-    registro_exitoso = False  # Variable de estado para el registro exitoso
-    nombreVar=request.POST.get('nombre')
-    apellidoVar=request.POST.get('apellidoo')
-    tipoIdentificacionVar=request.POST.get('tipoIdentificacion')
-    numeroIdentificacionVar=request.POST.get('numeroIdentificacion')
-    correoSenaVar=request.POST.get('correoSena')
-    celularVar=request.POST.get('celular')
-    rolVar=request.POST.get('rol')
-    cuentadanteVar=request.POST.get('cuentadante')
-    tipoContratoVar=request.POST.get('tipoContrato')
-    duracionContratoVar=request.POST.get('cantidad')
-    contraSenaVar=request.POST.get('contraSena')
-    validacionContraSenaVar = request.POST.get('validacionContraSena')
-    fotoUsuarioVar=request.FILES.get('fotoUsuario')
+    
+    if request.method == 'POST':
+        registro_exitoso = False  # Variable de estado para el registro exitoso
+        nombreVar=request.POST.get('nombre')
+        apellidoVar=request.POST.get('apellidoo')
+        tipoIdentificacionVar=request.POST.get('tipoIdentificacion')
+        numeroIdentificacionVar=request.POST.get('numeroIdentificacion')
+        correoSenaVar=request.POST.get('correoSena')
+        celularVar=request.POST.get('celular')
+        rolVar=request.POST.get('rol')
+        cuentadanteVar=request.POST.get('cuentadante')
+        tipoContratoVar=request.POST.get('tipoContrato')
+        duracionContratoVar=request.POST.get('duracionContrato')
+        contraSenaVar=request.POST.get('contraSena')
+        validacionContraSenaVar = request.POST.get('validacionContraSena')
+        fotoUsuarioVar=request.FILES.get('fotoUsuario')
 
-    user= UsuariosSena(nombre=nombreVar, apellidoo=apellidoVar, tipoIdentificacion=tipoIdentificacionVar, numeroIdentificacion=numeroIdentificacionVar, correoSena=correoSenaVar, celular=celularVar, rol=rolVar, cuentadante=cuentadanteVar, tipoContrato=tipoContratoVar, duracionContrato=duracionContratoVar, contraSena=contraSenaVar, validacionContraSena=validacionContraSenaVar, fotoUsuario=fotoUsuarioVar)
-    user.save()
-    messages.success(request,"Usuario Registrado con Exito")#mensaje de alerta
+        user= UsuariosSena(nombre=nombreVar, apellidoo=apellidoVar, tipoIdentificacion=tipoIdentificacionVar, numeroIdentificacion=numeroIdentificacionVar, correoSena=correoSenaVar, celular=celularVar, rol=rolVar, cuentadante=cuentadanteVar, tipoContrato=tipoContratoVar, duracionContrato=duracionContratoVar, contraSena=contraSenaVar, validacionContraSena=validacionContraSenaVar, fotoUsuario=fotoUsuarioVar)
+        user.save()
+        messages.success(request,"Usuario Registrado con Exito")#mensaje de alerta
+    
 
     return render(request, 'superAdmin/registroUsuario.html')
 
@@ -92,6 +98,8 @@ def formElementos_view(request):
 
         elementos= Elementos(fechaElemento=fechaElementoVar, nombreElemento=nombreElementoVar, categoriaElemento=categoriaElementoVar, estadoElemento=estadoElementoVar, cantidadElemento=cantidadElementoVar, valorUnidadElemento=valorUnidadElementoVar, valorTotalElemento=valorTotalElementoVar, serialSenaElemento=serialSenaElementoVar, descripcionElemento=descripcionElementoVar, observacionElemento=observacionElementoVar, facturaElemento=facturaElementoVar)
         elementos.save()
+        messages.success(request,'Elemento Guardado Exitosamente')
+        
     return render(request, 'superAdmin/formElementos.html')
 
 def listar_elementos(request):
@@ -103,20 +111,25 @@ def consultarElementos(request):
     return render(request, 'superAdmin/consultarElementos.html', {'elementos': elementos})
 
 
-def eliminar_registro(request, id):
+def eliminarElemento(request, id):
     try:
         # Busca el objeto con el ID especificado o devuelve un error 404 si no existe
         objeto = get_object_or_404(Elementos, id=id)
 
         # Realiza la eliminación del objeto
         objeto.delete()
+        
+        messages.warning(request,"¿Esta Seguro Que Desea Eliminar el Elemento?")#mensaje de alerta
 
         # Si se elimina correctamente, devuelve una respuesta JSON con un mensaje de éxito
-        response_data = {'mensaje': 'Registro eliminado correctamente'}
-        return JsonResponse(response_data)
+        #response_data = {'mensaje': 'Registro eliminado correctamente'}
+        #return JsonResponse(response_data)
 
     except Exception as e:
         # Si se produce un error, devuelve una respuesta JSON con un mensaje de error
-        response_data = {'error': str(e)}
-        return JsonResponse(response_data, status=400)
+        messages.error(request, "No se encontro el Elemento Seleccionado")
+        
+        return redirect('consultarElementos')
+    
+    return redirect('consultarElementos')
 

@@ -3,32 +3,36 @@
 
 {% load static %}
 
+
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/superAdmin/stylesregusuario1.css' %}">
+{% endblock extrastyle %}
+        
+
+{% block title %} Formulario Registro Usuarios {% endblock title %}
+       
+
 {% block content %}
-<head>
-    
-    <link rel="stylesheet" href="{% static 'css/superAdmin/stylesregusuario.css' %}">
-    <title>Formulario Registro Usuarios</title>
-    
-</head>
 
 <section class="section">
         
     <!-- Inicio del Forumlario-->
 
         <div class="signupFrm">
-            <form action="/regUsuario/" class="form" method="post">
-                <h1 class="title">Registro de Usuarios</h1>
+            <form action="/regUsuario/" class="form" method="post" enctype="multipart/form-data">
+                <h1 class="title" >Registro de Usuarios</h1>
   
                 {% csrf_token %}
                 
             <div class="container-1">
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="Nombres" name="nombre" required>
-                    <label for="" class="labelform">Nombres</label>
+                    <input type="text"  class="inputform" placeholder="a"  name="nombre" id="nombre" required>
+                    <label for="nombre" class="labelform">Nombres</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" name="apellidoo" placeholder="a" required>
-                    <label for="" class="labelform" name="apellidoo">Apellidos</label>
+                    <input type="text" class="inputform" name="apellidoo" placeholder="a" id="apellidoo"required>
+                    <label for="apellidoo" class="labelform" name="apellidoo">Apellidos</label>
                 </div>
                 <div class="selectContainer">                   
                     <label for="tipoIdentificacion" class="labelformselect">Tipo Documento</label>
@@ -42,17 +46,17 @@
                     </div>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" name="numeroIdentificacion" placeholder="a" required>
-                    <label for="" class="labelform" name="numeroIdentificacion">Numero Id</label>
+                    <input type="text" class="inputform" name="numeroIdentificacion" placeholder="a" id="numeroIdentificacion" required>
+                    <label for="numeroIdentificacion" class="labelform" name="numeroIdentificacion">Numero Id</label>
                 </div>    
             </div>
             <div class="container-1">
                 <div class="inputContainer">
-                    <input type="email" class="inputform" placeholder="a" name="correoSena" required>
+                    <input type="email" class="inputform" placeholder="a" name="correoSena" id="correoSena" required>
                     <label for="correoSena" class="labelform">Correo Sena</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="celular" required>
+                    <input type="text" class="inputform" placeholder="a" name="celular" id="celular" required>
                     <label for="celular" class="labelform">Celular</label>
                 </div>
                 <div class="selectContainer">                   
@@ -99,13 +103,13 @@
                 
             </div>
             <div class="container-1">
-                <div class="cantidadContainer">                   
-                    <input type="number" class="inputcantidad" name="cantidad" id="cantidad">
-                    <label for="cantidad"  class="labelcantidad">Duracion</label>                                
+                <div class="inputContainer">                   
+                    <input type="text" class="inputform" name="duracionContrato" id="duracionContrato">
+                    <label for="duracionContrato"  class="labelform">Duracion Contrato</label>                                
                     
                 </div>
                 <div class="inputContainer">
-                    <input type="password" class="inputform" placeholder="Contraseña" name="contraSena" required>
+                    <input type="password" class="inputform" placeholder="a" name="contraSena" required>
                     <label for="contraSena" class="labelform">Contraseña</label>
                 </div>
                 <div class="inputContainer">
@@ -128,5 +132,5 @@
             </form>
             
         </div>  
-</section> 
+    </section>
 {% endblock %}
