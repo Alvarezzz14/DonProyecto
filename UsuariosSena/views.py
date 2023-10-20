@@ -102,7 +102,7 @@ def eliminarUsuario_view(request, id):
         user = UsuariosSena.objects.get(id = id)
         user.delete()
         messages.success(request,"usuario eliminado correctamente")#mensaje de alerta
-
+        
         user = UsuariosSena.objects.all().values()
 
 
