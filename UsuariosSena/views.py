@@ -15,12 +15,12 @@ def homedash(request):
     return render(request, 'superAdmin/basedashboard.html')
 
 def consultarUsuario_view(request):
-    return render(request, 'superAdmin/consultarUsuario.html')
+    usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
+    return render(request, 'superAdmin/consultarUsuario.html',{'usuarios': usuarios})
 
 def registroUsuario_view(request):
     
     if request.method == 'POST':
-        registro_exitoso = False  # Variable de estado para el registro exitoso
         nombreVar=request.POST.get('nombre')
         apellidoVar=request.POST.get('apellidoo')
         tipoIdentificacionVar=request.POST.get('tipoIdentificacion')
@@ -31,16 +31,87 @@ def registroUsuario_view(request):
         cuentadanteVar=request.POST.get('cuentadante')
         tipoContratoVar=request.POST.get('tipoContrato')
         duracionContratoVar=request.POST.get('duracionContrato')
+        estadoUsuarioVar=request.POST.get('estadoUsuario')
         contraSenaVar=request.POST.get('contraSena')
         validacionContraSenaVar = request.POST.get('validacionContraSena')
         fotoUsuarioVar=request.FILES.get('fotoUsuario')
 
-        user= UsuariosSena(nombre=nombreVar, apellidoo=apellidoVar, tipoIdentificacion=tipoIdentificacionVar, numeroIdentificacion=numeroIdentificacionVar, correoSena=correoSenaVar, celular=celularVar, rol=rolVar, cuentadante=cuentadanteVar, tipoContrato=tipoContratoVar, duracionContrato=duracionContratoVar, contraSena=contraSenaVar, validacionContraSena=validacionContraSenaVar, fotoUsuario=fotoUsuarioVar)
+        user= UsuariosSena(nombre=nombreVar, apellidoo=apellidoVar, tipoIdentificacion=tipoIdentificacionVar, numeroIdentificacion=numeroIdentificacionVar, correoSena=correoSenaVar, celular=celularVar, rol=rolVar, cuentadante=cuentadanteVar, tipoContrato=tipoContratoVar, duracionContrato=duracionContratoVar, estadoUsuario=estadoUsuarioVar, contraSena=contraSenaVar, validacionContraSena=validacionContraSenaVar, fotoUsuario=fotoUsuarioVar)
         user.save()
         messages.success(request,"Usuario Registrado con Exito")#mensaje de alerta
     
 
     return render(request, 'superAdmin/registroUsuario.html')
+
+def editarUsuario_view(request, id):
+    try:
+        user = UsuariosSena.objects.get(id=id)
+        datos = {'user': user}
+         # Redirigir a la vista consultarUsuario_view para recargar los datos
+        return render(request,'superAdmin/editarUsuario.html',datos)
+    except UsuariosSena.DoesNotExist:
+        messages.warning(request, "No existe registro")
+        return redirect('consultarUsuario_view')
+    
+
+def actualizarUsuario_view(request, id):
+    
+    if request.method == 'POST':
+        nombreVar=request.POST.get('nombre')
+        apellidoVar=request.POST.get('apellidoo')
+        tipoIdentificacionVar=request.POST.get('tipoIdentificacion')
+        numeroIdentificacionVar=request.POST.get('numeroIdentificacion')
+        correoSenaVar=request.POST.get('correoSena')
+        celularVar=request.POST.get('celular')
+        rolVar=request.POST.get('rol')
+        cuentadanteVar=request.POST.get('cuentadante')
+        tipoContratoVar=request.POST.get('tipoContrato')
+        duracionContratoVar=request.POST.get('duracionContrato')
+        estadoUsuariovar=request.POST.get('estadoUsuario')
+        contraSenaVar=request.POST.get('contraSena')
+        validacionContraSenaVar = request.POST.get('validacionContraSena')
+        fotoUsuarioVar=request.FILES.get('fotoUsuario')
+
+        user= UsuariosSena.objects.get(id = id)
+
+        user.nombre=nombreVar 
+        user.apellidoo=apellidoVar
+        user.tipoIdentificacion=tipoIdentificacionVar
+        user.numeroIdentificacion=numeroIdentificacionVar
+        user.correoSena=correoSenaVar
+        user.celular=celularVar
+        user.rol=rolVar
+        user.cuentadante=cuentadanteVar
+        user.tipoContrato=tipoContratoVar
+        user.duracionContrato=duracionContratoVar
+        user.estadoUsuario=estadoUsuariovar
+        user.contraSena=contraSenaVar
+        user.validacionContraSena=validacionContraSenaVar
+        user.fotoUsuario=fotoUsuarioVar
+        user.save()
+        messages.success(request,"Usuario actualizado con Exito")#mensaje de alerta
+
+        # Redirigir a la vista consultarUsuario_view para recargar los datos
+        return redirect('consultarUsuario_view')
+    else:
+        messages.warning(request, "No existe registro")
+        return redirect('consultarUsuario_view')
+    
+def eliminarUsuario_view(request, id):
+    try:
+        user = UsuariosSena.objects.get(id = id)
+        user.delete()
+        messages.success(request,"usuario eliminado correctamente")#mensaje de alerta
+
+        user = UsuariosSena.objects.all().values()
+
+
+         # Redirigir a la vista consultarUsuario_view para recargar los datos
+        return redirect('consultarUsuario_view')
+    except UsuariosSena.DoesNotExist:
+        messages.warning(request, "No existe registro")
+        return redirect('consultarUsuario_view')
+
 
 def formPrestamos_view(request):
     
