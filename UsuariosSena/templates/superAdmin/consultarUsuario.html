@@ -23,7 +23,7 @@
 
 <!--Contenedor principal de todo el contenido -->
 
-  <section class="container  bg-white rounded-lg p-4 overflow-hidden m-2 ">
+  <section class="container  rounded-lg p-4 overflow-hidden m-2 ">
     
     <h1 class="text-[2.5rem] m-2 mb-16 font-extrabold text-center">Consultar Usuarios</h1>
 
@@ -73,11 +73,11 @@
   <tbody class="bg-white">
     {% for usuario in usuarios %}
     <tr>
-      <td class="text-[0.7rem]  leading-5 truncate  text-gray-900 px-3 py-2 whitespace-no-wrap border-b border-gray-200" contenteditable="true">
+      <td class="text-[0.7rem] capitalize leading-5 truncate  text-gray-900 px-3 py-2 whitespace-no-wrap border-b border-gray-200" contenteditable="true">
         <div class="text-[0.7rem] leading-5 text-gray-500">{{  usuario.nombre }}
         </div>
       </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
+      <td class=" truncate capitalize px-3 py-2 whitespace-no-wrap border-b border-gray-200">
         <div class="text-[0.7rem] leading-5 text-gray-500">{{  usuario.apellidoo }}
         </div>
       </td>
