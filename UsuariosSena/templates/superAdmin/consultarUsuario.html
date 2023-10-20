@@ -36,7 +36,7 @@
            id="filtroEdad" placeholder="Filtrar por: Nombre... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
       </div>
       <div>
-          <button type="submit" class="flex items-center bg-blue-500 justify-center w-12 h-12 text-white rounded-r-lg"
+          <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
               :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
               :disabled="search.length == 0">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -56,18 +56,18 @@
 <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
   <thead>
     <tr>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Nombres</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Apellidos</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Tipo Doc</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Numero ID</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Correo Sena</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Celular</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Rol</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Tipo Cuentadante</th>
-      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Tipo Contrato</th>
-      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Duracion Contrato</th>
-      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Estado</th>
-      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Acciones</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Nombres</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Apellidos</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Tipo Doc</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Numero ID</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Correo Sena</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Celular</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Rol</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Tipo Cuentadante</th>
+      <th class="px-2 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Tipo Contrato</th>
+      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Duracion Contrato</th>
+      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Estado</th>
+      <th class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-orange-50">Acciones</th>
     </tr>
   </thead>
   <tbody class="bg-white">
