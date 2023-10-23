@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from .forms import UsuariosSenaForm, LoginForm, ElementosForm, PrestamosForm
 from .models import UsuariosSena, Prestamo, Elementos
+from datetime import timedelta
 
 
 # Create your views here.
@@ -53,6 +54,20 @@ def formPrestamos_view(request):
 def listar_prestamos(request):
     prestamos = Prestamo.objects.all()
     return render(request, 'superAdmin/listarPrestamos.html', {'prestamos': prestamos})
+
+def calendario(request):
+    prestamos = Prestamo.objects.all()
+    eventos = []
+
+    for prestamo in prestamos:
+        evento = {
+            'title': prestamo.observacionesPrestamo,
+            'start': prestamo.fechaEntrega.isoformat(),
+            'end': (prestamo.fechaDevolucion + timedelta(days=1)).isoformat()
+        }
+        eventos.append(evento)
+
+    return render(request, 'superAdmin/calendario.html', {'eventos': eventos})
 
 def formElementos_view(request):
     
