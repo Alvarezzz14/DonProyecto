@@ -1,97 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-    {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/superAdmin/styledashboard.css' %}">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
-    <title>Base S.A</title> 
-</head>
+{% extends "../superAdmin/basesuadmin.html" %}
+{% load static %}
 
-<body class="cabeza">
-    <header>
-        <div class="header">
-            <div class="img">
-                <img src="{% static 'img/imgdashboard/Copia de LOGO SSIH.svg' %}" alt="logo sena">
-            </div>
-            <span class="material-icons-sharp" id="hambur">
-                menu
-            </span>
-            <div class="usuario">
-                
-                <div>   
-                    <p>Usuario</p>
-                    <p>Super Administrado</p>
-                </div>  
-                <img src="{% static 'img/imgdashboard/usuario.png' %}" alt="Usuario">
-            </div>
-            
-
-        </div>
-    </header>
-
-    <section  class="contenedor">
-        <aside class="aside" id="aside">
-            <div class="contenedor-barra-lateral">
-                <div class="barra-lateral">
-                    
-                    <a href="" class="logos">
-                        <span class="material-icons-sharp" id="hambur">
-                            menu
-                        </span>
-                        <img src="{% static 'img/imgdashboard/logo-sena-verde-svg-2022.svg' %}" alt="">
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            home
-                        </span>
-                        Home
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            person
-                        </span>
-                        Usuario
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            inventory
-                        </span>
-                        Inventario
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            category
-                        </span>
-                        Elementos
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            calendar_month
-                        </span>
-                        Calendario
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            logout
-                        </span>
-                        <h3>Salir</h3>
-                    </a>
-                </div>
-            </div>
-        </aside>  
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/superAdmin/styledashboard.css' %}">
+{% endblock extrastyle %}
+    
+    
+    
+    {% block title %}
+        Home SUAdmin
+    {% endblock title %}
+        
 
         <!-- Cotenido principal -->
 
         {% block content %}
 
-        {% endblock %}
+       
 
         <main>
             <div class="dashboard_home_principal">
                 <div class="titulo_home">
-                    <h1>Admin</h1>
+                    <h1>Home</h1>
                 </div>
                 <div class="dashboard_home">
                     
@@ -144,9 +74,10 @@
         </main>
         <!-- fin Cotenido principal -->
 
-    </section>
+        {% endblock %}
 
-    <script src="{% static 'js/scriptdashboard.js' %}"></script>
-
-</body>
-</html>
+   
+   {% block extrajs %}
+   
+   {% endblock extrajs %}
+    
