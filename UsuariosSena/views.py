@@ -4,7 +4,19 @@ from .models import UsuariosSena, Prestamo, Elementos
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+#Importar biblioteca reportlab
+from io import BytesIO
+from django.http import HttpResponse
+from reportlab.lib.units import inch  
 
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.platypus import Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Image
+#Librería excel
+import xlsxwriter
 
 # Create your views here.
 
@@ -102,7 +114,7 @@ def eliminarUsuario_view(request, id):
         user = UsuariosSena.objects.get(id = id)
         user.delete()
         messages.success(request,"usuario eliminado correctamente")#mensaje de alerta
-
+        
         user = UsuariosSena.objects.all().values()
 
 
@@ -204,3 +216,122 @@ def eliminarElemento(request, id):
     
     return redirect('consultarElementos')
 
+
+def generar_pdf(request):
+    elementos = Elementos.objects.all()
+    elements = []
+    # Crear un objeto BytesIO para almacenar el archivo PDF generado
+    buffer = BytesIO()
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="lista_elementos.pdf"'
+    
+    custom_page_size = (21.59 * inch, 27.94 * inch)
+
+    
+    left_margin = 1 * inch
+    right_margin = 1 * inch
+    top_margin = 1 * inch
+    bottom_margin = 1 * inch
+
+    # Crear el documento PDF, usando landscape para un formato apaisado
+    doc = SimpleDocTemplate(buffer, pagesize=custom_page_size, leftMargin=left_margin, rightMargin=right_margin, topMargin=top_margin, bottomMargin=bottom_margin)
+
+    logo_path = 'img/logo-sena-verde-complementario-svg-2022.svg'
+
+
+    data = [['Fecha', 'Nombre', 'Categoría', 'Estado', 'Cantidad', 'Valor Unidad', 'Valor Total', 'Descripción', 'Observación', 'Factura']]
+    for elemento in elementos:
+        data.append([
+            elemento.fechaElemento,
+            elemento.nombreElemento,
+            elemento.categoriaElemento,
+            elemento.estadoElemento,
+            elemento.cantidadElemento,
+            elemento.valorUnidadElemento,
+            elemento.valorTotalElemento,
+            elemento.descripcionElemento,
+            elemento.observacionElemento,
+            elemento.facturaElemento,
+        ])
+    table = Table(data)
+
+    row_style = TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey)])  # Color de fondo gris para la primera fila
+
+    table.setStyle(row_style)
+    title = "Lista de elementos"
+
+    style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.green),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ])
+
+
+        # Tamaño letra
+    style = TableStyle([
+        ('FONTSIZE', (0, 0), (-1, -1), 16),  
+    ])
+    table.setStyle(style)
+
+
+    col_widths = [1.5 * inch, 1.5 * inch, 1.5 * inch, 1.5 * inch, 1.0 * inch, 1.0 * inch, 1.0 * inch, 2.0 * inch, 2.0 * inch, 1.5 * inch]
+    table = Table(data, colWidths=col_widths)
+
+
+    # agrega la tabla al doc. y genera PDF
+    elements = [table]
+    doc.build(elements)
+
+    # Obtener el valor del buffer y establecerlo como la respuesta HTTP
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+    return response
+
+
+
+
+
+def generar_excel(request):
+    elementos = Elementos.objects.all()
+    elements = []
+    buffer = BytesIO()
+    workbook = xlsxwriter.Workbook(buffer, {'in_memory': True})
+    worksheet = workbook.add_worksheet()
+
+    header_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'bg_color': 'gray'})
+    header_format.set_border(1)
+
+    headers = ['Fecha', 'Nombre', 'Categoría', 'Estado', 'Cantidad', 'Valor Unidad', 'Valor Total', 'Descripción', 'Observación']
+
+    for col_num, header in enumerate(headers):
+        worksheet.write(0, col_num, header, header_format)
+
+    # Datos de la base de datos
+    for row_num, elemento in enumerate(elementos, start=1):
+        worksheet.write(row_num, 0, elemento.fechaElemento)
+        worksheet.write(row_num, 1, elemento.nombreElemento)
+        worksheet.write(row_num, 2, elemento.categoriaElemento)
+        worksheet.write(row_num, 3, elemento.estadoElemento)
+        worksheet.write(row_num, 4, elemento.cantidadElemento)
+        worksheet.write(row_num, 5, elemento.valorUnidadElemento)
+        worksheet.write(row_num, 6, elemento.valorTotalElemento)
+        worksheet.write(row_num, 7, elemento.descripcionElemento)
+        worksheet.write(row_num, 8, elemento.observacionElemento)
+        # worksheet.write(row_num, 9, elemento.facturaElemento)
+
+    for col_num, header in enumerate(headers):
+        worksheet.set_column(col_num, col_num, len(header) + 2)
+
+    workbook.close()
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="lista_elementos.xlsx"'
+    response.write(buffer.getvalue())
+    #una región temporal de memoria 
+    buffer.close()
+    return response
