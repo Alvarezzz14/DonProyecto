@@ -52,7 +52,6 @@ def registroUsuario_view(request):
         user.save()
         messages.success(request,"Usuario Registrado con Exito")#mensaje de alerta
     
-
     return render(request, 'superAdmin/registroUsuario.html')
 
 def editarUsuario_view(request, id):
