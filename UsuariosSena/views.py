@@ -216,7 +216,6 @@ def eliminarElemento(request, id):
     
     return redirect('consultarElementos')
 
-
 def generar_pdf(request):
     elementos = Elementos.objects.all()
     elements = []
@@ -236,7 +235,9 @@ def generar_pdf(request):
     # Crear el documento PDF, usando landscape para un formato apaisado
     doc = SimpleDocTemplate(buffer, pagesize=custom_page_size, leftMargin=left_margin, rightMargin=right_margin, topMargin=top_margin, bottomMargin=bottom_margin)
 
-    logo_path = 'img/logo-sena-verde-complementario-svg-2022.svg'
+    # image_path = 'img/logo-sena-negro-png-2022.png'
+    # logo = Image(image_path, width=1.5 * inch, height=1.5 * inch)  # Ajusta el ancho y alto de la imagen según tus necesidades
+    # logo.hAlign = 'LEFT'  # Alinea la imagen a la izquierda
 
 
     data = [['Fecha', 'Nombre', 'Categoría', 'Estado', 'Cantidad', 'Valor Unidad', 'Valor Total', 'Descripción', 'Observación', 'Factura']]
@@ -259,7 +260,15 @@ def generar_pdf(request):
 
     table.setStyle(row_style)
     title = "Lista de elementos"
-
+    title_style = TableStyle([
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 20),  # Tamaño del título
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+    ])
+    title_data = [[title]]  # Coloca el título en una lista dentro de una lista
+    title_table = Table(title_data, colWidths=[custom_page_size[0]])  # Ancho igual al ancho de la página
+    title_table.setStyle(title_style)
     style = TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -283,7 +292,8 @@ def generar_pdf(request):
 
 
     # agrega la tabla al doc. y genera PDF
-    elements = [table]
+    #si la ruta de la imagen está activa, agregar mediante comas 'image_path'
+    elements = [title_table, table]
     doc.build(elements)
 
     # Obtener el valor del buffer y establecerlo como la respuesta HTTP
