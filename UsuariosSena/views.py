@@ -5,7 +5,19 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login, authenticate, logout
+#Importar biblioteca reportlab
+from io import BytesIO
+from django.http import HttpResponse
+from reportlab.lib.units import inch  
 
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.platypus import Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Image
+#Librería excel
+import xlsxwriter
 
 # Create your views here.
 
@@ -71,7 +83,6 @@ def registroUsuario_view(request):
         user.save()
         messages.success(request,"Usuario Registrado con Exito")#mensaje de alerta
     
-
     return render(request, 'superAdmin/registroUsuario.html')
 
 def editarUsuario_view(request, id):
@@ -133,7 +144,7 @@ def eliminarUsuario_view(request, id):
         user = UsuariosSena.objects.get(id = id)
         user.delete()
         messages.success(request,"usuario eliminado correctamente")#mensaje de alerta
-
+        
         user = UsuariosSena.objects.all().values()
 
 
@@ -234,3 +245,4 @@ def eliminarElemento(request, id):
         return redirect('consultarElementos')
     
     return redirect('consultarElementos')
+

@@ -201,9 +201,11 @@ aside{
 }
 
 .contenidoExtra{
-    
-    
+    border-radius:10px;
+    box-shadow:  2px 5px 5px 4px #b3b3b3; 
     margin: 1px;
+    background-color: white;
+    max-width: 98%;
 }
 
 @media screen and (max-width:768px){

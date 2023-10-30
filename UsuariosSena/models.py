@@ -82,8 +82,17 @@ class Elementos(models.Model):
 class Prestamo(models.Model):
     fechaEntrega = models.DateField()
     fechaDevolucion = models.DateField()
+    nombreEntrega = models.CharField(max_length=25)
+    nombreRecibe = models.CharField(max_length=25, null=False)
     #serialSenaElemento = models.ForeignKey(Elementos,null=False,blank=True,on_delete=models.CASCADE)
     #nombre = models.ForeignKey(UsuariosSena,null=False,blank=True,on_delete=models.CASCADE)
+    observacionesPrestamo = models.CharField(max_length=25)
+    firmaDigital = models.ImageField(upload_to='firmaDigital/', blank=True, null=True)  # Campo para la foto
+    id = models.BigAutoField(primary_key=True)
+
+class SalidaConsumibles(models.Model):
+    nombreEntrega = models.CharField(max_length=25)
+    nombreRecibe = models.CharField(max_length=25)
     observacionesPrestamo = models.CharField(max_length=25)
     firmaDigital = models.ImageField(upload_to='firmaDigital/', blank=True, null=True)  # Campo para la foto
     id = models.BigAutoField(primary_key=True)

@@ -38,7 +38,9 @@ urlpatterns = [
     path('formElementos/', views.formElementos_view, name='formElementos_view'),
     path('listarElementos/', views.listar_elementos, name='listar_elementos'),
     path('eliminarElemento/<int:id>/', views.eliminarElemento, name='eliminarElemento'), #eliminar registro de la base de datos desde consultar elementos 
-    path('salir/', views.logout, name='logout'),
+    path('generar_pdf/', views.generar_pdf, name='generar_pdf'),
+    path('generar_excel/', views.generar_excel, name='generar_excel'),
+
 ]
 
 # Configuración para servir archivos multimedia en entorno de desarrollo
