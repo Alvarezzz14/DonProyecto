@@ -38,7 +38,7 @@ urlpatterns = [
     path('formElementos/', views.formElementos_view, name='formElementos_view'),
     path('listarElementos/', views.listar_elementos, name='listar_elementos'),
     path('eliminarElemento/<int:id>/', views.eliminarElemento, name='eliminarElemento'), #eliminar registro de la base de datos desde consultar elementos 
-
+    path('salir/', views.logout, name='logout'),
 ]
 
 # Configuración para servir archivos multimedia en entorno de desarrollo

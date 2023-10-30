@@ -1,18 +1,37 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect, get_object_or_404
-from .forms import UsuariosSenaForm, LoginForm, ElementosForm, PrestamosForm
+from .forms import UsuariosSenaForm, UserLoginForm, ElementosForm, PrestamosForm
 from .models import UsuariosSena, Prestamo, Elementos
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.contrib.auth import login, authenticate, logout
 
 
 # Create your views here.
 
 def login_view(request):
-    return render(request, 'indexLogin.html')
+    if request.method == 'POST':
+        loginForm = UserLoginForm(request.POST)
+        if loginForm.is_valid():
+            numeroIdentificacion = loginForm.cleaned_data.get('numeroIdentificacion')
+            password = loginForm.cleaned_data.get('password')
+            user = authenticate(request, username=numeroIdentificacion, password=password)
+            
+            if user is not None:
+                login(request, user)
+                return redirect('homedash')
+            else:
+                loginForm.add_error(None, "Invalid username or password")
+    else:
+        loginForm = UserLoginForm()
+        
+    return render(request, 'indexLogin.html', {'form':  loginForm})
 
 def homedash(request):
     return render(request, 'superAdmin/basedashboard.html')
+
+def logout(request):
+    return render(request, 'indexLogin.html')
 
 def consultarUsuario_view(request):
     usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
@@ -21,22 +40,34 @@ def consultarUsuario_view(request):
 def registroUsuario_view(request):
     
     if request.method == 'POST':
-        nombreVar=request.POST.get('nombre')
-        apellidoVar=request.POST.get('apellidoo')
+        nombresVar=request.POST.get('nombres')
+        apellidosVar=request.POST.get('apellidos')
         tipoIdentificacionVar=request.POST.get('tipoIdentificacion')
         numeroIdentificacionVar=request.POST.get('numeroIdentificacion')
-        correoSenaVar=request.POST.get('correoSena')
+        emailVar=request.POST.get('email')
         celularVar=request.POST.get('celular')
         rolVar=request.POST.get('rol')
         cuentadanteVar=request.POST.get('cuentadante')
         tipoContratoVar=request.POST.get('tipoContrato')
+        is_activeVar=request.POST.get('is_active')
         duracionContratoVar=request.POST.get('duracionContrato')
-        estadoUsuarioVar=request.POST.get('estadoUsuario')
-        contraSenaVar=request.POST.get('contraSena')
-        validacionContraSenaVar = request.POST.get('validacionContraSena')
-        fotoUsuarioVar=request.FILES.get('fotoUsuario')
+        passwordVar=request.POST.get('password')
+        fotoUsuarioVar = request.POST.get('fotoUsuario')
 
-        user= UsuariosSena(nombre=nombreVar, apellidoo=apellidoVar, tipoIdentificacion=tipoIdentificacionVar, numeroIdentificacion=numeroIdentificacionVar, correoSena=correoSenaVar, celular=celularVar, rol=rolVar, cuentadante=cuentadanteVar, tipoContrato=tipoContratoVar, duracionContrato=duracionContratoVar, estadoUsuario=estadoUsuarioVar, contraSena=contraSenaVar, validacionContraSena=validacionContraSenaVar, fotoUsuario=fotoUsuarioVar)
+        user= UsuariosSena(
+            nombres = nombresVar,
+            apellidos = apellidosVar, 
+            tipoIdentificacion = tipoIdentificacionVar, 
+            numeroIdentificacion = numeroIdentificacionVar, 
+            email = emailVar, 
+            celular = celularVar, 
+            rol = rolVar, 
+            cuentadante = cuentadanteVar, 
+            tipoContrato = tipoContratoVar, 
+            is_active = is_activeVar, 
+            duracionContrato = duracionContratoVar, 
+            password = passwordVar, 
+            fotoUsuario = fotoUsuarioVar)
         user.save()
         messages.success(request,"Usuario Registrado con Exito")#mensaje de alerta
     
@@ -203,4 +234,3 @@ def eliminarElemento(request, id):
         return redirect('consultarElementos')
     
     return redirect('consultarElementos')
-

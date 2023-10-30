@@ -32,7 +32,8 @@
                 <img src="{% static 'img/imgLogin/sena1_low.png' %}" class="logo" />
                 <h1>Ingreso Usuarios Registrados</h1>
             </div>
-            <form action="#">
+            <form class="loginForm" method="post">
+                {% csrf_token %}
                 <div class="control">
                     <label for="id-type">Tipo de identificación:</label>
                     <div class="select-container">
@@ -46,16 +47,16 @@
                         </div>
                     </div>
 
-                    <label for="name" class="labelInputs">Número Documento:</label>
+                    <label for="numeroIdentificacion" class="labelInputs">Número Documento:</label>
                     <div class="input-with-icon">
-                        <input type="text" id="name" name="name" placeholder="Número de documento" required />
+                        <input type="text" id="numeroIdentificacion" name="numeroIdentificacion" placeholder="Número de documento" required />
                         <i class="fa fa-user icon"></i>
                     </div>
 
 
-                    <label for="psw" class="labelInputs">Contraseña:</label>
+                    <label for="password" class="labelInputs">Contraseña:</label>
                     <div class="input-with-icon">
-                        <input type="password" id="psw" name="psw" placeholder="Contraseña" required />
+                        <input type="password" id="password" name="password" placeholder="Contraseña" required />
                         <i class="fa fa-lock icon"></i>
                         <span class="toggle-password"><i class="fas fa-eye"></i></span>
                     </div>

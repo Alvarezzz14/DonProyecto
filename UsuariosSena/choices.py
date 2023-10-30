@@ -8,7 +8,7 @@ cuentadantes = [
     ('adminD','administrador Directo'),
     ('monitor','monitor')
 ]
-tipoIdentificacion = [
+tipoId = [
     ('CC', 'Cedula de ciudadania'),
     ('TI', 'Tarjeta de identidad'),
     ('PEP', 'Permiso especial de permanencia'),
