@@ -8,22 +8,13 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UsuariosSenaManager(BaseUserManager):
-    def create_user(self, numeroIdentificacion, email, password=None, **extra_fields):
-        if not numeroIdentificacion:
-            raise ValueError('El número de identificación es obligatorio.')
-        
-        email = self.normalize_email(email)
-        extra_fields.setdefault('is_active', True)
-        user = self.model(
-            numeroIdentificacion=numeroIdentificacion,
-            email=email,
-            **extra_fields
-        )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+    def create_user(self, numeroIdentificacion, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
 
-    def create_superuser(self, numeroIdentificacion, email, password=None, **extra_fields):
+        return self.create_user(numeroIdentificacion, email, password, **extra_fields)
+
+    def create_superuser(self, numeroIdentificacion, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
