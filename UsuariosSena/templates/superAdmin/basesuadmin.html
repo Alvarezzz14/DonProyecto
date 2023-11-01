@@ -7,8 +7,9 @@
     
     <title>{% block title %} Base S.A {% endblock title %}</title> 
 
-    <link rel="stylesheet" href="{% static 'css/superAdmin/stylesBaseSuAdmin.css' %}">
+    <link rel="stylesheet" href="{% static 'css/superAdmin/estilobase.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     {% block extrastyle %} 
     
     {% endblock extrastyle %}
@@ -42,72 +43,72 @@
         </div>
     </header>
 
-    <section  class="contenedor">
-        <aside class="aside" id="aside">
-            <div class="contenedor-barra-lateral">
-                <div class="barra-lateral">
+    <body>
+        <section class="base">
+            <div class="barra-lateral" id="barra">
+                <a href="#" class="logo">
+                    <div class="nombre-logo">
+                        <img src="{% static 'img/SSoft.png' %}" alt="">
+                        <span class="material-icons-sharp" id="menu-toggle">menu</span> <!-- Cambiado el ID a menu-toggle -->
+                    </div>
+            
+                    <ul class="menu" id="menu"> <!-- Cambiado el ID a menu -->
+                        <li><a href="#"><span class="material-icons-sharp">home</span><p>Inicio</p> </a></li>
+                        <li><a href="#"><span class="material-icons-sharp">supervisor_account</span><p>Usuarios</p> </a></li>
+                        <li><a href="#"><span class="material-icons-sharp">inventory</span><p>Inventario</p> </a></li>
+                        <li><a href="#"><span class="material-icons-sharp">category</span><p>Elementos</p> </a></li>
+                        <li><a href="#"><span class="material-icons-sharp">calendar_month</span><p>Calendario</p></a></li>
+                    </ul>
+            
+                    <ul class="menu">
+                        <li><a href="#" class="salir" style="color: red;"><span style="color: red;" class="material-icons-sharp">logout</span><p>Salir</p></a></li>
                     
-                    <a href="" class="logos">
-                        <span class="material-icons-sharp" id="hambur">
-                            menu
-                        </span>
-                        <img src="{% static 'img/logo-sena-verde-svg-2022.svg' %}" alt="">
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            home
-                        </span>
-                        Home
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            person
-                        </span>
-                        Usuario
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            inventory
-                        </span>
-                        Inventario
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            category
-                        </span>
-                        Elementos
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            calendar_month
-                        </span>
-                        Calendario
-                    </a>
-                    <a href="#">
-                        <span class="material-icons-sharp">
-                            logout
-                        </span>
-                        <h3>Salir</h3>
-                    </a>
+                    </ul>
+                    
+                
+                </a>
+                <div class="redes-sociales">
+                    <i class="fab fa-facebook-square" style="color: blue;"></i>
+                    <i class="fab fa-instagram-square" style="color: #e697fa;"></i>
+                    <i class="fab fa-twitter-square" style="color: aqua;"></i>
+    
                 </div>
+    
             </div>
-        </aside>  
-
-        <!-- Cotenido principal -->
+    
+    
+            
+                <div class="titulo">
+                    <img src="{% static 'img/senaL.png' %}" alt="" width="40px
+                    ">
+                    <h3>Gestion de inventario</h3>
+                </div>
+                
+                <div class="perfil">
+                    <p>Bievenido <br>
+                    Administrador</p>
+                    <div class="bola">
         
-        <section class="contenidoExtra">
-
-        {% block content %}
-
-        {% endblock %}
-
+                    </div>
+                </div>
+        
+                <div class="redes">
+                    <div class="log">
+                        <img src="{% static 'img/SSIH.png' %}" alt="">
+                    </div>
+                </div>
+    
+            <div class="contenido" id="contenedor">
+                {% block content %}
+    
+                {% endblock %}
+            </div>
+    
         </section>
-       
-        <!-- fin Cotenido principal -->
-
-    </section>
-
-    <script src="{% static 'js/scriptBaseSuAdmin.js' %}"></script>
+    
+        <script src="{% static 'js/scriptbase.js' %}">  
+        </script>
+    
     
   
     
@@ -178,7 +179,6 @@
 {% endif %}
 
     <!-- fin  alert sweet2 -->
-    
 
 </body>
 </html>
