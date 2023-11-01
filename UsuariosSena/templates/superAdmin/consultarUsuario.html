@@ -12,9 +12,22 @@
   {% block extrascript %} 
   <script>
     const botonEliminar = (id) => {
-        if (window.confirm("¿Estas seguro de Eliminar el registro")) {
+        Swal.fire({
+          "title":"¿Estás seguro  de eliminar?",
+          "text":"Esta accion no se puede deshacer",
+          "icon":"question",
+          "showCancelButton":true,
+          "cancelButtonText":"Cancelar",
+          "confirmButtonText":"Eliminar",
+          "reverseButtons":true,
+          "confirmButtonColor":"#fc7323",
+          "iconColor":"#fc7323",
+        })
+        .then(function(result){
+          if(result.isConfirmed){
             window.location.href = "/eliminarUsuario/" + id;
-        }
+          }
+        })
     }
 </script>
 <script>
@@ -223,27 +236,27 @@
         <table>
           <tr>
             <th>Nombre:</th>
-            <td><input type="text" id="nombreField"></td>
+            <td><input type="text" id="nombreField" readonly></td>
           </tr>
           <tr>
             <th>Apellido:</th>
-            <td><input type="text" id="apellidoField"></td>
+            <td><input type="text" id="apellidoField" readonly></td>
           </tr>
           <tr>
             <th>Tipo de Identificación:</th>
-            <td><input type="text" id="tipoIdentificacionField"></td>
+            <td><input type="text" id="tipoIdentificacionField" readonly></td>
           </tr>
           <tr>
             <th>Número de Identificación:</th>
-            <td><input type="text" id="numeroIdentificacionField"></td>
+            <td><input type="text" id="numeroIdentificacionField" readonly></td>
           </tr>
           <tr>
             <th>Rol:</th>
-            <td><input type="text" id="rolField"></td>
+            <td><input type="text" id="rolField"readonly></td>
           </tr>
           <tr>
             <th>Correo SENA:</th>
-            <td><input type="text" id="correoSenaField"></td>
+            <td><input type="text" id="correoSenaField" readonly></td>
           </tr>
         </table>
       </div>
