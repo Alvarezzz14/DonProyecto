@@ -1,4 +1,3 @@
-
 .modal {
   display: none; 
   position: fixed; 
@@ -17,15 +16,14 @@
   left: 50%;
   transform: translate(-50%, -50%); 
   background-color: #fff; 
-  padding: 100px;
+  padding: 10vh;
   border: 1px solid #000;
   margin-bottom: 10vh;
 }
-.modal a:hover{
-    color: #fc7323;
+.modal-content span{
+  background: #f01d1d;
+  padding: 0.5vh;
 }
-
-
 .close {
   color: #070707;
   position: absolute;
@@ -36,4 +34,17 @@
   font-weight: bold;
   font-size: 1.5em;
   text-decoration: none;
+}
+
+th{
+  padding: 20px 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+td{
+  padding: 15px;
+  border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+}
+thead{
+  background: #f01d1d;
 }
