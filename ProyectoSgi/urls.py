@@ -38,6 +38,11 @@ urlpatterns = [
     ),
     path("formPrestamos/", views.formPrestamos_view, name="formPrestamos_view"),
     path(
+        "formPrestamosConsumibles/",
+        views.formPrestamosConsumibles_view,
+        name="formPrestamosConsumibles_view",
+    ),
+    path(
         "eliminarUsuario/<int:id>/",
         views.eliminarUsuario_view,
         name="eliminarUsuario_view",

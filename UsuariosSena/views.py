@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect, get_object_or_404
 from .forms import UsuariosSenaForm, UserLoginForm, ElementosForm, PrestamosForm
-from .models import UsuariosSena, Prestamo, Elementos
+from .models import UsuariosSena, Prestamo, Elementos, PrestamoConsumible
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -185,6 +185,37 @@ def formPrestamos_view(request):
         user.save()
 
     return render(request, "superAdmin/formPrestamos.html")
+
+
+def formPrestamosConsumibles_view(request):
+    nombre_elemento = None  # Valor por defecto en caso de solicitud GET
+
+    if request.method == "POST":
+        # Procesar el formulario aquí (guardar el préstamo consumible)
+        nombre_elemento = request.POST.get("nombre_elemento")
+        cantidad_prestada = int(request.POST.get("cantidad_prestada"))
+        fecha_entrega = request.POST.get("fecha_entrega")
+        serial_elemento = request.POST.get("serial_elemento")
+        nombre_solicitante = request.POST.get("nombre_solicitante")
+        observaciones_prestamo = request.POST.get("observaciones_prestamo")
+
+        # instancia de PrestamoConsumible
+        prestamo_consumible = PrestamoConsumible(
+            elemento_consumible=nombre_elemento,  # Asigna el elemento consumible, deberías buscarlo en la base de datos o tener una lógica para obtenerlo
+            cantidad_prestada=cantidad_prestada,
+            fecha_entrega=fecha_entrega,
+            serial_elemento=serial_elemento,
+            nombre_solicitante=nombre_solicitante,
+            observaciones_prestamo=observaciones_prestamo,
+        )
+        # Guarda la instancia en la base de datos
+        prestamo_consumible.save()
+
+    return render(
+        request,
+        "superAdmin/formPrestamosConsumibles.html",
+        {"nombre_elemento": nombre_elemento},
+    )
 
 
 def calendario(request):

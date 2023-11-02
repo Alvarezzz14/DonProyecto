@@ -3,20 +3,21 @@
 {% load static %}
 
 {% block content %}
+
 <head>
-    
+
     <link rel="stylesheet" href="{% static 'css/superAdmin/crearPrestamo.css' %}">
     <title>Formulario Prestamos</title>
-    
+
 </head>
 
-<section class="section">
-        
+<section class="section" style=" margin: 10px; padding: 10px">
+
     <!-- Inicio del Forumlario-->
 
-       
+
     <div class="signupFrm">
-            <form action="/formPrestamos/" class="form" method="post">
+        <form action="/formPrestamos/" class="form" method="post">
             <h1 class="title">Crear Prestamo</h1>
 
             {% csrf_token %}
@@ -33,46 +34,48 @@
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="nombre" name="nombre" required>
                     <label for="" class="labelform">Instructor Entrega:</label>
-                </div>  
+                </div>
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="nombre" name="nombre" required>
                     <label for="" class="labelform">Instructor Recibe</label>
-                </div>  
-        </div>
-        <div class="container-1">
-            <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="serialSenaElemento" name="serialSenaElemento" required>
-                <label for="" class="labelform">Serial Elemento</label>
+                </div>
             </div>
-            <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="serialSenaElemento" name="serialSenaElemento" required>
-                <label for="" class="labelform">Nombre Elemento</label>
-            </div>
-            <div class="selectorimagen">
-                <label for="soporte" class="labelsubirfoto">Firma Digital</label>
-                <input type="file" accept="image/*" class="inputsubirfoto">
-                
-            </div>   
-        </div>    
-        <div class="container-1">
-
-            <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="a" name="observacionesPrestamo" required>
-                <label for="" class="labelform">Observaciones</label>
-            </div>
-            
-        </div>
             <div class="container-1">
-            <div class="container-botones">
-                <button type="submit" class="submitBtn" >GUARDAR</button>
-                <button type="" class="submitBtn" >CANCELAR</button>
-            
+                <div class="inputContainer">
+                    <input type="text" class="inputform" placeholder="serialSenaElemento" name="serialSenaElemento"
+                        required>
+                    <label for="" class="labelform">Serial Elemento</label>
+                </div>
+                <div class="inputContainer">
+                    <input type="text" class="inputform" placeholder="serialSenaElemento" name="serialSenaElemento"
+                        required>
+                    <label for="" class="labelform">Nombre Elemento</label>
+                </div>
+                <div class="selectorimagen">
+                    <label for="soporte" class="labelsubirfoto">Firma Digital</label>
+                    <input type="file" accept="image/*" class="inputsubirfoto">
+
+                </div>
             </div>
+            <div class="container-1">
+
+                <div class="inputContainer">
+                    <input type="text" class="inputform" placeholder="a" name="observacionesPrestamo" required>
+                    <label for="" class="labelform">Observaciones</label>
+                </div>
+
+            </div>
+            <div class="container-1">
+                <div class="container-botones">
+                    <button type="submit" class="submitBtn">GUARDAR</button>
+                    <button type="" class="submitBtn">CANCELAR</button>
+
+                </div>
             </div>
         </form>
-        
-    </div>  
 
-    </section>
+    </div>
+
+</section>
 
 {% endblock %}
