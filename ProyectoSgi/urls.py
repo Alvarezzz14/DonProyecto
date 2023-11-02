@@ -16,31 +16,46 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-#Media
+
+# Media
 from django.conf import settings
 from django.conf.urls.static import static
 from UsuariosSena import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.login_view, name='login_view'),
-    path('dashboard/', views.homedash, name='homedash'),
-    path('regUsuario/', views.registroUsuario_view, name='registroUsuario_view'),
-    path('editarUsuario/<int:id>/', views.editarUsuario_view, name='editarUsuario_view'),
-    path('actualizarUsuario/<int:id>', views.actualizarUsuario_view, name='actualizarUsuario_view'),
-    path('formPrestamos/', views.formPrestamos_view, name='formPrestamos_view'),
-    path('eliminarUsuario/<int:id>/', views.eliminarUsuario_view, name='eliminarUsuario_view'),
-    path('formElementos/', views.formElementos_view, name='formElementos_view'),
-    path('consultarUsuario/', views.consultarUsuario_view, name='consultarUsuario_view'),
-    path('consultarElementos/', views.consultarElementos, name='consultarElementos'),
-    path('listarPrestamos/', views.listar_prestamos, name='listar_prestamos'),
-    path('formElementos/', views.formElementos_view, name='formElementos_view'),
-    path('listarElementos/', views.listar_elementos, name='listar_elementos'),
-    path('eliminarElemento/<int:id>/', views.eliminarElemento, name='eliminarElemento'), #eliminar registro de la base de datos desde consultar elementos 
-    path('generar_pdf/', views.generar_pdf, name='generar_pdf'),
-    path('generar_excel/', views.generar_excel, name='generar_excel'),
-
+    path("admin/", admin.site.urls),
+    path("", views.login_view, name="login_view"),
+    path("dashboard/", views.homedash, name="homedash"),
+    path("regUsuario/", views.registroUsuario_view, name="registroUsuario_view"),
+    path(
+        "editarUsuario/<int:id>/", views.editarUsuario_view, name="editarUsuario_view"
+    ),
+    path(
+        "actualizarUsuario/<int:id>",
+        views.actualizarUsuario_view,
+        name="actualizarUsuario_view",
+    ),
+    path("formPrestamos/", views.formPrestamos_view, name="formPrestamos_view"),
+    path(
+        "eliminarUsuario/<int:id>/",
+        views.eliminarUsuario_view,
+        name="eliminarUsuario_view",
+    ),
+    path("formElementos/", views.formElementos_view, name="formElementos_view"),
+    path("calendario/", views.calendario, name="calendario"),
+    path(
+        "consultarUsuario/", views.consultarUsuario_view, name="consultarUsuario_view"
+    ),
+    path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
+    path("listarPrestamos/", views.listar_prestamos, name="listar_prestamos"),
+    path("formElementos/", views.formElementos_view, name="formElementos_view"),
+    path("listarElementos/", views.listar_elementos, name="listar_elementos"),
+    path(
+        "eliminarElemento/<int:id>/", views.eliminarElemento, name="eliminarElemento"
+    ),  # eliminar registro de la base de datos desde consultar elementos
+    path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
+    path("generar_excel/", views.generar_excel, name="generar_excel"),
 ]
 
 # Configuración para servir archivos multimedia en entorno de desarrollo
