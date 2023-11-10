@@ -52,6 +52,13 @@ def homedash(request):
     return render(request, "superAdmin/basedashboard.html")
 
 
+def usuariodash(request):
+    return render(request, "superAdmin/usuariodash.html")
+
+def inventariodash(request):
+    return render(request, "superAdmin/inventariodash.html")
+
+
 def logout(request):
     return render(request, "indexLogin.html")
 

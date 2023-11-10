@@ -27,6 +27,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.login_view, name="login_view"),
     path("dashboard/", views.homedash, name="homedash"),
+    path("usuariodash/", views.usuariodash, name="usuariodash"),
+    path("inventariodash/", views.inventariodash, name="inventariodash"),
     path("regUsuario/", views.registroUsuario_view, name="registroUsuario_view"),
     path("editarUsuario/<int:id>/", views.editarUsuario_view, name="editarUsuario_view"),
     path( "actualizarUsuario/<int:id>",views.actualizarUsuario_view,name="actualizarUsuario_view",),
