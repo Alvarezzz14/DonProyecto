@@ -516,3 +516,7 @@ def generar_excel(request):
     # una región temporal de memoria
     buffer.close()
     return response
+
+def user_logout(request):
+    logout(request)
+    return redirect('login_view')
