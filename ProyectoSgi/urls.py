@@ -21,7 +21,6 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from UsuariosSena import views
-from UsuariosSena.views import get_serial_by_element_name
 
 
 urlpatterns = [
@@ -37,11 +36,7 @@ urlpatterns = [
         views.actualizarUsuario_view,
         name="actualizarUsuario_view",
     ),
-    path(
-        "formPrestamosDevolutivos/",
-        views.formPrestamosDevolutivos_view,
-        name="formPrestamosDevolutivos_view",
-    ),
+    path("formPrestamos/", views.formPrestamos_view, name="formPrestamos_view"),
     path(
         "formPrestamosConsumibles/",
         views.formPrestamosConsumibles_view,
@@ -66,16 +61,6 @@ urlpatterns = [
     ),  # eliminar registro de la base de datos desde consultar elementos
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
     path("generar_excel/", views.generar_excel, name="generar_excel"),
-    path(
-        "get-serial-by-element-name",
-        get_serial_by_element_name,
-        name="get_serial_by_element_name",
-    ),
-    path(
-        "get-element-name-by-serial",
-        views.get_element_name_by_serial,
-        name="get-element-name-by-serial",
-    ),
 ]
 
 # Configuración para servir archivos multimedia en entorno de desarrollo
