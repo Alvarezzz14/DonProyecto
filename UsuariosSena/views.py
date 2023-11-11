@@ -51,6 +51,9 @@ def login_view(request):
 def homedash(request):
     return render(request, "superAdmin/basedashboard.html")
 
+def elementosdash(request):
+    return render(request, "superAdmin/usuariodash.html")
+
 
 def usuariodash(request):
     return render(request, "superAdmin/usuariodash.html")

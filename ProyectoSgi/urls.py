@@ -29,6 +29,7 @@ urlpatterns = [
     path("dashboard/", views.homedash, name="homedash"),
     path("usuariodash/", views.usuariodash, name="usuariodash"),
     path("inventariodash/", views.inventariodash, name="inventariodash"),
+    path("elementosdash/", views.elementosdash, name="elementosdash"),
     path("regUsuario/", views.registroUsuario_view, name="registroUsuario_view"),
     path("editarUsuario/<int:id>/", views.editarUsuario_view, name="editarUsuario_view"),
     path( "actualizarUsuario/<int:id>",views.actualizarUsuario_view,name="actualizarUsuario_view",),
