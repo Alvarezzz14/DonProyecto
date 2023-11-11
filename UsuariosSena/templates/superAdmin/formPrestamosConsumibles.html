@@ -18,48 +18,52 @@
 
     <div class="signupFrm">
         <form action="/formPrestamosConsumibles/" class="form" method="post">
-            <h1 class="title">Crear Prestamo de Elemento Consumible</h1>
+            <h1 class="title">Crear Prestamo Consumible</h1>
 
             {% csrf_token %}
 
             <div class="container-1">
-                <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="Nombre del Elemento" name="nombre_elemento"
-                        required>
-                    <label for="nombre_elemento" class="labelform">Nombre del Elemento</label>
-                </div>
-                <div class="inputContainer">
-                    <input type="number" class="inputform" placeholder="Cantidad Prestada" name="cantidad_prestada"
-                        required>
-                    <label for="cantidad_prestada" class="labelform">Cantidad Prestada</label>
-                </div>
                 <div class="fechaContainer">
                     <input type="date" class="inputform" placeholder="Fecha de entrega" name="fecha_entrega" required>
                     <label for="fecha_entrega" class="labelform">Fecha de entrega</label>
                 </div>
-            </div>
-            <div class="container-1">
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="Responsable de la entrega" name="nombre_entrega"
+                    <input type="text" class="inputform" placeholder="responsable_Entrega" name="responsable_Entrega"
                         required>
-                    <label for="nombre_entrega" class="labelform">Responsable de la entrega</label>
+                    <label for="responsable_Entrega" class="labelform">Responsable de la entrega</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="Serial del Elemento" name="serial_elemento"
-                        required>
-                    <label for="serial_elemento" class="labelform">Serial del Elemento</label>
-                </div>
-            </div>
-            <div class="container-1">
-                <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="Nombre del Solicitante" name="nombre_solicitante"
+                    <input type="text" class="inputform" placeholder="nombre_solicitante" name="nombre_solicitante"
                         required>
                     <label for="nombre_solicitante" class="labelform">Nombre del Solicitante</label>
                 </div>
+            </div>
+            <div class="container-1">
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="Observaciones" name="observaciones_prestamo"
+                    <input type="text" class="inputform" placeholder="nombreElemento" name="nombreElemento" required>
+                    <label for="nombreElemento" class="labelform">Nombre del Elemento</label>
+                </div>
+                <div class="inputContainer">
+                    <input type="text" class="inputform" placeholder="serialSenaElemento" name="serialSenaElemento"
                         required>
+                    <label for="serialSenaElemento" class="labelform">Serial del Elemento</label>
+                </div>
+            </div>
+            <div class="container-1">
+                <div class="inputContainer">
+                    <input type="number" class="inputform" placeholder="cantidad_prestada" name="cantidad_prestada"
+                        required>
+                    <label for="cantidad_prestada" class="labelform">Cantidad Prestada</label>
+                </div>
+                <div class="inputContainer">
+                    <input type="text" class="inputform" placeholder="observaciones_prestamo"
+                        name="observaciones_prestamo" required>
                     <label for="observaciones_prestamo" class="labelform">Observaciones</label>
+                </div>
+                <div class="selectorimagen">
+                    <label for="soporte" class="labelsubirfoto">Firma Digital</label>
+                    <input type="file" accept="image/*" class="inputsubirfoto">
+
                 </div>
             </div>
             <div class="container-1">
