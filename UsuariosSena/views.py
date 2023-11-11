@@ -283,7 +283,7 @@ def formPrestamosConsumibles_view(request):
 
         # instancia de PrestamoConsumible
         prestamo_consumible = PrestamoConsumible(
-            nombreElemento=nombreElementovar,  # Asigna el elemento consumible, deberías buscarlo en la base de datos o tener una lógica para obtenerlo
+            nombreElemento=nombreElementovar,
             cantidad_prestada=cantidad_prestadavar,
             fecha_entrega=fecha_entregavar,
             serialSenaElemento=serialSenaElementovar,
@@ -356,7 +356,7 @@ def formElementos_view(request):
         messages.success(request, "Elemento Guardado Exitosamente")
 
         # Redireccionar o renderizar según sea necesario
-        return redirect("formElementos_view")  # Cambia esto por la ruta correspondiente
+        return redirect("formElementos_view")
 
     return render(request, "superAdmin/formElementos.html")
 
