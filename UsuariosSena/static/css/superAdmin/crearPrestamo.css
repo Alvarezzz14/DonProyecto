@@ -1,6 +1,6 @@
-.section{
+.section {
   width: 98%;
-  box-shadow:  2px 5px 5px 4px #b3b3b3;
+  box-shadow: 2px 5px 5px 4px #b3b3b3;
 }
 
 
@@ -15,42 +15,43 @@
 }
 
 .form {
-background-color: white;
-width: 100%;
-border-radius: 8px;
-padding: 20px 10px;
-box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
+  background-color: white;
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px 10px;
+  box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
 }
 
 .title {
-font-size: 2.5rem;
-font-weight: 900;
-margin-bottom: 2rem;
-text-align: center;
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
-.container-1{
+.container-1 {
   display: flex;
-  justify-content: center ;
+  justify-content: center;
   margin-bottom: 1rem;
   gap: 2rem;
-  
-  
+
+
 }
 
 .inputContainer {
-position: relative;
-height: 3rem;
-width: 20rem;
-margin-bottom: 17px;
+  position: relative;
+  height: 3rem;
+  width: 20rem;
+  margin-bottom: 17px;
 }
 
 .fechaContainer {
-position: relative;
-height: 3rem;
-width: 9rem;
-margin-bottom: 17px;
+  position: relative;
+  height: 3rem;
+  width: 9rem;
+  margin-bottom: 17px;
 }
+
 /* Estilo input formularios */
 
 .inputform {
@@ -89,13 +90,13 @@ margin-bottom: 17px;
   z-index: 0;
 }
 
-.labelsubirfoto{
+.labelsubirfoto {
   font-size: 0.9rem;
 }
 
 /*Estilos BOtones */
 
-.container-botones{
+.container-botones {
   display: flex;
   justify-content: center;
 }
@@ -119,7 +120,7 @@ margin-bottom: 17px;
   transform: translateY(-2px);
 }
 
-.inputform:focus + .labelform {
+.inputform:focus+.labelform {
   top: -7px;
   left: 3px;
   z-index: 10;
@@ -128,146 +129,259 @@ margin-bottom: 17px;
   color: rgb(0, 0, 0);
 }
 
-.inputform:focus{
+.inputform:focus {
   border: 3px solid #369dfd;
 }
 
-.inputform:not(:placeholder-shown) + .labelform{
+.inputform:not(:placeholder-shown)+.labelform {
   top: -7px;
   left: 3px;
   z-index: 10;
   font-size: 0.8rem;
   font-weight: 600;
   color: black;
-}  
+}
 
-.selectorimagen{
+.inputContainervalor {
+  position: relative;
+  height: 3rem;
+  width: 8rem;
+  margin-bottom: 17px;
+}
+
+.inputformvalor {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  border: 1px solid #DADCE0;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  padding: 0 20px;
+  outline: none;
+  background: none;
+  z-index: 1;
+}
+
+.inputformvalor:focus {
+  border: 3px solid #369dfd;
+}
+
+.inputformvalor:not(:placeholder-shown)+.labelformvalor {
+  top: -7px;
+  left: 3px;
+  z-index: 10;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.labelformvalor {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 0 4px;
+  background-color: white;
+  color: #4e4f4f;
+  font-size: 0.9rem;
+  transition: 0.5s;
+  z-index: 0;
+}
+
+.inputformvalor:focus+.labelformvalor {
+  top: -7px;
+  left: 3px;
+  z-index: 10;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(0, 0, 0);
+}
+
+.inputformvalor:not(:placeholder-shown)+.labelformvalor {
+  top: -7px;
+  left: 3px;
+  z-index: 10;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.inputformvalor:focus+.labelformvalor {
+  top: -7px;
+  left: 3px;
+  z-index: 10;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(0, 0, 0);
+}
+
+.selectContainer {
+  position: relative;
+  height: 4rem;
+  width: 8%;
+  margin-bottom: 1rem;
+}
+
+.labelcantidad {
+  position: absolute;
+  top: -7px;
+  left: 3px;
+  z-index: 10;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgb(82, 81, 81);
+
+}
+
+.inputcantidad {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 70%;
+  width: 100%;
+  border: 1px solid #DADCE0;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  padding: 0 20px;
+  outline: none;
+  background: none;
+  z-index: 1;
+}
+
+.selectorimagen {
   width: 15%;
   display: block;
   margin-left: 1rem;
-  
-}
-
-.selectorimagen label{
-
-font-size: 0.8rem;
-font-weight: 600;
-color: rgb(0, 0, 0);
 
 }
 
-.tomarfoto{
+.selectorimagen label {
+
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(0, 0, 0);
+
+}
+
+.tomarfoto {
   border: 1px solid #DADCE0;
   border-radius: 7px;
   font-size: 0.7em;
   width: 100%;
 }
 
-.inputsubirfoto{
+.inputsubirfoto {
   border: 1px solid #DADCE0;
   border-radius: 7px;
   font-size: 0.7em;
   width: 100%;
 }
 
-.divbotones{
-    display: flex;
-    align-items: center;
-    margin: 1rem;
-  }
+.divbotones {
+  display: flex;
+  align-items: center;
+  margin: 1rem;
+}
 
 
 
 
 
-/* Para 1300px */  
+/* Para 1300px */
 @media (max-width: 1270px) {
-  .section{
-      width: 95%;      
+  .section {
+    width: 95%;
   }
-  .inputform:focus + .labelform {
+
+  .inputform:focus+.labelform {
     font-size: 1rem;
-    
-    
+
+
   }
 }
 
-/* Para 1000px */  
+/* Para 1000px */
 @media (max-width: 1100px) {
-  .section{
+  .section {
     font-size: 0.6rem;
-    
-    
-}
-  .title{
-      font-size: 2rem;
-      
+
+
   }
-  .container-1{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      margin-bottom: 1rem;
+
+  .title {
+    font-size: 2rem;
+
+  }
+
+  .container-1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 1rem;
   }
 
   .inputContainer {
-      
-      height: 2rem;
-      width: 80%;
-      margin-bottom: 17px;
-      }
-  .selectContainer{
-  
-      height: 2rem;
-      width: 60%;
-      margin-bottom: 1rem;
-      
-      }
-  
-  .labelform{
-      font-size: 0.5rem;
+
+    height: 2rem;
+    width: 80%;
+    margin-bottom: 17px;
+  }
+
+  .selectContainer {
+
+    height: 4rem;
+    width: 60%;
+    margin-bottom: 1rem;
+
+  }
+
+  .labelform {
+    font-size: 0.5rem;
   }
 }
-.inputform:focus + .labelform {
+
+.inputform:focus+.labelform {
   font-size: 0.6rem;
-  
-  
+
+
 }
 
 @media (max-width: 768px) {
-      .title{
-          font-size: 1rem;
-      }
-      
-      .container-1{
-        display:grid;
-        grid-template-columns: 1fr;
-        margin: 2rem;
-        justify-self: center;
-    }
-      .signupFrm{
-          font-size: 1rem;
-      }
+  .title {
+    font-size: 1rem;
+  }
 
-      .labelform{
-        font-size: 1rem;
-      }
+  .container-1 {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 2rem;
+    justify-self: center;
+  }
 
-      .inputform:focus + .labelform{
-        font-size: 1rem;
-      }
+  .signupFrm {
+    font-size: 1rem;
+  }
 
-      .inputsubirfoto + .labelsubirfoto{
-        width: 100%;
-      }
-      .selectorimagen{
-        width: 60%;
-        
-      }
-      .inputContainer {
-      
-        height: 3rem;
-        width: 100%;
-        margin-bottom: 17px;
-        }
+  .labelform {
+    font-size: 1rem;
+  }
+
+  .inputform:focus+.labelform {
+    font-size: 1rem;
+  }
+
+  .inputsubirfoto+.labelsubirfoto {
+    width: 100%;
+  }
+
+  .selectorimagen {
+    width: 60%;
+
+  }
+
+  .inputContainer {
+
+    height: 3rem;
+    width: 100%;
+    margin-bottom: 17px;
+  }
 
 }
