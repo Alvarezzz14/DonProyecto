@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login, authenticate, logout
+from datetime import timedelta
 
 # Importar biblioteca reportlab
 from io import BytesIO
