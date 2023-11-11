@@ -24,14 +24,15 @@ class UsuariosSenaManager(BaseUserManager):
         return user
 
     def create_superuser(self, numeroIdentificacion, email, password, **extra_fields):
-        user = self.model(
-            numeroIdentificacion=numeroIdentificacion,
-            email=self.normalize_email(email),
-            **extra_fields,
-        )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        return self.create_user(numeroIdentificacion, email, password, **extra_fields)
 
 
 class UsuariosSena(AbstractUser):
