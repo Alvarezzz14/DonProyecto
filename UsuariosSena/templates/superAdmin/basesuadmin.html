@@ -4,9 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/superAdmin/stylesBaseSuAdmin.css' %}">
+    
+    <title>{% block title %} Base S.A {% endblock title %}</title> 
+
+    <link rel="stylesheet" href="{% static 'css/superAdmin/estilobase.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
-    <title>Base S.A</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    {% block extrastyle %} 
+    
+    {% endblock extrastyle %}
+    
+    
+    {% block extrascript %} {% endblock extrascript %}
+    
+  
+
 </head>
 
 <body class="cabeza">
@@ -31,67 +43,142 @@
         </div>
     </header>
 
-    <section  class="contenedor">
-        <aside class="aside" id="aside">
-            <div class="contenedor-barra-lateral">
-                <div class="barra-lateral">
+    <body>
+        <section class="base">
+            <div class="barra-lateral" id="barra">
+                <a href="#" class="logo">
+                    <div class="nombre-logo">
+                        <img src="{% static 'img/SSoft.png' %}" alt="">
+                        <span class="material-icons-sharp" id="menu-toggle">menu</span> <!-- Cambiado el ID a menu-toggle -->
+                    </div>
+            
+                    <ul class="menu" id="menu"> <!-- Cambiado el ID a menu -->
+                        <li><a href="{% url 'homedash' %}"><span class="material-icons-sharp">home</span><p>Inicio</p> </a></li>
+                        <li><a href="{% url 'usuariodash' %}"><span class="material-icons-sharp">supervisor_account</span><p>Usuarios</p> </a></li>
+                        <li><a href="{% url 'inventariodash' %}"><span class="material-icons-sharp">inventory</span><p>Inventario</p> </a></li>
+                        <li><a href="{% url 'elementosdash' %}"><span class="material-icons-sharp">category</span><p>Elementos</p> </a></li>
+                        <li><a href="{% url 'calendario' %}"><span class="material-icons-sharp">calendar_month</span><p>Calendario</p></a></li>
+                    </ul>
+            
+                    <ul class="menu">
+                        <li><a href="#" class="salir" style="color: red;"><span style="color: red;" class="material-icons-sharp">logout</span><p>Salir</p></a></li>
                     
-                    <a href="" class="logos">
-                        <span class="material-icons-sharp" id="hambur">
-                            menu
-                        </span>
-                        <img src="{% static 'img/logo-sena-verde-svg-2022.svg' %}" alt="">
-                    </a>
-                    <a href="{% url 'homedash' %}">
-                        <span class="material-icons-sharp">
-                            home
-                        </span>
-                        Home
-                    </a>
-                    <a href="{% url 'usuariodash' %}">
-                        <span class="material-icons-sharp">
-                            person
-                        </span>
-                        Usuario
-                    </a>
-                    <a href="{% url 'inventariodash' %}">
-                        <span class="material-icons-sharp">
-                            inventory
-                        </span>
-                        Inventario
-                    </a>
-                    <a href="{% url 'elementosdash' %}">
-                        <span class="material-icons-sharp">
-                            category
-                        </span>
-                        Elementos
-                    </a>
-                    <a href="{% url 'calendario' %}">
-                        <span class="material-icons-sharp">
-                            calendar_month
-                        </span>
-                        Calendario
-                    </a>
-                    <a href="{% url 'logout' %}">
-                        <span class="material-icons-sharp">
-                            logout
-                        </span>
-                        <h3>Salir</h3>
-                    </a>
+                    </ul>
+                    
+                
+                </a>
+                <div class="redes-sociales">
+                    <a href="https://www.facebook.com/senacditidosquebradas/?locale=es_LA" target="_blank"><i class="fab fa-facebook-square" style="color: blue;"></i></a>
+                    <a href="https://www.instagram.com/bienestaralaprendizcditi/?hl=es" target="_blank"><i class="fab fa-instagram-square" style="color: #e697fa;"></i></a>
+                    <a href="https://twitter.com/senacditi/status/913841534172368897?lang=es" target="_blank"><i class="fab fa-twitter-square" style="color: aqua;"></i></a>
+    
                 </div>
+    
             </div>
-        </aside>  
+    
+    
+            
+                <div class="titulo">
+                    <img src="{% static 'img/senaL.png' %}" alt="" width="40px
+                    ">
+                    <h3>Gestion de inventario</h3>
+                </div>
+                
+                <div class="perfil">
+                    <p>Bievenido <br>
+                    Administrador</p>
+                    <div class="bola">
+        
+                    </div>
+                </div>
+        
+                <div class="redes">
+                    <div class="log">
+                        <img src="{% static 'img/SSIH.png' %}" alt="">
+                    </div>
+                </div>
+    
+            <div class="contenido" id="contenedor">
+                {% block content %}
+    
+                {% endblock %}
+            </div>
+    
+        </section>
+    
+        <script src="{% static 'js/scriptbase.js' %}">  
+        </script>
+    
+    
+  
+    
+    {% block extrajs %}
+        
+    {% endblock extrajs %}
+        
 
-        <!-- Cotenido principal -->
-        {% block content %}
+    <!-- alert sweet2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    {% if messages %}
+    {% for message in messages %}
+        <script>
+            var messageType = "{{ message.tags }}";
+            var messageText = "{{ message }}";
+            var confirmButtonText = "Aceptar";
+            
+            if (messageType === "success") {
+                Swal.fire({
+                    title: 'Éxito',
+                    text: messageText,
+                    icon: 'success',
+                    confirmButtonText: confirmButtonText
+                });
+            } else if (messageType === "warning") {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: messageText,
+                    icon: 'warning',
+                    confirmButtonText: confirmButtonText,
+                    showCancelButton: true,
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                          Swal.fire(
+                            'Eliminado!',
+                            'Eliminado Correctamente.',
+                            'success'
+                          )
+                        }
+                      });
+                
+            } else if (messageType === "error") {
+                Swal.fire({
+                    title: 'Error',
+                    text: messageText,
+                    icon: 'error',
+                    confirmButtonText: confirmButtonText
+                });
+            } else if (messageType === "info") {
+                Swal.fire({
+                    title: 'Información',
+                    text: messageText,
+                    icon: 'info',
+                    confirmButtonText: confirmButtonText
+                });
+            } else {
+                // Mensaje personalizado para cualquier otro tipo
+                Swal.fire({
+                    title: 'Mensaje personalizado',
+                    text: messageText,
+                    icon: 'info',
+                    confirmButtonText: confirmButtonText
+                });
+            }
+        </script>
+    {% endfor %}
+{% endif %}
 
-        {% endblock %}
-       
-        <!-- fin Cotenido principal -->
-
-    </section>
-
-    <script src="{% static 'js/scriptBaseSuAdmin.js' %}"></script>
+    <!-- fin  alert sweet2 -->
 
 </body>
 </html>

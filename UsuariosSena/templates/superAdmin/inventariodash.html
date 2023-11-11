@@ -1,0 +1,67 @@
+{% extends "../superAdmin/basesuadmin.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    DashInventario
+{% endblock title %}
+
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/superAdmin/inventariodash.css' %}">
+{% endblock extrastyle %}
+    
+
+{% block content %}
+    
+    <section class="dashboard"> 
+        <h1>Inventario</h1>
+        <div class="caja_dash">
+            <div class="box_dash">
+                <a href="#">Usuarios</a>
+            </div>
+            <div class="box_dash">
+                <a href="#">Inventario</a>
+            </div>
+            <div class="box_dash">
+                <a href="#">Elementos</a>
+            </div>
+            <div class="box_dash">
+                <a href="#">Calendario</a>
+            </div>
+        </div>
+        <div class="dashboard2">
+            <div class="listaopciones">
+                <div class="opciones">
+                    <a class="opcion1" href="#">
+                        Reporte Elementos Activos
+                    </a>
+                    <a class="opcion2" href="#">
+                        Reporte Elementos de Baja
+                    </a>
+                    <a class="opcion3" href="#">
+                        Reporte Elementos en Prestamo
+                    </a>
+                </div>
+            </div>
+            <div class="fechas">
+                <div class="logo">
+                    <img src="{% static 'img/imgdashboard/senaL.png' %}" alt="" width="100px">
+                </div>
+                <div id="fechaHora">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    {% block extrajs %}
+    <script src="{% static 'js/usuariodash.js' %}"></script>    
+    {% endblock extrajs %}
+        
+    
+
+
+    {% endblock content %}
