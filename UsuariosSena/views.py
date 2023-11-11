@@ -71,41 +71,61 @@ def consultarUsuario_view(request):
     return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
 
 
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import UsuariosSena
+
 def registroUsuario_view(request):
     if request.method == "POST":
         nombresVar = request.POST.get("nombres")
         apellidosVar = request.POST.get("apellidos")
         tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
         numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
-        emailVar = request.POST.get("email")
-        celularVar = request.POST.get("celular")
-        rolVar = request.POST.get("rol")
-        cuentadanteVar = request.POST.get("cuentadante")
-        tipoContratoVar = request.POST.get("tipoContrato")
-        is_activeVar = request.POST.get("is_active")
-        duracionContratoVar = request.POST.get("duracionContrato")
-        passwordVar = request.POST.get("password")
-        fotoUsuarioVar = request.POST.get("fotoUsuario")
 
-        user = UsuariosSena(
-            nombres=nombresVar,
-            apellidos=apellidosVar,
-            tipoIdentificacion=tipoIdentificacionVar,
-            numeroIdentificacion=numeroIdentificacionVar,
-            email=emailVar,
-            celular=celularVar,
-            rol=rolVar,
-            cuentadante=cuentadanteVar,
-            tipoContrato=tipoContratoVar,
-            is_active=is_activeVar,
-            duracionContrato=duracionContratoVar,
-            password=passwordVar,
-            fotoUsuario=fotoUsuarioVar,
-        )
-        user.save()
-        messages.success(request, "Usuario Registrado con Exito")  # mensaje de alerta
+        # Validar si el número de identificación ya está registrado
+        if UsuariosSena.objects.filter(numeroIdentificacion=numeroIdentificacionVar).exists():
+            messages.error(request, "El número de identificación ya está registrado.")
+        else:
+            emailVar = request.POST.get("email")
+
+            # Validar si el correo electrónico ya está registrado
+            if UsuariosSena.objects.filter(email=emailVar).exists():
+                messages.error(request, "El correo electrónico ya está registrado.")
+            else:
+                celularVar = request.POST.get("celular")
+                rolVar = request.POST.get("rol")
+                cuentadanteVar = request.POST.get("cuentadante")
+                tipoContratoVar = request.POST.get("tipoContrato")
+                is_activeVar = request.POST.get("is_active")
+                duracionContratoVar = request.POST.get("duracionContrato")
+                passwordVar = request.POST.get("password")
+                fotoUsuarioVar = request.POST.get("fotoUsuario")
+
+                # Crear el objeto de usuario
+                user = UsuariosSena(
+                    nombres=nombresVar,
+                    apellidos=apellidosVar,
+                    tipoIdentificacion=tipoIdentificacionVar,
+                    numeroIdentificacion=numeroIdentificacionVar,
+                    email=emailVar,
+                    celular=celularVar,
+                    rol=rolVar,
+                    cuentadante=cuentadanteVar,
+                    tipoContrato=tipoContratoVar,
+                    is_active=is_activeVar,
+                    duracionContrato=duracionContratoVar,
+                    password=passwordVar,
+                    fotoUsuario=fotoUsuarioVar,
+                )
+
+                # Guardar el usuario en la base de datos
+                user.save()
+
+                # Mensaje de éxito
+                messages.success(request, "Usuario Registrado con Éxito")
 
     return render(request, "superAdmin/registroUsuario.html")
+
 
 
 def editarUsuario_view(request, id):
