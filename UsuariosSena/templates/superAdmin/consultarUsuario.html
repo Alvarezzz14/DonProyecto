@@ -3,91 +3,90 @@
 {% load static %}
 
 
-  
-  {% block title %}
-  Consultar Usuarios
-  {% endblock title %}
-    
-  {% block extrastyle %}
-  <link rel="stylesheet" href="{% static 'css/superAdmin/modal.css' %}">
-  <script src="https://cdn.tailwindcss.com"></script>
-  {% endblock extrastyle %}
-  <!--Script Contenido Estilos de Tailwindcss-->
-  {% block extrascript %} 
-  <script>
-    const botonEliminar = (id) => {
-        Swal.fire({
-          "title":"¿Estás seguro  de eliminar?",
-          "text":"Esta accion no se puede deshacer",
-          "icon":"question",
-          "showCancelButton":true,
-          "cancelButtonText":"Cancelar",
-          "confirmButtonText":"Eliminar",
-          "reverseButtons":true,
-          "confirmButtonColor":"#fc7323",
-          "iconColor":"#fc7323",
-        })
-        .then(function(result){
-          if(result.isConfirmed){
-            window.location.href = "/eliminarUsuario/" + id;
-          }
-        })
-    }
+
+{% block title %}
+Consultar Usuarios
+{% endblock title %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/superAdmin/modal.css' %}">
+<script src="https://cdn.tailwindcss.com"></script>
+{% endblock extrastyle %}
+<!--Script Contenido Estilos de Tailwindcss-->
+{% block extrascript %}
+<script>
+  const botonEliminar = (id) => {
+    Swal.fire({
+      "title": "¿Estás seguro  de eliminar?",
+      "text": "Esta accion no se puede deshacer",
+      "icon": "question",
+      "showCancelButton": true,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Eliminar",
+      "reverseButtons": true,
+      "confirmButtonColor": "#fc7323",
+      "iconColor": "#fc7323",
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/eliminarUsuario/" + id;
+        }
+      })
+  }
 </script>
 <script>
   // Función para abrir el modal y mostrar la información del usuario
   function openModal(userData) {
-      const modal = document.getElementById('userModal');
-      const userDataContainer = document.getElementById('userData');
+    const modal = document.getElementById('userModal');
+    const userDataContainer = document.getElementById('userData');
 
-      // Llenar el contenido del modal con los datos del usuario
-      userDataContainer.innerHTML = userData;
+    // Llenar el contenido del modal con los datos del usuario
+    userDataContainer.innerHTML = userData;
 
-      modal.style.display = 'block';
+    modal.style.display = 'block';
   }
 
   // Función para cerrar el modal
   function closeModal() {
-      const modal = document.getElementById('userModal');
-      modal.style.display = 'none';
+    const modal = document.getElementById('userModal');
+    modal.style.display = 'none';
   }
 
   // Cierra el modal si se hace clic fuera de él
   window.onclick = function (event) {
-      const modal = document.getElementById('userModal');
-      if (event.target == modal) {
-          modal.style.display = 'none';
-      }
+    const modal = document.getElementById('userModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
   }
 </script>
 {% endblock extrascript %}
 {% block content %}
-  <section class="container  rounded-lg p-4 overflow-hidden m-2 ">
-    
-    <h1 class="text-[2.5rem] m-2 mb-16 font-extrabold text-center">Consultar Usuarios</h1>
+<section class="container  rounded-lg p-4 overflow-hidden m-2 ">
+
+  <h1 class="text-[2.5rem] m-2 mb-16 font-extrabold text-center">Consultar Usuarios</h1>
 
   <!--Barra de Busqueda-->
   <div class="flex mb-10 items-center w-full h-[1rem] max-w-md " x-data="{ search: '' }">
-      <div class="w-full ">
-          <input type="search" class="w-full px-4 py-1 text-gray-800 rounded-full focus:outline-none"
-           id="filtroEdad" placeholder="Filtrar por: Nombre... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
-      </div>
-      <div>
-          <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
-              :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
-              :disabled="search.length == 0">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-              </svg>
-          </button>
-      </div>
+    <div class="w-full ">
+      <input type="search" class="w-full px-4 py-1 text-gray-800 rounded-full focus:outline-none" id="filtroEdad"
+        placeholder="Filtrar por: Nombre... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
+    </div>
+    <div>
+      <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
+        :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
+        :disabled="search.length == 0">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+    </div>
   </div>
 
-<div class="flex flex-col overflow-x-auto mt-8">
-<div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-<div class="inline-block min-w-full scroll-auto overflow-hidden align-middle sm:rounded-lg">
+  <div class="flex flex-col overflow-x-auto mt-8">
+    <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div class="inline-block min-w-full scroll-auto overflow-hidden align-middle sm:rounded-lg">
 
         <!--Datatable se crea tabla con scrool maximo del conrenedor disponible, con 12 enunciados en la cabecera-->
         <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
@@ -147,58 +146,67 @@
               <td class=" truncate px-3 text-center py-2 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.tipoIdentificacion }}
 
-        </div>
-      </td>
-      <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.numeroIdentificacion }}
+                </div>
+              </td>
+              <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
+                <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.numeroIdentificacion }}
 
-          </div>
-      </td>
-      <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.email }}
+                </div>
+              </td>
+              <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.email }}
 
-          </div>
-      </td>
-      <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.celular }}
+                </div>
+              </td>
+              <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
+                <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.celular }}
 
                 </div>
               </td>
               <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
                 {% if usuario.rol == 'superAdmin' %}
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-orange-800 bg-orange-100 rounded-full"> SuperAdmin</span>
-                {% elif usuario.rol == 'I' %}    
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full"> Instructor</span>
-                {% elif usuario.rol == 'M' %}    
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-yellow-800 bg-yellow-100 rounded-full"> Monitor</span>
-                {% endif %}    
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-orange-800 bg-orange-100 rounded-full">
+                  SuperAdmin</span>
+                {% elif usuario.rol == 'I' %}
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
+                  Instructor</span>
+                {% elif usuario.rol == 'M' %}
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-yellow-800 bg-yellow-100 rounded-full">
+                  Monitor</span>
+                {% endif %}
               </td>
               <td class=" truncate px-3 py-2  text-center whitespace-no-wrap border-b border-gray-200">
                 {% if usuario.cuentadante == 'adminS' %}
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-cyan-800 bg-cyan-100 rounded-full"> AdminS</span>
-                {% elif usuario.cuentadante == 'adminD' %}    
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-emerald-800 bg-emerald-100 rounded-full"> AdminD</span>
-                {% elif usuario.cuentadante == 'monitor' %}    
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-purple-800 bg-purple-100 rounded-full"> Monitor</span>
-                {% endif %}    
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-cyan-800 bg-cyan-100 rounded-full">
+                  AdminS</span>
+                {% elif usuario.cuentadante == 'adminD' %}
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-emerald-800 bg-emerald-100 rounded-full">
+                  AdminD</span>
+                {% elif usuario.cuentadante == 'monitor' %}
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-purple-800 bg-purple-100 rounded-full">
+                  Monitor</span>
+                {% endif %}
               </td>
               <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
                 {% if usuario.tipoContrato == 'P' %}
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-lime-800 bg-lime-100 rounded-full"> Planta</span>
-                {% elif usuario.tipoContrato == 'C' %}    
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-teal-800 bg-teal-100 rounded-full"> Contratista</span>
-                  {% elif usuario.tipoContrato == 'A' %}    
-                <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-indigo-800 bg-indigo-100 rounded-full"> Aprendiz</span>
-                  {% endif %}
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-lime-800 bg-lime-100 rounded-full">
+                  Planta</span>
+                {% elif usuario.tipoContrato == 'C' %}
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-teal-800 bg-teal-100 rounded-full">
+                  Contratista</span>
+                {% elif usuario.tipoContrato == 'A' %}
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-indigo-800 bg-indigo-100 rounded-full">
+                  Aprendiz</span>
+                {% endif %}
               </td>
               <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
                 <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.duracionContrato }}
@@ -207,12 +215,14 @@
               </td>
               <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
                 {% if usuario.is_active == True %}
-               <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-green-800 bg-green-100 rounded-full"> Activo</span>
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
+                  Activo</span>
                 {% elif usuario.is_active == False %}
-              <span 
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-red-800 bg-red-100 rounded-full"> Inactivo</span>
-                
+                <span
+                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-red-800 bg-red-100 rounded-full">
+                  Inactivo</span>
+
                 {% endif %}
               </td>
 
@@ -256,7 +266,7 @@
     </div>
   </div>
   <!-- Modal para mostrar la información del usuario -->
-  
+
   <div id="userModal" class="modal">
     <div class="modal-content">
       <thead>
@@ -282,7 +292,7 @@
           </tr>
           <tr>
             <th>Rol:</th>
-            <td><input type="text" id="rolField"readonly></td>
+            <td><input type="text" id="rolField" readonly></td>
           </tr>
           <tr>
             <th>Correo SENA:</th>

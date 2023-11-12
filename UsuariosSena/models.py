@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.html import format_html
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import BaseUserManager
 from .choices import (
     roles,
     cuentadantes,
@@ -19,16 +21,26 @@ from django.contrib.auth.models import User
 class UsuariosSenaManager(BaseUserManager):
     def create_user(self, numeroIdentificacion, email, password=None, **extra_fields):
         user = self.model(numeroIdentificacion=numeroIdentificacion, email=self.normalize_email(email), **extra_fields)
+        user = self.model(
+            numeroIdentificacion=numeroIdentificacion,
+            email=self.normalize_email(email),
+            **extra_fields,
+        )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
     def create_superuser(self, numeroIdentificacion, email, password, **extra_fields):
-        user = self.model(numeroIdentificacion=numeroIdentificacion, email=self.normalize_email(email), **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-    
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        return self.create_user(numeroIdentificacion, email, password, **extra_fields)
+
 
 class UsuariosSena(AbstractUser):
     nombres = models.CharField(max_length=25)
@@ -49,8 +61,8 @@ class UsuariosSena(AbstractUser):
     objects = UsuariosSenaManager()
     
     username = None
-    first_name = None
     last_name = None
+    first_name = None
 
 
     # Set the node for log in
@@ -69,17 +81,19 @@ class Elementos(models.Model):
 
     cantidadElemento = models.IntegerField()
     valorUnidadElemento = models.IntegerField()
-    valorTotalElemento = models.IntegerField()
-    serialSenaElemento = models.CharField(max_length=25)
+    valorTotalElemento = models.IntegerField(blank=True, null=True)
+    serial = models.CharField(max_length=25, primary_key=True)
     facturaElemento = models.ImageField(
         upload_to="facturaElemento/", blank=True, null=True
     )  # Campo para la foto
-    id = models.BigAutoField(primary_key=True)
 
     def save(self, *args, **kwargs):
         # Calcula el valor total antes de guardar el objeto en la base de datos
         self.valorTotal = self.valorUnidadElemento * self.cantidadElemento
         super(Elementos, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Elemento devolutivo {self.nombreElemento}, unidades disponibles {self.cantidadElemento}"
 
 
 class Prestamo(models.Model):
@@ -87,33 +101,35 @@ class Prestamo(models.Model):
     fechaDevolucion = models.DateField()
     nombreEntrega = models.CharField(max_length=25)
     nombreRecibe = models.CharField(max_length=25, null=False)
-    # serialSenaElemento = models.ForeignKey(Elementos,null=False,blank=True,on_delete=models.CASCADE)
-    # nombre = models.ForeignKey(UsuariosSena,null=False,blank=True,on_delete=models.CASCADE)
-    observacionesPrestamo = models.CharField(max_length=25)
+    nombreElemento = models.CharField(max_length=25)
+    serialSenaElemento = models.ForeignKey(
+        Elementos, on_delete=models.CASCADE, related_name="prestamos"
+    )
+    cantidadElemento = models.IntegerField()
+    valorUnidadElemento = models.IntegerField()
+    valorTotalElemento = models.IntegerField(blank=True, null=True)
     firmaDigital = models.ImageField(
         upload_to="firmaDigital/", blank=True, null=True
     )  # Campo para la foto
-    id = models.BigAutoField(primary_key=True)
-
-
-class SalidaConsumibles(models.Model):
-    nombreEntrega = models.CharField(max_length=25)
-    nombreRecibe = models.CharField(max_length=25)
     observacionesPrestamo = models.CharField(max_length=25)
-    firmaDigital = models.ImageField(
-        upload_to="firmaDigital/", blank=True, null=True
-    )  # Campo para la foto
-    id = models.BigAutoField(primary_key=True)
-
-
-class PrestamoConsumible(models.Model):
-    elemento_consumible = models.ForeignKey(Elementos, on_delete=models.CASCADE)
-    cantidad_prestada = models.PositiveIntegerField()
-    fecha_entrega = models.DateField()
-    serial_elemento = models.CharField(max_length=100)
-    nombre_solicitante = models.CharField(max_length=100)
-    observaciones_prestamo = models.TextField()
     id = models.BigAutoField(primary_key=True)
 
     def __str__(self):
-        return f"Prestamo de {self.cantidad_prestada} unidades de {self.elemento_consumible.nombre}"
+        return f"Prestamo devolutivo de {self.cantidadElemento} unidades de {self.nombreElemento}"
+
+
+class PrestamoConsumible(models.Model):
+    fecha_entrega = models.DateField()
+    responsable_Entrega = models.CharField(max_length=25)
+    nombre_solicitante = models.CharField(max_length=100)
+    nombreElemento = models.CharField(max_length=25)
+    serialSenaElemento = models.CharField(max_length=100)
+    cantidad_prestada = models.PositiveIntegerField()
+    observaciones_prestamo = models.TextField()
+    firmaDigital = models.ImageField(
+        upload_to="firmaDigital/", blank=True, null=True
+    )  # Campo para la foto
+    id = models.BigAutoField(primary_key=True)
+
+    def __str__(self):
+        return self.nombreElemento

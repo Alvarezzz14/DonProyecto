@@ -4,19 +4,12 @@
 {% block extrastyle %}
     <link rel="stylesheet" href="{% static 'css/superAdmin/styledashboard.css' %}">
 {% endblock extrastyle %}
-    
-    
-    
-    {% block title %}
-        Home SUAdmin
-    {% endblock title %}
-        
 
-        <!-- Cotenido principal -->
 
-        {% block content %}
 
-       
+{% block title %}
+Home SUAdmin
+{% endblock title %}
 
         <body>
             <section class="dashboard"> 
@@ -77,7 +70,7 @@
             </section>
         <!-- fin Cotenido principal -->
 
-        {% endblock %}
+{% block extrajs %}
 
    
    {% block extrajs %}
