@@ -8,6 +8,7 @@
     text-decoration: none;
 }
 
+
 .dashboard{
     margin: 20px;
 }
@@ -29,11 +30,12 @@
     justify-content: center;
     width: 80%;
     padding:20px 1px;
-    background: #ababab;
+    background: #fc7323;
     box-shadow: 1px 2px 1px #b0afaf;
     border-radius: 5px;
     transition: 0.5s;
     cursor: pointer;
+    
 }
 
 .box_dash:hover{
@@ -42,7 +44,7 @@
 
 .box_dash a{
     text-decoration: none;
-    color: #000;
+    color: #ffffff;
 }
 
 .dashboard2{
