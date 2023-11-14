@@ -93,7 +93,7 @@ class Elementos(models.Model):
         super(Elementos, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"Elemento devolutivo {self.nombreElemento}, unidades disponibles {self.cantidadElemento}"
+        return self.nombreElemento
 
 
 class Prestamo(models.Model):
@@ -102,12 +102,11 @@ class Prestamo(models.Model):
     nombreEntrega = models.CharField(max_length=25)
     nombreRecibe = models.CharField(max_length=25, null=False)
     nombreElemento = models.CharField(max_length=25)
-    serialSenaElemento = models.ForeignKey(
-        Elementos, on_delete=models.CASCADE, related_name="prestamos"
-    )
+    serialSenaElemento = models.ForeignKey(Elementos, on_delete=models.CASCADE, related_name="prestamos", to_field='serial')
     cantidadElemento = models.IntegerField()
     valorUnidadElemento = models.IntegerField()
     valorTotalElemento = models.IntegerField(blank=True, null=True)
+    estado_prestamo = models.CharField(max_length=15)
     firmaDigital = models.ImageField(
         upload_to="firmaDigital/", blank=True, null=True
     )  # Campo para la foto

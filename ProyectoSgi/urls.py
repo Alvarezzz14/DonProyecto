@@ -36,6 +36,9 @@ urlpatterns = [
         "editarUsuario/<int:id>/", views.editarUsuario_view, name="editarUsuario_view"
     ),
     path(
+        "editarPrestamo/<int:id>/", views.editarPrestamo_view, name="editarPrestamo_view"
+    ),
+    path(
         "actualizarUsuario/<int:id>",
         views.actualizarUsuario_view,
         name="actualizarUsuario_view",
@@ -60,6 +63,7 @@ urlpatterns = [
     path("consultarUsuario/", views.consultarUsuario_view, name="consultarUsuario_view"),
     path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
     path("listarPrestamos/", views.listar_prestamos, name="listar_prestamos"),
+    path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones"),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("listarElementos/", views.listar_elementos, name="listar_elementos"),
     path("eliminarElemento/<int:id>/", views.eliminarElemento, name="eliminarElemento"),  # eliminar registro de la base de datos desde consultar elementos
