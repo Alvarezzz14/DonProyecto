@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0011_update_proxy_permissions'),
+        ('auth', '0012_alter_user_first_name_max_length'),
     ]
 
     operations = [
@@ -53,20 +53,17 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name="PrestamoConsumible",
+            name='PrestamoConsumible',
             fields=[
-                ("fecha_entrega", models.DateField()),
-                ("responsable_Entrega", models.CharField(max_length=25)),
-                ("nombre_solicitante", models.CharField(max_length=100)),
-                ("nombreElemento", models.CharField(max_length=25)),
-                ("serialSenaElemento", models.CharField(max_length=100)),
-                ("cantidad_prestada", models.PositiveIntegerField()),
-                ("observaciones_prestamo", models.TextField()),
-                (
-                    "firmaDigital",
-                    models.ImageField(blank=True, null=True, upload_to="firmaDigital/"),
-                ),
-                ("id", models.BigAutoField(primary_key=True, serialize=False)),
+                ('fecha_entrega', models.DateField()),
+                ('responsable_Entrega', models.CharField(max_length=25)),
+                ('nombre_solicitante', models.CharField(max_length=100)),
+                ('nombreElemento', models.CharField(max_length=25)),
+                ('serialSenaElemento', models.CharField(max_length=100)),
+                ('cantidad_prestada', models.PositiveIntegerField()),
+                ('observaciones_prestamo', models.TextField()),
+                ('firmaDigital', models.ImageField(blank=True, null=True, upload_to='firmaDigital/')),
+                ('id', models.BigAutoField(primary_key=True, serialize=False)),
             ],
         ),
         migrations.CreateModel(
@@ -90,8 +87,8 @@ class Migration(migrations.Migration):
                 ('password', models.CharField(default='', max_length=30)),
                 ('fotoUsuario', models.ImageField(blank=True, null=True, upload_to='usuarioFoto/')),
                 ('id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
+                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
+                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
             ],
             options={
                 'verbose_name': 'user',
@@ -100,30 +97,21 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="Prestamo",
+            name='Prestamo',
             fields=[
-                ("fechaEntrega", models.DateField()),
-                ("fechaDevolucion", models.DateField()),
-                ("nombreEntrega", models.CharField(max_length=25)),
-                ("nombreRecibe", models.CharField(max_length=25)),
-                ("nombreElemento", models.CharField(max_length=25)),
-                ("cantidadElemento", models.IntegerField()),
-                ("valorUnidadElemento", models.IntegerField()),
-                ("valorTotalElemento", models.IntegerField(blank=True, null=True)),
-                (
-                    "firmaDigital",
-                    models.ImageField(blank=True, null=True, upload_to="firmaDigital/"),
-                ),
-                ("observacionesPrestamo", models.CharField(max_length=25)),
-                ("id", models.BigAutoField(primary_key=True, serialize=False)),
-                (
-                    "serialSenaElemento",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="prestamos",
-                        to="UsuariosSena.elementos",
-                    ),
-                ),
+                ('fechaEntrega', models.DateField()),
+                ('fechaDevolucion', models.DateField()),
+                ('nombreEntrega', models.CharField(max_length=25)),
+                ('nombreRecibe', models.CharField(max_length=25)),
+                ('nombreElemento', models.CharField(max_length=25)),
+                ('cantidadElemento', models.IntegerField()),
+                ('valorUnidadElemento', models.IntegerField()),
+                ('valorTotalElemento', models.IntegerField(blank=True, null=True)),
+                ('estado_prestamo', models.CharField(max_length=15)),
+                ('firmaDigital', models.ImageField(blank=True, null=True, upload_to='firmaDigital/')),
+                ('observacionesPrestamo', models.CharField(max_length=25)),
+                ('id', models.BigAutoField(primary_key=True, serialize=False)),
+                ('serialSenaElemento', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='prestamos', to='UsuariosSena.elementos')),
             ],
         ),
     ]

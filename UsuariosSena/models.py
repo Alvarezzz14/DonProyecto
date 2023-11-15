@@ -88,7 +88,7 @@ class ElementosDevolutivo(models.Model):
     )  # Campo para la foto
 
     def __str__(self):
-        return f"Elemento devolutivo {self.nombreElemento}, unidades disponibles {self.cantidadElemento}"
+        return self.nombreElemento
 
 
 class ElementosConsumible(models.Model):
@@ -128,6 +128,7 @@ class Prestamo(models.Model):
     cantidadElemento = models.IntegerField()
     valorUnidadElemento = models.IntegerField()
     valorTotalElemento = models.IntegerField(blank=True, null=True)
+    estado_prestamo = models.CharField(max_length=15)
     firmaDigital = models.ImageField(
         upload_to="firmaDigital/", blank=True, null=True
     )  # Campo para la foto
