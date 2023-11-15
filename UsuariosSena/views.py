@@ -8,6 +8,8 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth import login, authenticate, logout
 from datetime import timedelta
 from django.core.exceptions import ValidationError
+from django.urls import reverse
+
 
 
 # Importar biblioteca reportlab
@@ -608,13 +610,12 @@ def consultarTransacciones_view(request):
 	data = {'opcion_seleccionada':opcion_seleccionada, "Prestamos": prestamos, "Entregas": entregas, "usuarios":usuarios}
 
 	return render(
-		request, "superAdmin/consultarTransacciones.html", data
-	)	
-
+		request, "superAdmin/consultarTransacciones.html", data)
+		
 def editarPrestamo_view(request, id):
     # Obtener el objeto Prestamo por su ID
     prestamo = get_object_or_404(Prestamo, id=id)
-    elemento = None
+    elemento = None  # Inicializar la variable fuera del bloque try
 
     if request.method == "POST":
         # Obtener datos del formulario
@@ -623,15 +624,11 @@ def editarPrestamo_view(request, id):
         nombre_entrega = request.POST.get('txt_nombreEntrega')
         nombre_recibe = request.POST.get('txt_nombreRecibe')
         nombre_elemento = request.POST.get('txt_nombreElemento')
-        serial_elemento = request.POST.get('txt_serialSenaElemento')
         cantidad_elemento = request.POST.get('txt_cantidadElemento')
         valor_unidad = request.POST.get('txt_valorUnidadElemento')
-        valor_total = request.POST.get('txt_valorTotalElemento')
-
+        observaciones_prestamo = request.POST.get('txt_observacionesPrestamo')
+                
         try:
-            # Obtener el objeto Elementos por su serial
-            elemento = Elementos.objects.get(serial=serial_elemento)
-
             # Actualizar los campos del objeto Prestamo con los datos del formulario
             prestamo.fechaEntrega = fecha_entrega
             prestamo.fechaDevolucion = fecha_devolucion
@@ -639,14 +636,14 @@ def editarPrestamo_view(request, id):
             prestamo.nombreRecibe = nombre_recibe
             prestamo.nombreElemento = nombre_elemento
             prestamo.cantidadElemento = cantidad_elemento
-            prestamo.serialSenaElemento = serial_elemento
             prestamo.valorUnidadElemento = valor_unidad
-            prestamo.valorTotalElemento = valor_total
+            prestamo.observacionesPrestamo = observaciones_prestamo
             # Resto de la lógica de actualización
 
             prestamo.save()
 
-            return redirect("consultarTransacciones_view")
+            consultar_transacciones_url = reverse("consultarTransacciones")
+            return redirect(f"{consultar_transacciones_url}?opcion=prestamo")
 
         except Elementos.DoesNotExist as e:
             # Manejar la excepción y mostrar un mensaje de error

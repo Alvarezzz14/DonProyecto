@@ -1,5 +1,5 @@
 {% extends "../superAdmin/basesuadmin.html" %}
-
+                        
 {% load static %}
 
 {% block content %}
@@ -40,15 +40,8 @@
                     <label for="nombreElemento" class="labelform">Elemento</label>
                 </div>
             </div>
-            <div class="container-1">
-                <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="txt_serialSenaElemento" value="{{prestamo.serialSenaElemento}}" required>
-                    <label for="serialSenaElemento" class="labelform">Serial Elemento </label>
-                </div>
-                <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="txt_cantidadElemento" value="{{prestamo.cantidadElemento}}" required>
-                    <label for="cantidadElemento" class="labelform">Cantidad Prestada </label>
-                </div>
+            <div class="container-1">                                
+
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="a" name="txt_cantidadElemento" value="{{prestamo.cantidadElemento}}" required>
                     <label for="cantidadElemento" class="labelform">Cantidad Prestada </label>
@@ -58,12 +51,7 @@
                     <input type="text" class="inputform" placeholder="a" name="txt_valorUnidadElemento" value="{{prestamo.valorUnidadElemento}}" required readonly>
                     <label for="valorUnidadElemento" class="labelform">Valor Unitario </label>
                 </div>
-
-                <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="txt_valorTotalElemento" value="{{prestamo.valorTotalElemento}}" required readonly>
-                    <label for="valorTotalElemento" class="labelform">Valor Total </label>
-                </div>
-
+            
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="a" name="txt_estado_prestamo" value="{{prestamo.estado_prestamo}}" required readonly>
                     <label for="estado_prestamo" class="labelform">Estado</label>
