@@ -134,4 +134,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = 'indexLogin.html'
 LOGIN_REDIRECT_URL = 'homedash'
 
+LOGOUT_REDIRECT_URL = '/'   
 

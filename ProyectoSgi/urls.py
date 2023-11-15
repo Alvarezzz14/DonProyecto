@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 # Media
 from django.conf import settings
@@ -13,6 +13,8 @@ urlpatterns = [
         "admin/", 
         admin.site.urls
         ),
+    
+    path('', include(('UsuariosSena.urls','usu'), namespace='usu')),
     
     path(
         "", 
@@ -113,6 +115,8 @@ urlpatterns = [
         views.get_element_name_by_serial,
         name="get-element-name-by-serial",
     ),
+    
+    
 ]
 
 # Configuración para servir archivos multimedia en entorno de desarrollo
