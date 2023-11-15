@@ -1,6 +1,19 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect, get_object_or_404
-from .forms import UsuariosSenaForm, UserLoginForm, ElementosForm, PrestamosForm
-from .models import UsuariosSena, Prestamo, Elementos, PrestamoConsumible
+from .forms import (
+    UsuariosSenaForm,
+    UserLoginForm,
+    ElementosDevolutivoForm,
+    PrestamosForm,
+    ElementosConsumiblesForm,
+    EntregaConsumibleForm,
+)
+from .models import (
+    UsuariosSena,
+    Prestamo,
+    ElementosDevolutivo,
+    ElementosConsumible,
+    EntregaConsumible,
+)
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.http import JsonResponse
@@ -8,6 +21,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth import login, authenticate, logout
 from datetime import timedelta
 from django.core.exceptions import ValidationError
+from datetime import date
 
 
 # Importar biblioteca reportlab
@@ -111,6 +125,8 @@ def registroUsuario_view(request):
             cuentadante=cuentadanteVar,
             tipoContrato=tipoContratoVar,
             is_active=is_activeVar,
+            # is_superuser=True, # puede hacer cualquier cosa
+            is_staff=True,  # puede acceder al panel de administración, pero sus acciones específicas dentro del panel estarán limitadas por sus permisos asignados.
             duracionContrato=duracionContratoVar,
             password=password_cifrada,
             fotoUsuario=fotoUsuarioVar,
@@ -194,9 +210,14 @@ def eliminarUsuario_view(request, id):
 
 
 def formPrestamosDevolutivos_view(request):
-    elementos = Elementos.objects.all().values_list("nombreElemento", "serial")
+    elementos = ElementosDevolutivo.objects.all().values_list(
+        "nombreElemento", "serial"
+    )
+    usuarios = UsuariosSena.objects.all()  # Obtiene todos los ususarios
     if request.method == "POST":
-        fechaEntregaVar = request.POST.get("fechaEntrega")
+        # fechaEntregaVar = request.POST.get("fechaEntrega")
+        # Manera 1 de hacerlo
+        fechaEntregaVar = date.today()
         fechaDevolucionVar = request.POST.get("fechaDevolucion")
         nombreEntregavar = request.POST.get("nombreEntrega")
         nombreRecibevar = request.POST.get("nombreRecibe")
@@ -208,7 +229,7 @@ def formPrestamosDevolutivos_view(request):
         observacionesPrestamovar = request.POST.get("observacionesPrestamo")
 
         try:
-            elemento = Elementos.objects.get(serial=serialSenaElementovar)
+            elemento = ElementosDevolutivo.objects.get(serial=serialSenaElementovar)
 
             # Validar que la cantidad no sea negativa
             if cantidadElementoVar <= 0:
@@ -239,14 +260,16 @@ def formPrestamosDevolutivos_view(request):
             )
             prestamo.save()
             messages.success(request, "Elemento Guardado Exitosamente")
-        except Elementos.DoesNotExist:
+        except ElementosDevolutivo.DoesNotExist:
             return HttpResponse("El elemento con el serial dado no existe.", status=404)
         except ValidationError as e:
             # Manejar la excepción ValidationError
             return HttpResponse(str(e), status=400)
 
     return render(
-        request, "superAdmin/formPrestamosDevolutivos.html", {"elementos": elementos}
+        request,
+        "superAdmin/formPrestamosDevolutivos.html",
+        {"elementos": elementos, "usuarios": usuarios},
     )
 
 
@@ -256,13 +279,18 @@ def get_serial_by_element_name(request):
     if element_name:
         try:
             # Busca el elemento por su nombre
-            elemento = Elementos.objects.get(nombreElemento=element_name)
+            elemento = ElementosDevolutivo.objects.get(nombreElemento=element_name)
             serial_number = elemento.serial
             valor_unidad = elemento.valorUnidadElemento
+            stock = elemento.cantidadElemento
             return JsonResponse(
-                {"serialNumber": serial_number, "valorUnidad": valor_unidad}
+                {
+                    "serialNumber": serial_number,
+                    "valorUnidad": valor_unidad,
+                    "Stock": stock,
+                }
             )
-        except Elementos.DoesNotExist:
+        except ElementosDevolutivo.DoesNotExist:
             return JsonResponse({"error": "Element not found"}, status=404)
     else:
         return JsonResponse({"error": "No element name provided"}, status=400)
@@ -274,13 +302,18 @@ def get_element_name_by_serial(request):
     if serial_number:
         try:
             # Busca el elemento por su número de serie
-            elemento = Elementos.objects.get(serial=serial_number)
+            elemento = ElementosDevolutivo.objects.get(serial=serial_number)
             element_name = elemento.nombreElemento
             valor_unidad = elemento.valorUnidadElemento
+            stock = elemento.cantidadElemento
             return JsonResponse(
-                {"elementName": element_name, "valorUnidad": valor_unidad}
+                {
+                    "elementName": element_name,
+                    "valorUnidad": valor_unidad,
+                    "Stock": stock,
+                }
             )
-        except Elementos.DoesNotExist:
+        except ElementosDevolutivo.DoesNotExist:
             return JsonResponse({"error": "Serial number not found"}, status=404)
     else:
         return JsonResponse({"error": "No serial number provided"}, status=400)
@@ -291,14 +324,15 @@ def formPrestamosConsumibles_view(request):
         # Procesar el formulario aquí (guardar el préstamo consumible)
         nombreElementovar = request.POST.get("nombreElemento")
         cantidad_prestadavar = int(request.POST.get("cantidad_prestada"))
-        fecha_entregavar = request.POST.get("fecha_entrega")
+        # fecha_entregavar = request.POST.get("fecha_entrega")
+        fecha_entregavar = date.today()  # Manera 1 de hacerlo
         serialSenaElementovar = request.POST.get("serialSenaElemento")
         nombre_solicitantevar = request.POST.get("nombre_solicitante")
         observaciones_prestamovar = request.POST.get("observaciones_prestamo")
         responsable_Entregavar = request.POST.get("responsable_Entrega")
 
         # instancia de PrestamoConsumible
-        prestamo_consumible = PrestamoConsumible(
+        prestamo_consumible = EntregaConsumible(
             nombreElemento=nombreElementovar,
             cantidad_prestada=cantidad_prestadavar,
             fecha_entrega=fecha_entregavar,
@@ -334,56 +368,117 @@ def listar_prestamos(request):
 
 def formElementos_view(request):
     if request.method == "POST":
-        fechaElementoVar = request.POST.get("fechaElemento")
         nombreElementoVar = request.POST.get("nombreElemento")
         categoriaElementoVar = request.POST.get("categoriaElemento")
         estadoElementoVar = request.POST.get("estadoElemento")
-        cantidadElementoVar = int(request.POST.get("cantidadElemento"))
-        valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
-        serialVar = request.POST.get("serialSenaElemento")
         descripcionElementoVar = request.POST.get("descripcionElemento")
         observacionElementoVar = request.POST.get("observacionElemento")
-        facturaElementoVar = request.FILES.get(
-            "facturaElemento"
-        )  # Asumiendo que es un archivo
+        facturaElementoVar = request.FILES.get("facturaElemento")
+        cantidadElementoVar = int(request.POST.get("cantidadElemento"))
+        valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
 
         # Validar que la cantidad no sea negativa
         if cantidadElementoVar <= 0:
             messages.error(request, "La cantidad no puede ser negativa o igual a cero")
             return render(request, "superAdmin/formElementos.html")
 
-        # Calcula el valor total
         valorTotalElementoVar = cantidadElementoVar * valorUnidadElementoVar
 
-        elementos = Elementos(
-            fechaElemento=fechaElementoVar,
-            nombreElemento=nombreElementoVar,
-            categoriaElemento=categoriaElementoVar,
-            estadoElemento=estadoElementoVar,
-            cantidadElemento=cantidadElementoVar,
-            valorUnidadElemento=valorUnidadElementoVar,
-            valorTotalElemento=valorTotalElementoVar,
-            serial=serialVar,
-            descripcionElemento=descripcionElementoVar,
-            observacionElemento=observacionElementoVar,
-            facturaElemento=facturaElementoVar,
-        )
-        elementos.save()
-        messages.success(request, "Elemento Guardado Exitosamente")
+        if categoriaElementoVar == "D":
+            serialVar = request.POST.get(
+                "serialSenaElemento"
+            )  # Específico para ElementosDevolutivo
+            elemento = ElementosDevolutivo(
+                nombreElemento=nombreElementoVar,
+                categoriaElemento=categoriaElementoVar,
+                estadoElemento=estadoElementoVar,
+                descripcionElemento=descripcionElementoVar,
+                observacionElemento=observacionElementoVar,
+                cantidadElemento=cantidadElementoVar,
+                valorUnidadElemento=valorUnidadElementoVar,
+                valorTotalElemento=valorTotalElementoVar,
+                serial=serialVar,
+                facturaElemento=facturaElementoVar,
+            )
+        elif categoriaElementoVar == "C":
+            elemento = ElementosConsumible(
+                nombreElemento=nombreElementoVar,
+                categoriaElemento=categoriaElementoVar,
+                estadoElemento=estadoElementoVar,
+                descripcionElemento=descripcionElementoVar,
+                observacionElemento=observacionElementoVar,
+                cantidadElemento=cantidadElementoVar,
+                costoUnidadElemento=valorUnidadElementoVar,
+                costoTotalElemento=valorTotalElementoVar,
+                lote=request.POST.get(
+                    "serialSenaElemento"
+                ),  # 'lote' es como el serial en devolt.
+                facturaElemento=facturaElementoVar,
+            )
+        else:
+            messages.error(request, "Categoría de elemento no válida.")
+            return render(request, "superAdmin/formElementos.html")
 
-        # Redireccionar o renderizar según sea necesario
+        elemento.save()
+        messages.success(request, "Elemento Guardado Exitosamente")
         return redirect("formElementos_view")
 
     return render(request, "superAdmin/formElementos.html")
 
 
+# ---------------------------------------------------------------------------
+# def formElementos_view(request):
+#     if request.method == "POST":
+#         # fechaElementoVar = request.POST.get("fechaElemento")
+#         nombreElementoVar = request.POST.get("nombreElemento")
+#         categoriaElementoVar = request.POST.get("categoriaElemento")
+#         estadoElementoVar = request.POST.get("estadoElemento")
+#         cantidadElementoVar = int(request.POST.get("cantidadElemento"))
+#         valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
+#         serialVar = request.POST.get("serialSenaElemento")
+#         descripcionElementoVar = request.POST.get("descripcionElemento")
+#         observacionElementoVar = request.POST.get("observacionElemento")
+#         facturaElementoVar = request.FILES.get(
+#             "facturaElemento"
+#         )  # Asumiendo que es un archivo
+
+#         # Validar que la cantidad no sea negativa
+#         if cantidadElementoVar <= 0:
+#             messages.error(request, "La cantidad no puede ser negativa o igual a cero")
+#             return render(request, "superAdmin/formElementos.html")
+
+#         # Calcula el valor total
+#         valorTotalElementoVar = cantidadElementoVar * valorUnidadElementoVar
+
+#         elementos = Elementos(
+#             nombreElemento=nombreElementoVar,
+#             categoriaElemento=categoriaElementoVar,
+#             estadoElemento=estadoElementoVar,
+#             cantidadElemento=cantidadElementoVar,
+#             valorUnidadElemento=valorUnidadElementoVar,
+#             valorTotalElemento=valorTotalElementoVar,
+#             serial=serialVar,
+#             descripcionElemento=descripcionElementoVar,
+#             observacionElemento=observacionElementoVar,
+#             facturaElemento=facturaElementoVar,
+#         )
+#         elementos.save()
+#         messages.success(request, "Elemento Guardado Exitosamente")
+
+#         # Redireccionar o renderizar según sea necesario
+#         return redirect("formElementos_view")
+
+#     return render(request, "superAdmin/formElementos.html")
+# ---------------------------------------------------------------------------------
+
+
 def listar_elementos(request):
-    elementos = Elementos.objects.all()
+    elementos = ElementosDevolutivo.objects.all()
     return render(request, "superAdmin/listarElemento.html", {"elementos": elementos})
 
 
 def consultarElementos(request):
-    elementos = Elementos.objects.all()
+    elementos = ElementosDevolutivo.objects.all()
     return render(
         request, "superAdmin/consultarElementos.html", {"elementos": elementos}
     )
@@ -392,7 +487,7 @@ def consultarElementos(request):
 def eliminarElemento(request, id):
     try:
         # Busca el objeto con el ID especificado o devuelve un error 404 si no existe
-        objeto = get_object_or_404(Elementos, id=id)
+        objeto = get_object_or_404(ElementosDevolutivo, id=id)
 
         # Realiza la eliminación del objeto
         objeto.delete()
@@ -415,7 +510,7 @@ def eliminarElemento(request, id):
 
 
 def generar_pdf(request):
-    elementos = Elementos.objects.all()
+    elementos = ElementosDevolutivo.objects.all()
     elements = []
     # Crear un objeto BytesIO para almacenar el archivo PDF generado
     buffer = BytesIO()
@@ -542,7 +637,7 @@ def generar_pdf(request):
 
 
 def generar_excel(request):
-    elementos = Elementos.objects.all()
+    elementos = ElementosDevolutivo.objects.all()
     elements = []
     buffer = BytesIO()
     workbook = xlsxwriter.Workbook(buffer, {"in_memory": True})

@@ -11,7 +11,7 @@
 
 </head>
 
-<section class="section" style=" margin: 10px; padding: 10px">
+<section class="section" style=" margin: 10px; padding: 50px">
 
     <!-- Inicio del Forumlario-->
 
@@ -23,10 +23,6 @@
             {% csrf_token %}
 
             <div class="container-1">
-                <div class="fechaContainer">
-                    <input type="date" class="inputform" placeholder="Fecha de entrega" name="fecha_entrega" required>
-                    <label for="fecha_entrega" class="labelform">Fecha de entrega</label>
-                </div>
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="responsable_Entrega" name="responsable_Entrega"
                         required>
@@ -37,19 +33,17 @@
                         required>
                     <label for="nombre_solicitante" class="labelform">Nombre del Solicitante</label>
                 </div>
-            </div>
-            <div class="container-1">
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="nombreElemento" name="nombreElemento" required>
                     <label for="nombreElemento" class="labelform">Nombre del Elemento</label>
                 </div>
+            </div>
+            <div class="container-1">
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="serialSenaElemento" name="serialSenaElemento"
                         required>
                     <label for="serialSenaElemento" class="labelform">Serial del Elemento</label>
                 </div>
-            </div>
-            <div class="container-1">
                 <div class="inputContainer">
                     <input type="number" class="inputform" placeholder="cantidad_prestada" name="cantidad_prestada"
                         required>

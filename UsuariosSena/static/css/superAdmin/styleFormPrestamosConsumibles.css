@@ -31,23 +31,24 @@
 
 .container-1 {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     margin-bottom: 1rem;
-    align-items: center;
+    gap: 2rem;
+
 
 }
 
 .inputContainer {
     position: relative;
     height: 3rem;
-    width: 24rem;
+    width: 20rem;
     margin-bottom: 17px;
 }
 
 .fechaContainer {
     position: relative;
     height: 3rem;
-    width: 10rem;
+    width: 9rem;
     margin-bottom: 17px;
 }
 
@@ -61,7 +62,7 @@
     width: 100%;
     border: 1px solid #DADCE0;
     border-radius: 7px;
-    font-size: 0.6rem;
+    font-size: 1rem;
     padding: 0 20px;
     outline: none;
     background: none;
@@ -83,38 +84,14 @@
     left: 15px;
     padding: 0 4px;
     background-color: white;
-    color: #626264;
-    font-size: 0.8rem;
-    transition: 0.5s;
-    z-index: 0;
-}
-
-.labelform1 {
-    position: absolute;
-    top: 15px;
-    left: -40px;
-    padding: 0 4px;
-    background-color: white;
-    color: #626264;
-    font-size: 0.8rem;
-    transition: 0.5s;
-    z-index: 0;
-}
-
-.labelform2 {
-    position: absolute;
-    top: 15px;
-    left: 60px;
-    padding: 0 4px;
-    background-color: white;
-    color: #626264;
-    font-size: 0.8rem;
+    color: #4e4f4f;
+    font-size: 0.9rem;
     transition: 0.5s;
     z-index: 0;
 }
 
 .labelsubirfoto {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
 /*Estilos BOtones */
@@ -147,8 +124,8 @@
     top: -7px;
     left: 3px;
     z-index: 10;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-size: 0.9rem;
+    font-weight: 700;
     color: rgb(0, 0, 0);
 }
 
@@ -162,6 +139,36 @@
     z-index: 10;
     font-size: 0.8rem;
     font-weight: 600;
+    color: black;
+}
+
+.selectorimagen {
+    width: 15%;
+    display: block;
+    margin-left: 1rem;
+
+}
+
+.selectorimagen label {
+
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+
+}
+
+.tomarfoto {
+    border: 1px solid #DADCE0;
+    border-radius: 7px;
+    font-size: 0.7em;
+    width: 100%;
+}
+
+.inputsubirfoto {
+    border: 1px solid #DADCE0;
+    border-radius: 7px;
+    font-size: 0.7em;
+    width: 100%;
 }
 
 .divbotones {
@@ -171,10 +178,13 @@
 }
 
 
+
+
+
 /* Para 1300px */
 @media (max-width: 1270px) {
     .section {
-        width: 98%;
+        width: 95%;
     }
 
     .inputform:focus+.labelform {
@@ -185,9 +195,10 @@
 }
 
 /* Para 1000px */
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
     .section {
         font-size: 0.6rem;
+
 
     }
 
@@ -222,6 +233,12 @@
     }
 }
 
+.inputform:focus+.labelform {
+    font-size: 0.6rem;
+
+
+}
+
 @media (max-width: 768px) {
     .title {
         font-size: 1rem;
@@ -235,14 +252,31 @@
     }
 
     .signupFrm {
-        font-size: 0.4rem;
+        font-size: 1rem;
     }
 
     .labelform {
-        font-size: 0.4rem;
+        font-size: 1rem;
     }
 
     .inputform:focus+.labelform {
-        font-size: 0.4rem;
+        font-size: 1rem;
     }
+
+    .inputsubirfoto+.labelsubirfoto {
+        width: 100%;
+    }
+
+    .selectorimagen {
+        width: 60%;
+
+    }
+
+    .inputContainer {
+
+        height: 3rem;
+        width: 100%;
+        margin-bottom: 17px;
+    }
+
 }

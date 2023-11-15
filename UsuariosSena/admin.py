@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import UsuariosSena, Elementos, Prestamo, PrestamoConsumible
+from .models import (
+    UsuariosSena,
+    ElementosDevolutivo,
+    ElementosConsumible,
+    Prestamo,
+    EntregaConsumible,
+)
 from .choices import roles, cuentadantes
 
 
@@ -8,6 +14,7 @@ class ServicioAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UsuariosSena)
-admin.site.register(Elementos)
+admin.site.register(ElementosDevolutivo)
+admin.site.register(ElementosConsumible)
 admin.site.register(Prestamo)
-admin.site.register(PrestamoConsumible)
+admin.site.register(EntregaConsumible)

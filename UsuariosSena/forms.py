@@ -2,7 +2,13 @@
 # from django import forms
 
 from django import forms
-from .models import UsuariosSena, Elementos, Prestamo
+from .models import (
+    UsuariosSena,
+    ElementosDevolutivo,
+    ElementosConsumible,
+    Prestamo,
+    EntregaConsumible,
+)
 from django.forms import ModelForm
 
 
@@ -17,13 +23,25 @@ class UserLoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label="password")
 
 
-class ElementosForm(forms.ModelForm):
+class ElementosDevolutivoForm(forms.ModelForm):
     class Meta:
-        model = Elementos
+        model = ElementosDevolutivo
+        fields = "__all__"
+
+
+class ElementosConsumiblesForm(forms.ModelForm):
+    class Meta:
+        model = ElementosConsumible
         fields = "__all__"
 
 
 class PrestamosForm(forms.ModelForm):
     class Meta:
         model = Prestamo
+        fields = "__all__"
+
+
+class EntregaConsumibleForm(forms.ModelForm):
+    class Meta:
+        model = EntregaConsumible
         fields = "__all__"
