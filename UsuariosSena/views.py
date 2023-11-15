@@ -14,8 +14,8 @@ from .models import (
     ElementosConsumible,
     EntregaConsumible,
 )
-from .forms import UsuariosSenaForm, UserLoginForm, ElementosForm, PrestamosForm
-from .models import UsuariosSena, Prestamo, Elementos, PrestamoConsumible, Prestamo, PrestamoConsumible
+from .forms import UsuariosSenaForm, UserLoginForm, PrestamosForm
+from .models import UsuariosSena, Prestamo
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.http import JsonResponse
@@ -701,7 +701,7 @@ def user_logout(request):
 
 def consultarTransacciones_view(request):
 	prestamos = Prestamo.objects.all()
-	entregas = PrestamoConsumible.objects.all()
+	entregas = Prestamo.objects.all()
 	usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
 	opcion_seleccionada = request.GET.get('opcion', None)
 	data = {'opcion_seleccionada':opcion_seleccionada, "Prestamos": prestamos, "Entregas": entregas, "usuarios":usuarios}
@@ -742,7 +742,7 @@ def editarPrestamo_view(request, id):
             consultar_transacciones_url = reverse("consultarTransacciones")
             return redirect(f"{consultar_transacciones_url}?opcion=prestamo")
 
-        except Elementos.DoesNotExist as e:
+        except ElementosDevolutivo.DoesNotExist as e:
             # Manejar la excepción y mostrar un mensaje de error
             error_message = f"Elemento no encontrado. Por favor, asegúrate de que el serial sea correcto. Detalles: {e}"
             print(error_message)  # Imprimir mensaje de error en la consola
