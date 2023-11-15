@@ -14,6 +14,9 @@ $(document).ready(function () {
                     if (response.valorUnidad) {
                         $('input[name="valorUnidadElemento"]').val(response.valorUnidad);
                     }
+                    if (response.Stock) {
+                        $('input[name="disponibles"]').val(response.Stock);  // Actualizar el campo Disponibles
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error("Error: ", error);
@@ -23,6 +26,10 @@ $(document).ready(function () {
             // Limpiar los campos si el nombre del elemento está vacío
             $('input[name="serialSenaElemento"]').val('');
             $('input[name="valorUnidadElemento"]').val('');
+            $('input[name="disponibles"]').val('');
+            $('input[name="cantidadElemento"]').val('');
+            $('input[name="valorTotalElemento"]').val('');
+            $('input[name="observacionesPrestamo"]').val('');
         }
     });
 
@@ -34,12 +41,15 @@ $(document).ready(function () {
                 url: '/get-element-name-by-serial',
                 type: 'GET',
                 data: { 'serialNumber': serialNumber },
-                success: function (response) {
+                success: function (response) {// Actualizar el campos
                     if (response.elementName) {
                         $('input[name="nombreElemento"]').val(response.elementName);
                     }
                     if (response.valorUnidad) {
                         $('input[name="valorUnidadElemento"]').val(response.valorUnidad);
+                    }
+                    if (response.Stock) {
+                        $('input[name="disponibles"]').val(response.Stock);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -50,6 +60,10 @@ $(document).ready(function () {
             // Limpiar los campos si el número de serie está vacío
             $('input[name="nombreElemento"]').val('');
             $('input[name="valorUnidadElemento"]').val('');
+            $('input[name="disponibles"]').val('');
+            $('input[name="cantidadElemento"]').val('');
+            $('input[name="valorTotalElemento"]').val('');
+            $('input[name="observacionesPrestamo"]').val('');
         }
     });
 });

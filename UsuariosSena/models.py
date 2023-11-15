@@ -65,8 +65,8 @@ class UsuariosSena(AbstractUser):
     USERNAME_FIELD = "numeroIdentificacion"
 
 
-class Elementos(models.Model):
-    fechaElemento = models.DateField()
+class ElementosDevolutivo(models.Model):
+    fechaElemento = models.DateField(auto_now_add=True)  # Manera 2 de hacerlo
     nombreElemento = models.CharField(max_length=25)
     categoriaElemento = models.CharField(
         max_length=25, choices=categoriaElemento, default="C"
@@ -83,13 +83,32 @@ class Elementos(models.Model):
         upload_to="facturaElemento/", blank=True, null=True
     )  # Campo para la foto
 
-    def save(self, *args, **kwargs):
-        # Calcula el valor total antes de guardar el objeto en la base de datos
-        self.valorTotal = self.valorUnidadElemento * self.cantidadElemento
-        super(Elementos, self).save(*args, **kwargs)
-
     def __str__(self):
         return f"Elemento devolutivo {self.nombreElemento}, unidades disponibles {self.cantidadElemento}"
+
+
+class ElementosConsumible(models.Model):
+    fechaAdquisicion = models.DateField(auto_now_add=True)
+    nombreElemento = models.CharField(max_length=25)
+    categoriaElemento = models.CharField(
+        max_length=25, choices=[("D", "Devolutivo"), ("C", "Consumible")], default="C"
+    )
+    estadoElemento = models.CharField(
+        max_length=25, choices=[("D", "Disponible"), ("A", "Agotado")], default="D"
+    )
+    descripcionElemento = models.CharField(max_length=25)
+    observacionElemento = models.CharField(max_length=25)
+
+    cantidadElemento = models.IntegerField()
+    costoUnidadElemento = models.IntegerField()
+    costoTotalElemento = models.IntegerField(blank=True, null=True)
+    lote = models.CharField(max_length=25)
+    facturaElemento = models.ImageField(
+        upload_to="facturaElemento/", blank=True, null=True
+    )
+
+    def __str__(self):
+        return f"Elemento consumible {self.nombreElemento}, unidades disponibles {self.cantidadElemento}"
 
 
 class Prestamo(models.Model):
@@ -98,8 +117,9 @@ class Prestamo(models.Model):
     nombreEntrega = models.CharField(max_length=25)
     nombreRecibe = models.CharField(max_length=25, null=False)
     nombreElemento = models.CharField(max_length=25)
+    estado = models.CharField(max_length=10, default="ACTIVO")
     serialSenaElemento = models.ForeignKey(
-        Elementos, on_delete=models.CASCADE, related_name="prestamos"
+        ElementosDevolutivo, on_delete=models.CASCADE, related_name="prestamos"
     )
     cantidadElemento = models.IntegerField()
     valorUnidadElemento = models.IntegerField()
@@ -114,7 +134,7 @@ class Prestamo(models.Model):
         return f"Prestamo devolutivo de {self.cantidadElemento} unidades de {self.nombreElemento}"
 
 
-class PrestamoConsumible(models.Model):
+class EntregaConsumible(models.Model):
     fecha_entrega = models.DateField()
     responsable_Entrega = models.CharField(max_length=25)
     nombre_solicitante = models.CharField(max_length=100)
