@@ -78,10 +78,15 @@ Editar Elemento
         <div class="container-1">
             <div class="container-botones">
                 <button type="submit" class="submitBtn">GUARDAR</button>
-                <button type="" class="submitBtn">CANCELAR</button>
-
+                <button type="button" class="submitBtn" id="cancelBtn"><span>CANCELAR</span></button>
+                <script>
+                    document.getElementById("cancelBtn").onclick = function() {
+                      window.location.href = "/elementosdash/";
+                    };
+                  </script>
             </div>
         </div>
+        
     </form>
 </div>
 </section>
