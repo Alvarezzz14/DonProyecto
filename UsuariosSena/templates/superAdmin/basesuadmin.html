@@ -32,10 +32,12 @@
                 menu
             </span>
             <div class="usuario">
-
-                <div>
+            
+                <div class="usuariotexto">
                     <p>Usuario</p>
-                    <p>Super Administrado</p>
+                    <p>{% if request.user.is_authenticated %}
+                        {{ request.user.cuentadante }}</p>
+                        {% endif %}</p>
                 </div>
                 <img src="{% static 'img/usuario.png' %}" alt="Usuario">
             </div>
@@ -94,7 +96,9 @@
 
             <div class="perfil">
                 <p>Bievenido <br>
-                    Administrador</p>
+                    {% if request.user.is_authenticated %}
+                    {{ request.user.nombres }} {{ request.user.apellidos }}</p>
+                    {% endif %}
                 <div class="bola">
 
                 </div>
