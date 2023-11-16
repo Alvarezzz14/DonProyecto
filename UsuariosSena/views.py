@@ -127,8 +127,8 @@ def registroUsuario_view(request):
                 passwordVar = request.POST.get("password")
                 fotoUsuarioVar = request.POST.get("fotoUsuario")
 
-        # Cifrar la contraseña
-        password_cifrada = make_password(passwordVar)
+        
+        password_cifrada = make_password(passwordVar)# Cifrar la contraseña
 
         user = UsuariosSena(
             nombres=nombresVar,
@@ -167,7 +167,7 @@ def editarUsuario_view(request, id):
 def actualizarUsuario_view(request, id):
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
-        apellidoVar = request.POST.get("apellidoo")
+        apellidoVar = request.POST.get("Apellidos")
         tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
         numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
         correoSenaVar = request.POST.get("correoSena")
@@ -177,29 +177,29 @@ def actualizarUsuario_view(request, id):
         tipoContratoVar = request.POST.get("tipoContrato")
         duracionContratoVar = request.POST.get("duracionContrato")
         estadoUsuariovar = request.POST.get("estadoUsuario")
-        contraSenaVar = request.POST.get("contraSena")
+        passwordVar = request.POST.get("contraSena")
         validacionContraSenaVar = request.POST.get("validacionContraSena")
         fotoUsuarioVar = request.FILES.get("fotoUsuario")
-        
+
         user = UsuariosSena.objects.get(id=id)
 
-        user.nombre = nombreVar
-        user.apellidoo = apellidoVar
+        user.nombres = nombreVar
+        user.apellidos = apellidoVar
         user.tipoIdentificacion = tipoIdentificacionVar
         user.numeroIdentificacion = numeroIdentificacionVar
-        user.correoSena = correoSenaVar
+        user.email = correoSenaVar
         user.celular = celularVar
         user.rol = rolVar
         user.cuentadante = cuentadanteVar
         user.tipoContrato = tipoContratoVar
         user.duracionContrato = duracionContratoVar
-        user.estadoUsuario = estadoUsuariovar
-        user.contraSena = contraSenaVar
+        user.is_active = estadoUsuariovar == 'A'  # 'A' para activo, 'I' para inactivo  
+        user.password = passwordVar      
         user.validacionContraSena = validacionContraSenaVar
         user.fotoUsuario = fotoUsuarioVar
         user.save()
         messages.success(request, "Usuario actualizado con Exito")  # mensaje de alerta
-        
+
         # Redirigir a la vista consultarUsuario_view para recargar los datos
         return redirect("consultarUsuario_view")
     else:
