@@ -21,9 +21,10 @@
             {% csrf_token %}
 
             <div class="container-1">
+                <input type="text"   name="estadoPrestamo" value="Vigente" required hidden readonly>
                 <div class="fechaContainer">
                     <input type="date" class="inputform" placeholder="fechaDevolucion" name="fechaDevolucion" required>
-                    <label for="fechaDevolucion" class="labelform">Fecha Devoluc</label>
+                    <label for="fechaDevolucion" class="labelform">Fecha Devolución</label>
                 </div>
                 <div class="inputContainer">
                     <input list="usuariosList" type="text" class="inputform" placeholder="nombreEntrega"

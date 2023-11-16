@@ -56,7 +56,15 @@ urlpatterns = [
         name="editarUsuario_view"
     ),
     path(
+        "finalizarPrestamo/<int:id>/",
+        views.finalizarPrestamo_view, 
+        name="finalizarPrestamo_view"
+    ),
+    path(
         "editarPrestamo/<int:id>/", views.editarPrestamo_view, name="editarPrestamo_view"
+    ),
+    path(
+        "editarEntrega/<int:id>/", views.editarEntrega_view, name="editarEntrega_view"
     ),
     path(
         "actualizarUsuario/<int:id>",
