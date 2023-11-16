@@ -22,20 +22,28 @@
 
             <div class="container-1">
                 <div class="fechaContainer">
-                    <input type="date" class="inputform" placeholder="fechaEntrega" name="fechaEntrega" required>
-                    <label for="fechaEntrega" class="labelform">Fecha Entrega</label>
-                </div>
-                <div class="fechaContainer">
                     <input type="date" class="inputform" placeholder="fechaDevolucion" name="fechaDevolucion" required>
                     <label for="fechaDevolucion" class="labelform">Fecha Devoluc</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="nombreEntrega" name="nombreEntrega" required>
+                    <input list="usuariosList" type="text" class="inputform" placeholder="nombreEntrega"
+                        name="nombreEntrega" autocomplete="off" required>
                     <label for="" class="labelform">Instructor Entrega</label>
+                    <datalist id="usuariosList">
+                        {% for usuario in usuarios %}
+                        <option value="{{ usuario.nombres }}">
+                            {% endfor %}
+                    </datalist>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="nombreRecibe" name="nombreRecibe" required>
+                    <input list="usuariosListRecibe" type="text" class="inputform" placeholder="nombreRecibe"
+                        name="nombreRecibe" autocomplete="off" required>
                     <label for="" class="labelform">Instructor Recibe</label>
+                    <datalist id="usuariosListRecibe">
+                        {% for usuario in usuarios %}
+                        <option value="{{ usuario.nombres }}">
+                            {% endfor %}
+                    </datalist>
                 </div>
             </div>
             <div class="container-1">
@@ -60,9 +68,9 @@
                     </datalist>
                 </div>
                 <div class="inputContainervalor">
-                    <input type="text" class="inputformvalor" placeholder="a" name="valorUnidadElemento"
-                        id="valorUnidad">
-                    <label for="valorUnidadElemento" class="labelformvalor">Disponibles</label>
+                    <input type="text" class="inputform" placeholder="Disponibles" name="disponibles"
+                        id="campoDisponibles">
+                    <label for="cantidadElemento" class="labelform">Disponibles</label>
                 </div>
                 <div class="selectContainer">
                     <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento">
@@ -72,14 +80,13 @@
             </div>
             <div class="container-1">
                 <div class="inputContainervalor">
-                    <input type="text" class="inputformvalor" placeholder="a" name="valorUnidadElemento"
-                        id="valorUnidad">
-                    <label for="valorUnidadElemento" class="labelformvalor">Valor Unidad</label>
+                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento" id="valorUnidad">
+                    <label for="valorUnidadElemento" class="labelform">Valor Unidad</label>
                 </div>
                 <div class="inputContainervalor">
-                    <input type="text" class="inputformvalor" placeholder="a" name="valorTotalElemento"
+                    <input type="text" class="inputform" placeholder="a" name="valorTotalElemento"
                         id="valorTotalElemento">
-                    <label for="valorTotalElemento" class="labelformvalor">Valor Total</label>
+                    <label for="valorTotalElemento" class="labelform">Valor Total</label>
                 </div>
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="a" name="observacionesPrestamo" required>
