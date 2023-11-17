@@ -23,12 +23,12 @@
             <div class="container-1">
                 <input type="text" name="estadoPrestamo" value="Vigente" required hidden readonly>
                 <div class="fechaContainer">
-                    <input type="date" class="inputform" placeholder="fechaDevolucion" name="fechaDevolucion" required>
+                    <input type="date" class="inputform" name="fechaDevolucion" value="{{ fechaDevolucion }}" required>
                     <label for="fechaDevolucion" class="labelform">Fecha Devolución</label>
                 </div>
                 <div class="inputContainer">
                     <input list="usuariosList" type="text" class="inputform" placeholder="nombreEntrega"
-                        name="nombreEntrega" autocomplete="off" required>
+                        name="nombreEntrega" value="{{ nombreEntrega }}" autocomplete="off" required>
                     <label for="" class="labelform">Instructor Entrega</label>
                     <datalist id="usuariosList">
                         {% for usuario in usuarios %}
@@ -38,7 +38,7 @@
                 </div>
                 <div class="inputContainer">
                     <input list="usuariosListRecibe" type="text" class="inputform" placeholder="nombreRecibe"
-                        name="nombreRecibe" autocomplete="off" required>
+                        name="nombreRecibe" value="{{ nombreRecibe }}" autocomplete="off" required>
                     <label for="" class="labelform">Instructor Recibe</label>
                     <datalist id="usuariosListRecibe">
                         {% for usuario in usuarios %}
@@ -50,7 +50,7 @@
             <div class="container-1">
                 <div class="inputContainer">
                     <input list="elementosList" type="text" class="inputform" placeholder="nombreElemento"
-                        name="nombreElemento" autocomplete="off" required>
+                        name="nombreElemento" value="{{ nombreElemento }}" autocomplete="off" required>
                     <label for="" class="labelform">Nombre Elemento</label>
                     <datalist id="elementosList">
                         {% for elemento, Serial in elementos %}
@@ -60,7 +60,7 @@
                 </div>
                 <div class="inputContainer">
                     <input list="serialesList" type="text" class="inputform" placeholder="serialSenaElemento"
-                        name="serialSenaElemento" autocomplete="off" required>
+                        name="serialSenaElemento" value="{{ serialSenaElemento }}" autocomplete="off" required>
                     <label for="" class="labelform">Serial Elemento</label>
                     <datalist id="serialesList">
                         {% for elemento, serial in elementos %}
@@ -70,28 +70,30 @@
                 </div>
                 <div class="inputContainervalor">
                     <input type="text" class="inputform" placeholder="Disponibles" name="disponibles"
-                        id="campoDisponibles" readonly>
+                        value="{{ disponibles }}" id="campoDisponibles" readonly>
                     <label for="cantidadElemento" class="labelform">Disponibles</label>
                 </div>
                 <div class="selectContainer">
-                    <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento">
+                    <input type="number" class="inputcantidad" name="cantidadElemento" value="{{ cantidadElemento }}"
+                        id="cantidadElemento">
                     <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
                 </div>
 
             </div>
             <div class="container-1">
                 <div class="inputContainervalor">
-                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento" id="valorUnidad"
-                        readonly>
+                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento"
+                        value="{{ valorUnidadElemento }}" id="valorUnidad" readonly>
                     <label for="valorUnidadElemento" class="labelform">Valor Unidad</label>
                 </div>
                 <div class="inputContainervalor">
                     <input type="text" class="inputform" placeholder="a" name="valorTotalElemento"
-                        id="valorTotalElemento" readonly>
+                        value="{{ valorTotalElemento }}" id="valorTotalElemento" readonly>
                     <label for="valorTotalElemento" class="labelform">Valor Total</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="observacionesPrestamo" required>
+                    <input type="text" class="inputform" placeholder="a" name="observacionesPrestamo"
+                        value="{{ observacionesPrestamo }}" required>
                     <label for="" class="labelform">Observaciones</label>
                 </div>
                 <div class="selectorimagen">

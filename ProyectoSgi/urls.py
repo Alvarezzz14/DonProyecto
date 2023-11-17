@@ -43,9 +43,9 @@ urlpatterns = [
         name="formPrestamosDevolutivos_view",
     ),
     path(
-        "formPrestamosConsumibles/",
-        views.formPrestamosConsumibles_view,
-        name="formPrestamosConsumibles_view",
+        "formEntregasConsumibles/",
+        views.formEntregasConsumibles_view,
+        name="formEntregasConsumibles_view",
     ),
     path(
         "eliminarUsuario/<int:id>/",

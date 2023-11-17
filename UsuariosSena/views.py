@@ -219,20 +219,51 @@ def formPrestamosDevolutivos_view(request):
             elemento = ElementosDevolutivo.objects.get(
                 nombreElemento=nombreElementovar, serial=serialSenaElementovar
             )
-
+            # Trae disponibles para mantenerlo en el campo despues del aviso de Error
+            disponibles = elemento.cantidadElemento if elemento else 0
             # Validar que la cantidad no sea negativa
             if cantidadElementoVar <= 0:
                 messages.error(
                     request, "La cantidad no puede ser negativa o igual a cero"
                 )
-                return render(request, "superAdmin/formPrestamosDevolutivos.html")
+                return render(
+                    request,
+                    "superAdmin/formPrestamosDevolutivos.html",
+                    {
+                        "fechaDevolucion": fechaDevolucionVar,
+                        "nombreEntrega": nombreEntregavar,
+                        "nombreRecibe": nombreRecibevar,
+                        "nombreElemento": nombreElementovar,
+                        "serialSenaElemento": serialSenaElementovar,
+                        "disponibles": disponibles,
+                        "cantidadElemento": cantidadElementoVar,
+                        "valorUnidadElemento": valorUnidadElementoVar,
+                        "valorTotalElemento": valorTotalElementoVar,
+                        "observacionesPrestamo": observacionesPrestamovar,
+                    },
+                )
 
             # Validar la disponibilidad de la cantidad en el inventario
             if cantidadElementoVar > elemento.cantidadElemento:
                 messages.error(
                     request, "La cantidad ingresada excede el stock disponible"
                 )
-                return render(request, "superAdmin/formPrestamosDevolutivos.html")
+                return render(
+                    request,
+                    "superAdmin/formPrestamosDevolutivos.html",
+                    {
+                        "fechaDevolucion": fechaDevolucionVar,
+                        "nombreEntrega": nombreEntregavar,
+                        "nombreRecibe": nombreRecibevar,
+                        "nombreElemento": nombreElementovar,
+                        "serialSenaElemento": serialSenaElementovar,
+                        "disponibles": disponibles,
+                        "cantidadElemento": cantidadElementoVar,
+                        "valorUnidadElemento": valorUnidadElementoVar,
+                        "valorTotalElemento": valorTotalElementoVar,
+                        "observacionesPrestamo": observacionesPrestamovar,
+                    },
+                )
             # Comprobar si la fecha de devolución es anterior a la fecha actual
             if fechaDevolucion < date.today():
                 messages.error(
@@ -242,7 +273,18 @@ def formPrestamosDevolutivos_view(request):
                 return render(
                     request,
                     "superAdmin/formPrestamosDevolutivos.html",
-                    {"elementos": elementos, "usuarios": usuarios},
+                    {
+                        "fechaDevolucion": fechaDevolucionVar,
+                        "nombreEntrega": nombreEntregavar,
+                        "nombreRecibe": nombreRecibevar,
+                        "nombreElemento": nombreElementovar,
+                        "serialSenaElemento": serialSenaElementovar,
+                        "disponibles": disponibles,
+                        "cantidadElemento": cantidadElementoVar,
+                        "valorUnidadElemento": valorUnidadElementoVar,
+                        "valorTotalElemento": valorTotalElementoVar,
+                        "observacionesPrestamo": observacionesPrestamovar,
+                    },
                 )
             # Si las validaciones son correctas, crea el objeto Prestamo
             prestamo = Prestamo(
@@ -324,7 +366,7 @@ def get_element_name_by_serial(request):
         return JsonResponse({"error": "No serial number provided"}, status=400)
 
 
-def formPrestamosConsumibles_view(request):
+def formEntregasConsumibles_view(request):
     if request.method == "POST":
         # Procesar el formulario aquí (guardar el préstamo consumible)
         nombreElementovar = request.POST.get("nombreElemento")
@@ -348,7 +390,7 @@ def formPrestamosConsumibles_view(request):
         )
         # Guarda la instancia en la base de datos
         prestamo_consumible.save()
-    return render(request, "superAdmin/formPrestamosConsumibles.html")
+    return render(request, "superAdmin/formEntregasConsumibles.html")
 
 
 def calendario(request):
