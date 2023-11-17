@@ -17,7 +17,7 @@ Consultar Usuarios
 <script>
   const botonEliminar = (id) => {
     Swal.fire({
-      "title": "¿Estás seguro  de eliminar?",
+      "title": "¿Estás seguro de inhabilitar el usuario?",
       "text": "Esta accion no se puede deshacer",
       "icon": "question",
       "showCancelButton": true,
@@ -29,7 +29,7 @@ Consultar Usuarios
     })
       .then(function (result) {
         if (result.isConfirmed) {
-          window.location.href = "/eliminarUsuario/" + id;
+          window.location.href = "/eliminarUsuario_view/" + id;
         }
       })
   }
