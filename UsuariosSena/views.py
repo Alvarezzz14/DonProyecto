@@ -210,13 +210,28 @@ def actualizarUsuario_view(request, id):
         return redirect("consultarUsuario_view")
 
 
-def eliminarUsuario_view(request):
-    user = request.user
-    user.is_active = False
-    user.save()
-    messages.success(request, 'Perfil inhabilitado correctamente.')
-    return redirect('consultarUsuario_view')
+def eliminarUsuario_view(request, id):
+    try:
+        # Busca el usuario por ID
+        user = UsuariosSena.objects.get(id=id)
 
+        # Desactiva el usuario
+        user.is_active = False
+        user.save()
+
+        # Cierra la sesión del usuario
+        logout(request)
+
+        # Mensaje de éxito
+        messages.success(request, 'Perfil descativado exitosamente.')
+
+        # Redirige a la página de inicio (ajusta la URL según tu configuración)
+        return redirect('consultarUsuario_view')
+
+    except UsuariosSena.DoesNotExist:
+        # Maneja el caso en el que el usuario no existe
+        messages.error(request, 'Usuario no encontrado.')
+        return redirect('index')
 
 def formPrestamosDevolutivos_view(request):
     elementos = ElementosDevolutivo.objects.all().values_list(
