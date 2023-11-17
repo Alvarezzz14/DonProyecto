@@ -164,9 +164,8 @@ Consultar Usuarios
                 </div>
               </td>
               <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-                <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.rol }}
+                <div class="text-[0.7rem] leading-5 text-gray-500">
                   
-
                 {% if usuario.rol == 'superAdmin' %}
                 <span
                   class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-orange-800 bg-orange-100 rounded-full">
@@ -197,7 +196,7 @@ Consultar Usuarios
                 {% endif %}
               </td>
               <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-                <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.tipoContrato }}
+                <div class="text-[0.7rem] leading-5 text-gray-500">
                 {% if usuario.tipoContrato == 'P' %}
                 <span
                   class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-lime-800 bg-lime-100 rounded-full">
@@ -218,7 +217,7 @@ Consultar Usuarios
                 </div>
               </td>
               <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-                <div class="text-[0.7rem] leading-5 text-gray-500">{{ usuario.is_active }}
+                <div class="text-[0.7rem] leading-5 text-gray-500">
                 {% if usuario.is_active == True %}
                 <span
                   class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-green-800 bg-green-100 rounded-full">

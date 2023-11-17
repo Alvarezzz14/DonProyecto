@@ -2,16 +2,19 @@
 
 {% load static %}
 
+
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/superAdmin/stylesEditarUsuario.css' %}">
+{% endblock extrastyle %}
+
+{% block title %}
+    Editar Usuarios
+{% endblock title %}
+
+
 {% block content %}
 
-<head>
-
-    <link rel="stylesheet" href="{% static 'css/superAdmin/stylesEditarUsuario.css' %}">
-    <title>Formulario Editar Usuarios</title>
-
-</head>
-
-<section class="section">
 
     <!-- Inicio del Forumlario-->
 
@@ -202,15 +205,18 @@
 
 
             </div>
-            <script>
-                document.getElementById("cancelBtn").onclick = function() {
-                  window.location.href = "/dashboard/";
-                };
-              </script>
+      
         </form>
 
     </div>
-</section>
 
-  
+
+{% block extrajs %}
+<script>
+    document.getElementById("cancelBtn").onclick = function() {
+      window.location.href = "/dashboard/";
+    };
+</script>
+{% endblock extrajs %}
+    
 {% endblock %}

@@ -2,15 +2,22 @@
 
 {% load static %}
 
+
+
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/superAdmin/crearPrestamo.css' %}">
+{% endblock extrastyle %}
+    
+
+    
+    
+    {% block title %}
+        Prestamos
+    {% endblock title %}
+        
 {% block content %}
 
-<head>
-
-    <link rel="stylesheet" href="{% static 'css/superAdmin/crearPrestamo.css' %}">
-    <title>Formulario Prestamos</title>
-</head>
-
-<section class="section" style=" margin: 10px; padding: 10px">
 
     <!-- Inicio del Forumlario-->
 
@@ -109,10 +116,11 @@
             </div>
         </form>
     </div>
-</section>
+
 {% block extrajs %}
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{% static 'js/rellenarCampos.js'%}"></script>
 <script src="{% static 'js/calculoTotal.js'%}"></script>
 {% endblock extrajs %}
+
 {% endblock %}
