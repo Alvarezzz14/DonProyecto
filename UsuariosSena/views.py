@@ -400,9 +400,13 @@ def formElementos_view(request):
         valorTotalElementoVar = cantidadElementoVar * valorUnidadElementoVar
 
         if categoriaElementoVar == "D":
-            serialVar = request.POST.get(
-                "serialSenaElemento"
-            )  # Específico para ElementosDevolutivo
+            serialVar = request.POST.get("serialSenaElemento")
+            
+            # Verificar si el serial ya está registrado
+            if ElementosDevolutivo.objects.filter(serial=serialVar).exists():
+                messages.error(request, "El serial ya está registrado en otro equipo.")
+                return render(request, "superAdmin/formElementos.html")
+            
             elemento = ElementosDevolutivo(
                 nombreElemento=nombreElementoVar,
                 categoriaElemento=categoriaElementoVar,
