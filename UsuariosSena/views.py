@@ -14,7 +14,8 @@ from .models import (
 	Prestamo,
 	ElementosDevolutivo,
 	ElementosConsumible,
-	EntregaConsumible,
+	EntregaConsumible
+	,
 )
 from .forms import UsuariosSenaForm, UserLoginForm, PrestamosForm
 from .models import UsuariosSena, Prestamo
@@ -705,7 +706,7 @@ def user_logout(request):
 
 def consultarTransacciones_view(request):
 	prestamos = Prestamo.objects.all()
-	entregas = Prestamo.objects.all()
+	entregas = EntregaConsumible.objects.all()
 	usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
 	opcion_seleccionada = request.GET.get('opcion', None)
 	data = {'opcion_seleccionada':opcion_seleccionada, "Prestamos": prestamos, "Entregas": entregas, "usuarios":usuarios}
@@ -754,10 +755,36 @@ def editarPrestamo_view(request, id):
 
 	# Si la solicitud no es POST, enviar el objeto Prestamo y Elementos a la plantilla
 	return render(request, "superAdmin/editarPrestamo.html", {"prestamo": prestamo, "elemento": elemento})
-def editarEntrega_view(request):
-	  
-	return render(request, "superAdmin/editarPrestamo.html")
 
+def editarEntrega_view(request, id):
+	# Obtener el objeto Prestamo por su ID
+	entrega = get_object_or_404(EntregaConsumible, id=id)
+	elemento = None  # Inicializar la variable fuera del bloque try
+
+	if request.method == "POST":
+		# Obtener datos del formulario		
+		cantidad_elemento = request.POST.get('txt_cantidad_prestada')		
+		observaciones_prestamo = request.POST.get('txt_observaciones_prestamo')
+				
+		try:
+			# Actualizar los campos del objeto Prestamo con los datos del formulario			
+			entrega.cantidad_prestada = cantidad_elemento			
+			entrega.observaciones_prestamo = observaciones_prestamo
+			# Resto de la lógica de actualización
+
+			entrega.save()
+
+			consultar_transacciones_url = reverse("consultarTransacciones")
+			return redirect(f"{consultar_transacciones_url}?opcion=entregas")
+
+		except ElementosConsumible.DoesNotExist as e:
+			# Manejar la excepción y mostrar un mensaje de error
+			error_message = f"Elemento no encontrado. Por favor, asegúrate de que el serial sea correcto. Detalles: {e}"
+			print(error_message)  # Imprimir mensaje de error en la consola
+			return render(request, "superAdmin/editarEntrega.html", {"entrega": entrega, "elemento": elemento, "error_message": error_message})
+
+	# Si la solicitud no es POST, enviar el objeto Prestamo y Elementos a la plantilla
+	return render(request, "superAdmin/editarEntrega.html", {"entrega": entrega, "elemento": elemento})
 # views.py
 
 from django.http import HttpResponse
