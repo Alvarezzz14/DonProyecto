@@ -10,7 +10,7 @@
     <title>Formulario Prestamos</title>
 </head>
 
-<section class="section" style=" margin: 10px; padding: 10px">
+<section class="section" style=" margin: 30px; padding: 10px">
 
     <!-- Inicio del Forumlario-->
 
@@ -21,7 +21,7 @@
             {% csrf_token %}
 
             <div class="container-1">
-                <input type="text" name="estadoPrestamo" value="Vigente" required hidden readonly>
+                <input type="text" name="estadoPrestamo" value="VIGENTE" required hidden readonly>
                 <div class="fechaContainer">
                     <input type="date" class="inputform" placeholder="fechaDevolucion" name="fechaDevolucion" required>
                     <label for="fechaDevolucion" class="labelform">Fecha Devolución</label>
@@ -74,7 +74,7 @@
                     <label for="cantidadElemento" class="labelform">Disponibles</label>
                 </div>
                 <div class="selectContainer">
-                    <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento">
+                    <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento" required>
                     <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
                 </div>
 

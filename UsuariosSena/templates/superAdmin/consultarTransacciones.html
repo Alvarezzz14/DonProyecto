@@ -11,58 +11,7 @@ Consultar Transaciones
 <script src="https://cdn.tailwindcss.com"></script>
 {% endblock extrastyle %}
 <!--Script Contenido Estilos de Tailwindcss-->
-{% block extrascript %}
-<script>
-  const botonEliminar = (id) => {
-    Swal.fire({
-      "title": "¿Estás seguro  de eliminar?",
-      "text": "Esta accion no se puede deshacer",
-      "icon": "question",
-      "showCancelButton": true,
-      "cancelButtonText": "Cancelar",
-      "confirmButtonText": "Eliminar",
-      "reverseButtons": true,
-      "confirmButtonColor": "#fc7323",
-      "iconColor": "#fc7323",
-    })
-      .then(function (result) {
-        if (result.isConfirmed) {
-          window.location.href = "/eliminarUsuario/" + id;
-        }
-      })
-  }
-</script>
-<script>
-// Función para abrir el modal y mostrar la información del usuario
-  function openModal(userData) {
-    const modal = document.getElementById('userModal');
-    const userDataContainer = document.getElementById('userData');
-
-    // Llenar el contenido del modal con los datos del usuario
-    userDataContainer.innerHTML = userData;
-
-    modal.style.display = 'block';
-  }
-
-  // Función para cerrar el modal
-  function closeModal() {
-    const modal = document.getElementById('userModal');
-    modal.style.display = 'none';
-  }
-
-  // Cierra el modal si se hace clic fuera de él
-  window.onclick = function (event) {
-    const modal = document.getElementById('userModal');
-    if (event.target == modal) {
-      modal.style.display = 'none';
-    }
-  }
-</script>
-{% endblock extrascript %}
 {% block content %}
-
-<section class="container  rounded-lg p-4 overflow-hidden m-2 ">
-
   <h1 class="text-[1.5rem] m-2 mb-16 font-extrabold">Consultar Prestamos/Entregas</h1>
 
  <!--Barra de Opcion de Categoria Elemento-->   
@@ -109,6 +58,7 @@ Consultar Transaciones
       <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="inline-block min-w-full scroll-auto overflow-hidden align-middle sm:rounded-lg">
   {% if opcion_seleccionada == 'prestamo' %}  
+<section class="container  rounded-lg p-4 overflow-hidden m-2 ">
   <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
             <thead>
               <tr>
@@ -139,7 +89,7 @@ Consultar Transaciones
                 <th
                   class="px-2 py-1 text-xs font-semibold leading-4 tracking-wider text-center text-black-500 uppercase border-b border-gray-200 bg-orange-50">
                   Valor Total</th>
-                <th
+              
                 <th
                   class="px-2 py-1 text-xs font-semibold leading-4 tracking-wider text-center text-black-500 uppercase border-b border-gray-200 bg-orange-50">
                     Estado</th>
@@ -221,26 +171,27 @@ Consultar Transaciones
                     <path d="m39.4 32c0 4.1-3.4 7.5-7.5 7.5s-7.5-3.4-7.5-7.5 3.4-7.5 7.5-7.5 7.5 3.4 7.5 7.5"
                       fill="#231f20" />
                   </svg>
-                </button>
-                  <button onclick="">
-                      <a href="/editarPrestamo/{{Prestamos.id}}">
-                      <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarPrestamo.html"
-                        class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </a>
-                  </button>
-                  <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="txt_nuevo_estado" value="Finalizado">
-                    <button type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                         </svg>
-                  </button>
-                </td>
-              </tr>
+                </button>              
+              <button onclick="">
+                <a href="/editarPrestamo/{{Prestamos.id}}">
+                <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarPrestamo.html"
+                  class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </a>
+            </button>
+            <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="txt_nuevo_estado" value="Finalizado">
+              <button type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+            </button>
+            </form>
+          </td>
+        </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -252,8 +203,85 @@ Consultar Transaciones
         </div>
       </div>
     </div>
+    <!-- Modal para mostrar la información del usuario -->
+
+  <div id="userModal" class="modal">
+    <div class="modal-content">
+      <thead>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </thead>
+      <div id="userData">
+        <table class="tabla">
+          <tr>
+            <th>Nombre:</th>
+            <td><input type="text" id="nombreField" readonly></td>
+          </tr>
+          <tr>
+            <th>Apellido:</th>
+            <td><input type="text" id="apellidoField" readonly></td>
+          </tr>
+          <tr>
+            <th>Tipo de Identificación:</th>
+            <td><input type="text" id="tipoIdentificacionField" readonly></td>
+          </tr>
+          <tr>
+            <th>Número de Identificación:</th>
+            <td><input type="text" id="numeroIdentificacionField" readonly></td>
+          </tr>
+          <tr>
+            <th>Rol:</th>
+            <td><input type="text" id="rolField" readonly></td>
+          </tr>
+          <tr>
+            <th>Correo SENA:</th>
+            <td><input type="text" id="correoSenaField" readonly></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
+
+<script>
+  // Función para abrir el modal y mostrar la información del usuario
+  function openModal(userData) {
+    const modal = document.getElementById('userModal');
+
+    const userDataArray = userData.split(', ');
+
+    const nombreField = document.getElementById('nombreField');
+    const apellidoField = document.getElementById('apellidoField');
+    const tipoIdentificacionField = document.getElementById('tipoIdentificacionField');
+    const rolField = document.getElementById('rolField');
+    const numeroIdentificacionField = document.getElementById('numeroIdentificacionField');
+    const correoSenaField = document.getElementById('correoSenaField');
+
+    nombreField.value = userDataArray[0];
+    apellidoField.value = userDataArray[1];
+    tipoIdentificacionField.value = userDataArray[2];
+    rolField.value = userDataArray[3];
+    numeroIdentificacionField.value = userDataArray[4];
+    correoSenaField.value = userDataArray[5];
+    modal.style.display = 'block';
+  }
+
+  // Función para cerrar el modal
+  function closeModal() {
+    const modal = document.getElementById('userModal');
+    modal.style.display = 'none';
+  }
+
+  // Cierra el modal si se hace clic fuera de él
+  window.onclick = function (event) {
+    const modal = document.getElementById('userModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+</script>
 {% elif opcion_seleccionada == 'entregas' %}
-  
+  <section class="container  rounded-lg p-4 overflow-hidden m-5 ">
         <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
             <thead>
               <tr>
@@ -358,6 +386,83 @@ Consultar Transaciones
         </div>
       </div>
     </div>
+      <!-- Modal para mostrar la información del usuario -->
+
+  <div id="userModal" class="modal">
+    <div class="modal-content">
+      <thead>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </thead>
+      <div id="userData">
+        <table>
+          <tr>
+            <th>Nombre:</th>
+            <td><input type="text" id="nombreField" readonly></td>
+          </tr>
+          <tr>
+            <th>Apellido:</th>
+            <td><input type="text" id="apellidoField" readonly></td>
+          </tr>
+          <tr>
+            <th>Tipo de Identificación:</th>
+            <td><input type="text" id="tipoIdentificacionField" readonly></td>
+          </tr>
+          <tr>
+            <th>Número de Identificación:</th>
+            <td><input type="text" id="numeroIdentificacionField" readonly></td>
+          </tr>
+          <tr>
+            <th>Rol:</th>
+            <td><input type="text" id="rolField" readonly></td>
+          </tr>
+          <tr>
+            <th>Correo SENA:</th>
+            <td><input type="text" id="correoSenaField" readonly></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
+
+<script>
+  // Función para abrir el modal y mostrar la información del usuario
+  function openModal(userData) {
+    const modal = document.getElementById('userModal');
+
+    const userDataArray = userData.split(', ');
+
+    const nombreField = document.getElementById('nombreField');
+    const apellidoField = document.getElementById('apellidoField');
+    const tipoIdentificacionField = document.getElementById('tipoIdentificacionField');
+    const rolField = document.getElementById('rolField');
+    const numeroIdentificacionField = document.getElementById('numeroIdentificacionField');
+    const correoSenaField = document.getElementById('correoSenaField');
+
+    nombreField.value = userDataArray[0];
+    apellidoField.value = userDataArray[1];
+    tipoIdentificacionField.value = userDataArray[2];
+    rolField.value = userDataArray[3];
+    numeroIdentificacionField.value = userDataArray[4];
+    correoSenaField.value = userDataArray[5];
+    modal.style.display = 'block';
+  }
+
+  // Función para cerrar el modal
+  function closeModal() {
+    const modal = document.getElementById('userModal');
+    modal.style.display = 'none';
+  }
+
+  // Cierra el modal si se hace clic fuera de él
+  window.onclick = function (event) {
+    const modal = document.getElementById('userModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+</script>
 {% endif %}
 
-  {% endblock %}
+{% endblock %}
