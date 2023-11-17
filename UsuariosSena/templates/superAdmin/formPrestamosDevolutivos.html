@@ -21,9 +21,10 @@
             {% csrf_token %}
 
             <div class="container-1">
+                <input type="text" name="estadoPrestamo" value="Vigente" required hidden readonly>
                 <div class="fechaContainer">
                     <input type="date" class="inputform" placeholder="fechaDevolucion" name="fechaDevolucion" required>
-                    <label for="fechaDevolucion" class="labelform">Fecha Devoluc</label>
+                    <label for="fechaDevolucion" class="labelform">Fecha Devolución</label>
                 </div>
                 <div class="inputContainer">
                     <input list="usuariosList" type="text" class="inputform" placeholder="nombreEntrega"
@@ -69,7 +70,7 @@
                 </div>
                 <div class="inputContainervalor">
                     <input type="text" class="inputform" placeholder="Disponibles" name="disponibles"
-                        id="campoDisponibles">
+                        id="campoDisponibles" readonly>
                     <label for="cantidadElemento" class="labelform">Disponibles</label>
                 </div>
                 <div class="selectContainer">
@@ -80,12 +81,13 @@
             </div>
             <div class="container-1">
                 <div class="inputContainervalor">
-                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento" id="valorUnidad">
+                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento" id="valorUnidad"
+                        readonly>
                     <label for="valorUnidadElemento" class="labelform">Valor Unidad</label>
                 </div>
                 <div class="inputContainervalor">
                     <input type="text" class="inputform" placeholder="a" name="valorTotalElemento"
-                        id="valorTotalElemento">
+                        id="valorTotalElemento" readonly>
                     <label for="valorTotalElemento" class="labelform">Valor Total</label>
                 </div>
                 <div class="inputContainer">

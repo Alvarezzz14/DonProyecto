@@ -8,6 +8,7 @@
     text-decoration: none;
 }
 
+
 .base{
     display: flex;
     position: relative;
@@ -29,6 +30,10 @@
     display: flex;
     justify-content: end;
     width: 100%;
+}
+
+.usuariotexto p{
+    color: #000;
 }
 
 .barra-lateral{

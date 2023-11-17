@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'UsuariosSena',
 ]
 
-AUTH_USER_MODEL = "UsuariosSena.UsuariosSena" 
+AUTH_USER_MODEL="UsuariosSena.UsuariosSena" 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
