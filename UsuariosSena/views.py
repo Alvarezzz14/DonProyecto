@@ -99,48 +99,59 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from .models import UsuariosSena
 
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import UsuariosSena
+
 def registroUsuario_view(request):
-	if request.method == "POST":
-		nombresVar = request.POST.get("nombres")
-		apellidosVar = request.POST.get("apellidos")
-		tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
-		numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
-		emailVar = request.POST.get("email")
-		celularVar = request.POST.get("celular")
-		rolVar = request.POST.get("rol")
-		cuentadanteVar = request.POST.get("cuentadante")
-		tipoContratoVar = request.POST.get("tipoContrato")
-		is_activeVar = request.POST.get("is_active")
-		duracionContratoVar = request.POST.get("duracionContrato")
-		passwordVar = request.POST.get("password")
-		fotoUsuarioVar = request.FILES.get(
-			"fotoUsuario", None
-		)  # Ajustado para manejar casos en los que no se suba una foto
+    if request.method == "POST":
+        nombresVar = request.POST.get("nombres")
+        apellidosVar = request.POST.get("apellidos")
+        tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
+        numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
 
-		# Cifrar la contraseña
-		password_cifrada = make_password(passwordVar)
+        # Validar si el número de identificación ya está registrado
+        if UsuariosSena.objects.filter(numeroIdentificacion=numeroIdentificacionVar).exists():
+            messages.error(request, "El número de identificación ya está registrado.")
+        else:
+            emailVar = request.POST.get("email")
 
-		user = UsuariosSena(
-			nombres=nombresVar,
-			apellidos=apellidosVar,
-			tipoIdentificacion=tipoIdentificacionVar,
-			numeroIdentificacion=numeroIdentificacionVar,
-			email=emailVar,
-			celular=celularVar,
-			rol=rolVar,
-			cuentadante=cuentadanteVar,
-			tipoContrato=tipoContratoVar,
-			is_active=is_activeVar,
-			# is_superuser=True, # puede hacer cualquier cosa
-			is_staff=True,  # puede acceder al panel de administración, pero sus acciones específicas dentro del panel estarán limitadas por sus permisos asignados.
-			duracionContrato=duracionContratoVar,
-			password=password_cifrada,
-			fotoUsuario=fotoUsuarioVar,
-		)
-		user.save()
-		messages.success(request, "Usuario Registrado con Exito")
+            # Validar si el correo electrónico ya está registrado
+            if UsuariosSena.objects.filter(email=emailVar).exists():
+                messages.error(request, "El correo electrónico ya está registrado.")
+            else:
+                celularVar = request.POST.get("celular")
+                rolVar = request.POST.get("rol")
+                cuentadanteVar = request.POST.get("cuentadante")
+                tipoContratoVar = request.POST.get("tipoContrato")
+                is_activeVar = request.POST.get("is_active")
+                duracionContratoVar = request.POST.get("duracionContrato")
+                passwordVar = request.POST.get("password")
+                fotoUsuarioVar = request.POST.get("fotoUsuario")
 
-	return render(request, "superAdmin/registroUsuario.html")
+        
+        password_cifrada = make_password(passwordVar)# Cifrar la contraseña
+
+        user = UsuariosSena(
+            nombres=nombresVar,
+            apellidos=apellidosVar,
+            tipoIdentificacion=tipoIdentificacionVar,
+            numeroIdentificacion=numeroIdentificacionVar,
+            email=emailVar,
+            celular=celularVar,
+            rol=rolVar,
+            cuentadante=cuentadanteVar,
+            tipoContrato=tipoContratoVar,
+            is_active=is_activeVar,
+            duracionContrato=duracionContratoVar,
+            password=password_cifrada,
+            fotoUsuario=fotoUsuarioVar,
+        )
+        user.save()
+        messages.success(request, "Usuario Registrado con Exito")
+
+    return render(request, "superAdmin/registroUsuario.html")
+
 
 
 
@@ -156,46 +167,46 @@ def editarUsuario_view(request, id):
 
 
 def actualizarUsuario_view(request, id):
-	if request.method == "POST":
-		nombreVar = request.POST.get("nombre")
-		apellidoVar = request.POST.get("apellidoo")
-		tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
-		numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
-		correoSenaVar = request.POST.get("correoSena")
-		celularVar = request.POST.get("celular")
-		rolVar = request.POST.get("rol")
-		cuentadanteVar = request.POST.get("cuentadante")
-		tipoContratoVar = request.POST.get("tipoContrato")
-		duracionContratoVar = request.POST.get("duracionContrato")
-		estadoUsuariovar = request.POST.get("estadoUsuario")
-		contraSenaVar = request.POST.get("contraSena")
-		validacionContraSenaVar = request.POST.get("validacionContraSena")
-		fotoUsuarioVar = request.FILES.get("fotoUsuario")
+    if request.method == "POST":
+        nombreVar = request.POST.get("nombre")
+        apellidoVar = request.POST.get("Apellidos")
+        tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
+        numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
+        correoSenaVar = request.POST.get("correoSena")
+        celularVar = request.POST.get("celular")
+        rolVar = request.POST.get("rol")
+        cuentadanteVar = request.POST.get("cuentadante")
+        tipoContratoVar = request.POST.get("tipoContrato")
+        duracionContratoVar = request.POST.get("duracionContrato")
+        estadoUsuariovar = request.POST.get("estadoUsuario")
+        passwordVar = request.POST.get("contraSena")
+        validacionContraSenaVar = request.POST.get("validacionContraSena")
+        fotoUsuarioVar = request.FILES.get("fotoUsuario")
 
-		user = UsuariosSena.objects.get(id=id)
+        user = UsuariosSena.objects.get(id=id)
 
-		user.nombre = nombreVar
-		user.apellidoo = apellidoVar
-		user.tipoIdentificacion = tipoIdentificacionVar
-		user.numeroIdentificacion = numeroIdentificacionVar
-		user.correoSena = correoSenaVar
-		user.celular = celularVar
-		user.rol = rolVar
-		user.cuentadante = cuentadanteVar
-		user.tipoContrato = tipoContratoVar
-		user.duracionContrato = duracionContratoVar
-		user.estadoUsuario = estadoUsuariovar
-		user.contraSena = contraSenaVar
-		user.validacionContraSena = validacionContraSenaVar
-		user.fotoUsuario = fotoUsuarioVar
-		user.save()
-		messages.success(request, "Usuario actualizado con Exito")  # mensaje de alerta
+        user.nombres = nombreVar
+        user.apellidos = apellidoVar
+        user.tipoIdentificacion = tipoIdentificacionVar
+        user.numeroIdentificacion = numeroIdentificacionVar
+        user.email = correoSenaVar
+        user.celular = celularVar
+        user.rol = rolVar
+        user.cuentadante = cuentadanteVar
+        user.tipoContrato = tipoContratoVar
+        user.duracionContrato = duracionContratoVar
+        user.is_active = estadoUsuariovar == 'A'  # 'A' para activo, 'I' para inactivo  
+        user.password = passwordVar      
+        user.validacionContraSena = validacionContraSenaVar
+        user.fotoUsuario = fotoUsuarioVar
+        user.save()
+        messages.success(request, "Usuario actualizado con Exito")  # mensaje de alerta
 
-		# Redirigir a la vista consultarUsuario_view para recargar los datos
-		return redirect("consultarUsuario_view")
-	else:
-		messages.warning(request, "No existe registro")
-		return redirect("consultarUsuario_view")
+        # Redirigir a la vista consultarUsuario_view para recargar los datos
+        return redirect("consultarUsuario_view")
+    else:
+        messages.warning(request, "No existe registro")
+        return redirect("consultarUsuario_view")
 
 
 def eliminarUsuario_view(request, id):
