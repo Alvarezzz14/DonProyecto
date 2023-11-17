@@ -216,69 +216,88 @@ def eliminarUsuario_view(request, id):
 
 
 def formPrestamosDevolutivos_view(request):
-	elementos = ElementosDevolutivo.objects.all().values_list(
-		"nombreElemento", "serial"
-	)
-	usuarios = UsuariosSena.objects.all()  # Obtiene todos los ususarios
-	if request.method == "POST":
-		# fechaEntregaVar = request.POST.get("fechaEntrega")
-		# Manera 1 de hacerlo
-		fechaEntregaVar = date.today()
-		fechaDevolucionVar = request.POST.get("fechaDevolucion")
-		nombreEntregavar = request.POST.get("nombreEntrega")
-		nombreRecibevar = request.POST.get("nombreRecibe")
-		nombreElementovar = request.POST.get("nombreElemento")
-		serialSenaElementovar = request.POST.get("serialSenaElemento")
-		cantidadElementoVar = int(request.POST.get("cantidadElemento"))
-		valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
-		valorTotalElementoVar = int(request.POST.get("valorTotalElemento"))
-		estadoPrestamovar = request.POST.get("estadoPrestamo")
-		observacionesPrestamovar = request.POST.get("observacionesPrestamo")
+    elementos = ElementosDevolutivo.objects.all().values_list(
+        "nombreElemento", "serial"
+    )
+    usuarios = UsuariosSena.objects.all()  # Obtiene todos los ususarios
+    if request.method == "POST":
+        fechaDevolucionVar = request.POST.get("fechaDevolucion")
 
-		try:
-			elemento = ElementosDevolutivo.objects.get(serial=serialSenaElementovar)
+        # Convertir la fecha de devolución a un objeto date
+        fechaDevolucion = date.fromisoformat(fechaDevolucionVar)
+        # Manera 1 de hacerlo
+        fechaEntregaVar = date.today()
+        fechaDevolucionVar = request.POST.get("fechaDevolucion")
+        nombreEntregavar = request.POST.get("nombreEntrega")
+        nombreRecibevar = request.POST.get("nombreRecibe")
+        nombreElementovar = request.POST.get("nombreElemento")
+        serialSenaElementovar = request.POST.get("serialSenaElemento")
+        cantidadElementoVar = int(request.POST.get("cantidadElemento"))
+        valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
+        valorTotalElementoVar = int(request.POST.get("valorTotalElemento"))
+        observacionesPrestamovar = request.POST.get("observacionesPrestamo")
 
-			# Validar que la cantidad no sea negativa
-			if cantidadElementoVar <= 0:
-				messages.error(
-					request, "La cantidad no puede ser negativa o igual a cero"
-				)
-				return render(request, "superAdmin/formElementos.html")
+        try:
+            elemento = ElementosDevolutivo.objects.get(
+                nombreElemento=nombreElementovar, serial=serialSenaElementovar
+            )
 
-			# Validar la disponibilidad de la cantidad en el inventario
-			if cantidadElementoVar > elemento.cantidadElemento:
-				return HttpResponse(
-					f"Solo hay {elemento.cantidadElemento} unidades de {elemento.nombreElemento} disponibles en el inventario.",
-					status=400,
-				)
+            # Validar que la cantidad no sea negativa
+            if cantidadElementoVar <= 0:
+                messages.error(
+                    request, "La cantidad no puede ser negativa o igual a cero"
+                )
+                return render(request, "superAdmin/formPrestamosDevolutivos.html")
 
-			# Si las validaciones son correctas, crea el objeto Prestamo
-			prestamo = Prestamo(
-				fechaEntrega=fechaEntregaVar,
-				fechaDevolucion=fechaDevolucionVar,
-				nombreEntrega=nombreEntregavar,
-				nombreRecibe=nombreRecibevar,
-				nombreElemento=nombreElementovar,
-				serialSenaElemento=elemento,
-				cantidadElemento=cantidadElementoVar,
-				valorUnidadElemento=valorUnidadElementoVar,
-				valorTotalElemento=valorTotalElementoVar,
-				estadoPrestamo=estadoPrestamovar,
-				observacionesPrestamo=observacionesPrestamovar,
-			)
-			prestamo.save()
-			messages.success(request, "Elemento Guardado Exitosamente")
-		except ElementosDevolutivo.DoesNotExist:
-			return HttpResponse("El elemento con el serial dado no existe.", status=404)
-		except ValidationError as e:
-			# Manejar la excepción ValidationError
-			return HttpResponse(str(e), status=400)
-
-	return render(
-		request,
-		"superAdmin/formPrestamosDevolutivos.html",
-		{"elementos": elementos, "usuarios": usuarios},
-	)
+            # Validar la disponibilidad de la cantidad en el inventario
+            if cantidadElementoVar > elemento.cantidadElemento:
+                messages.error(
+                    request, "La cantidad ingresada excede el stock disponible"
+                )
+                return render(request, "superAdmin/formPrestamosDevolutivos.html")
+            # Comprobar si la fecha de devolución es anterior a la fecha actual
+            if fechaDevolucion < date.today():
+                messages.error(
+                    request,
+                    "La fecha de devolución no puede ser anterior a la fecha actual.",
+                )
+                return render(
+                    request,
+                    "superAdmin/formPrestamosDevolutivos.html",
+                    {"elementos": elementos, "usuarios": usuarios},
+                )
+            # Si las validaciones son correctas, crea el objeto Prestamo
+            prestamo = Prestamo(
+                fechaEntrega=fechaEntregaVar,
+                fechaDevolucion=fechaDevolucionVar,
+                nombreEntrega=nombreEntregavar,
+                nombreRecibe=nombreRecibevar,
+                nombreElemento=nombreElementovar,
+                serialSenaElemento=elemento,
+                cantidadElemento=cantidadElementoVar,
+                valorUnidadElemento=valorUnidadElementoVar,
+                valorTotalElemento=valorTotalElementoVar,
+                observacionesPrestamo=observacionesPrestamovar,
+            )
+            prestamo.save()
+            messages.success(request, "Elemento Guardado Exitosamente")
+        except ElementosDevolutivo.DoesNotExist:
+            messages.error(
+                request, "El elemento con el nombre o serial dado no existe."
+            )
+            return render(
+                request,
+                "superAdmin/formPrestamosDevolutivos.html",
+                {"elementos": elementos, "usuarios": usuarios},
+            )
+        except ValidationError as e:
+            # Manejar la excepción ValidationError
+            return HttpResponse(str(e), status=400)
+    return render(
+        request,
+        "superAdmin/formPrestamosDevolutivos.html",
+        {"elementos": elementos, "usuarios": usuarios},
+    )
 
 
 # Rellenar serial
