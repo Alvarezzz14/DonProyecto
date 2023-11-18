@@ -35,14 +35,8 @@ import xlsxwriter
 from datetime import datetime
 from datetime import timedelta
 
+
 # Create your views here.
-
-
-def ruta_para_cancelar(request):
-    messages.warning(request, "Operación cancelada.")
-    return redirect("nombre_ruta_destino")
-
-
 def login_view(request):
     if request.method == "POST":
         loginForm = UserLoginForm(request.POST)
@@ -532,52 +526,6 @@ def formElementos_view(request):
         return redirect("formElementos_view")
 
     return render(request, "superAdmin/formElementos.html")
-
-
-# ---------------------------------------------------------------------------
-# def formElementos_view(request):
-#     if request.method == "POST":
-#         # fechaElementoVar = request.POST.get("fechaElemento")
-#         nombreElementoVar = request.POST.get("nombreElemento")
-#         categoriaElementoVar = request.POST.get("categoriaElemento")
-#         estadoElementoVar = request.POST.get("estadoElemento")
-#         cantidadElementoVar = int(request.POST.get("cantidadElemento"))
-#         valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
-#         serialVar = request.POST.get("serialSenaElemento")
-#         descripcionElementoVar = request.POST.get("descripcionElemento")
-#         observacionElementoVar = request.POST.get("observacionElemento")
-#         facturaElementoVar = request.FILES.get(
-#             "facturaElemento"
-#         )  # Asumiendo que es un archivo
-
-#         # Validar que la cantidad no sea negativa
-#         if cantidadElementoVar <= 0:
-#             messages.error(request, "La cantidad no puede ser negativa o igual a cero")
-#             return render(request, "superAdmin/formElementos.html")
-
-#         # Calcula el valor total
-#         valorTotalElementoVar = cantidadElementoVar * valorUnidadElementoVar
-
-#         elementos = Elementos(
-#             nombreElemento=nombreElementoVar,
-#             categoriaElemento=categoriaElementoVar,
-#             estadoElemento=estadoElementoVar,
-#             cantidadElemento=cantidadElementoVar,
-#             valorUnidadElemento=valorUnidadElementoVar,
-#             valorTotalElemento=valorTotalElementoVar,
-#             serial=serialVar,
-#             descripcionElemento=descripcionElementoVar,
-#             observacionElemento=observacionElementoVar,
-#             facturaElemento=facturaElementoVar,
-#         )
-#         elementos.save()
-#         messages.success(request, "Elemento Guardado Exitosamente")
-
-#         # Redireccionar o renderizar según sea necesario
-#         return redirect("formElementos_view")
-
-#     return render(request, "superAdmin/formElementos.html")
-# ---------------------------------------------------------------------------------
 
 
 def listar_elementos(request):
