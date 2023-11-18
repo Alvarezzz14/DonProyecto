@@ -1,11 +1,6 @@
-from django.shortcuts import render, HttpResponseRedirect, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import (
-    UsuariosSenaForm,
     UserLoginForm,
-    ElementosDevolutivoForm,
-    PrestamosForm,
-    ElementosConsumiblesForm,
-    EntregaConsumibleForm,
 )
 from .models import (
     UsuariosSena,
@@ -41,6 +36,11 @@ from datetime import datetime
 from datetime import timedelta
 
 # Create your views here.
+
+
+def ruta_para_cancelar(request):
+    messages.warning(request, "Operación cancelada.")
+    return redirect("nombre_ruta_destino")
 
 
 def login_view(request):
@@ -219,17 +219,42 @@ def formPrestamosDevolutivos_view(request):
             elemento = ElementosDevolutivo.objects.get(
                 nombreElemento=nombreElementovar, serial=serialSenaElementovar
             )
-            # Trae disponibles para mantenerlo en el campo despues del aviso de Error
-            disponibles = elemento.cantidadElemento if elemento else 0
-            # Validar que la cantidad no sea negativa
-            if cantidadElementoVar <= 0:
+            disponibles = elemento.cantidadElemento
+
+            # VALIDACIONES
+            if not UsuariosSena.objects.filter(nombres=nombreEntregavar).exists():
                 messages.error(
-                    request, "La cantidad no puede ser negativa o igual a cero"
+                    request, "El nombre del instructor que entrega no es válido."
                 )
                 return render(
                     request,
                     "superAdmin/formPrestamosDevolutivos.html",
                     {
+                        "elementos": elementos,
+                        "usuarios": usuarios,
+                        "fechaDevolucion": fechaDevolucionVar,
+                        "nombreEntrega": nombreEntregavar,
+                        "nombreRecibe": nombreRecibevar,
+                        "nombreElemento": nombreElementovar,
+                        "serialSenaElemento": serialSenaElementovar,
+                        "disponibles": disponibles,
+                        "cantidadElemento": cantidadElementoVar,
+                        "valorUnidadElemento": valorUnidadElementoVar,
+                        "valorTotalElemento": valorTotalElementoVar,
+                        "observacionesPrestamo": observacionesPrestamovar,
+                    },
+                )
+
+            if not UsuariosSena.objects.filter(nombres=nombreRecibevar).exists():
+                messages.error(
+                    request, "El nombre del instructor que recibe no es válido."
+                )
+                return render(
+                    request,
+                    "superAdmin/formPrestamosDevolutivos.html",
+                    {
+                        "elementos": elementos,
+                        "usuarios": usuarios,
                         "fechaDevolucion": fechaDevolucionVar,
                         "nombreEntrega": nombreEntregavar,
                         "nombreRecibe": nombreRecibevar,
@@ -252,6 +277,12 @@ def formPrestamosDevolutivos_view(request):
                     request,
                     "superAdmin/formPrestamosDevolutivos.html",
                     {
+                        # Mantener los datalist funcionales
+                        "elementos": ElementosDevolutivo.objects.all().values_list(
+                            "nombreElemento", "serial"
+                        ),
+                        "usuarios": UsuariosSena.objects.all(),
+                        # Mantener valores en los inputs
                         "fechaDevolucion": fechaDevolucionVar,
                         "nombreEntrega": nombreEntregavar,
                         "nombreRecibe": nombreRecibevar,
@@ -264,6 +295,9 @@ def formPrestamosDevolutivos_view(request):
                         "observacionesPrestamo": observacionesPrestamovar,
                     },
                 )
+            # Actualizar la cantidad en el inventario
+            elemento.cantidadElemento -= cantidadElementoVar
+            elemento.save()
             # Comprobar si la fecha de devolución es anterior a la fecha actual
             if fechaDevolucion < date.today():
                 messages.error(
@@ -273,7 +307,12 @@ def formPrestamosDevolutivos_view(request):
                 return render(
                     request,
                     "superAdmin/formPrestamosDevolutivos.html",
-                    {
+                    {  # Mantener los datalist funcionales
+                        "elementos": ElementosDevolutivo.objects.all().values_list(
+                            "nombreElemento", "serial"
+                        ),
+                        "usuarios": UsuariosSena.objects.all(),
+                        # Mantener valores en los inputs
                         "fechaDevolucion": fechaDevolucionVar,
                         "nombreEntrega": nombreEntregavar,
                         "nombreRecibe": nombreRecibevar,
@@ -305,10 +344,32 @@ def formPrestamosDevolutivos_view(request):
             messages.error(
                 request, "El elemento con el nombre o serial dado no existe."
             )
+            # Obtener los valores actuales del formulario
+            fechaDevolucionVar = request.POST.get("fechaDevolucion", "")
+            nombreEntregavar = request.POST.get("nombreEntrega", "")
+            nombreRecibevar = request.POST.get("nombreRecibe", "")
+            nombreElementovar = request.POST.get("nombreElemento", "")
+            serialSenaElementovar = request.POST.get("serialSenaElemento", "")
+            cantidadElementoVar = request.POST.get("cantidadElemento", "")
+            valorUnidadElementoVar = request.POST.get("valorUnidadElemento", "")
+            valorTotalElementoVar = request.POST.get("valorTotalElemento", "")
+            observacionesPrestamovar = request.POST.get("observacionesPrestamo", "")
             return render(
                 request,
                 "superAdmin/formPrestamosDevolutivos.html",
-                {"elementos": elementos, "usuarios": usuarios},
+                {
+                    "elementos": elementos,
+                    "usuarios": usuarios,
+                    "fechaDevolucion": fechaDevolucionVar,
+                    "nombreEntrega": nombreEntregavar,
+                    "nombreRecibe": nombreRecibevar,
+                    "nombreElemento": nombreElementovar,
+                    "serialSenaElemento": serialSenaElementovar,
+                    "cantidadElemento": cantidadElementoVar,
+                    "valorUnidadElemento": valorUnidadElementoVar,
+                    "valorTotalElemento": valorTotalElementoVar,
+                    "observacionesPrestamo": observacionesPrestamovar,
+                },
             )
         except ValidationError as e:
             # Manejar la excepción ValidationError

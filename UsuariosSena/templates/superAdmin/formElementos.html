@@ -5,7 +5,10 @@
 
 
 <head>
+
+    {% block extrastyle %}
     <link rel="stylesheet" href="{% static 'css/superAdmin/stylesFormElem.css' %}">
+    {% endblock extrastyle %}
     <title>Formulario Registro Usuarios</title>
 
 </head>
@@ -47,7 +50,8 @@
                     </div>
                 </div>
                 <div class="selectContainer">
-                    <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento">
+                    <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento" min="1"
+                        step="1" required>
                     <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
                 </div>
                 <div class="inputContainervalor">
@@ -90,5 +94,9 @@
         </form>
     </div>
 </section>
+{% block extrajs %}
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{% static 'js/calculoTotal.js'%}"></script>
+<script src="{% static 'js/verificarValorCant.js'%}"></script>
+{% endblock extrajs %}
 {% endblock %}

@@ -6,7 +6,10 @@
 
 <head>
 
+    {% block extrastyle %}
     <link rel="stylesheet" href="{% static 'css/superAdmin/crearPrestamo.css' %}">
+    {% endblock extrastyle %}
+
     <title>Formulario Prestamos</title>
 </head>
 
@@ -73,23 +76,22 @@
                         value="{{ disponibles }}" id="campoDisponibles" readonly>
                     <label for="cantidadElemento" class="labelform">Disponibles</label>
                 </div>
-                <div class="selectContainer">
-                    <input type="number" class="inputcantidad" name="cantidadElemento" value="{{ cantidadElemento }}"
-                        id="cantidadElemento">
-                    <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
-                </div>
-
             </div>
             <div class="container-1">
-                <div class="inputContainervalor">
-                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento"
-                        value="{{ valorUnidadElemento }}" id="valorUnidad" readonly>
-                    <label for="valorUnidadElemento" class="labelform">Valor Unidad</label>
-                </div>
-                <div class="inputContainervalor">
-                    <input type="text" class="inputform" placeholder="a" name="valorTotalElemento"
-                        value="{{ valorTotalElemento }}" id="valorTotalElemento" readonly>
-                    <label for="valorTotalElemento" class="labelform">Valor Total</label>
+
+                <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento"
+                    value="{{ valorUnidadElemento }}" id="valorUnidad" hidden readonly>
+
+
+
+                <input type="text" class="inputform" placeholder="a" name="valorTotalElemento"
+                    value="{{ valorTotalElemento }}" id="valorTotalElemento" hidden readonly>
+
+
+                <div class="selectContainer">
+                    <input type="number" class="inputcantidad" name="cantidadElemento" value="{{ cantidadElemento }}"
+                        id="cantidadElemento" min="1" step="1" required>
+                    <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
                 </div>
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="a" name="observacionesPrestamo"
@@ -105,16 +107,18 @@
             <div class="container-1">
                 <div class="container-botones">
                     <button type="submit" class="submitBtn">GUARDAR</button>
-                    <button type="" class="submitBtn">CANCELAR</button>
-
+                    <button type="button" class="submitBtn" onclick="confirmCancel()">CANCELAR</button>
                 </div>
             </div>
         </form>
     </div>
 </section>
 {% block extrajs %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/avisoCancelar.js'%}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{% static 'js/rellenarCampos.js'%}"></script>
 <script src="{% static 'js/calculoTotal.js'%}"></script>
+<script src="{% static 'js/verificarValorCant.js'%}"></script>
 {% endblock extrajs %}
 {% endblock %}
