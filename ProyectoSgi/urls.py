@@ -88,15 +88,15 @@ urlpatterns = [
     ),
     path(
         "formElementos/", views.formElementos_view, 
-        name="formElementos_view"
+         name="formElementos_view"
     ),
     
     path("calendario/", views.calendario, name="calendario"),
     
     path
     ("consultarUsuario/",
-    views.consultarUsuario_view,
-    name="consultarUsuario_view"),
+     views.consultarUsuario_view,
+     name="consultarUsuario_view"),
     
     path(
         "consultarElementos/",
