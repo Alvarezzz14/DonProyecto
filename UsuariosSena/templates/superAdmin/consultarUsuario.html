@@ -234,7 +234,7 @@ Consultar Usuarios
               <!--Botones de Visualizar Editar y ELiminar-->
               <td
                 class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
-                <button onclick="openModal('{{usuario.nombres}}, {{usuario.apellidos}}, {{usuario.tipoIdentificacion}},  {{usuario.rol}}, {{usuario.numeroIdentificacion }}, {{ usuario.email }}  ')",>
+                <button onclick="openModal('{{usuario.nombres}}, {{usuario.apellidos}}, {{usuario.tipoIdentificacion}}, {{usuario.celular}},  {{usuario.rol}}, {{usuario.numeroIdentificacion }}, {{ usuario.email }}  ')",>
                   <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                     <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
                     <path d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z" fill="#fff" />
@@ -293,6 +293,10 @@ Consultar Usuarios
             <td><input type="text" id="numeroIdentificacionField" readonly></td>
           </tr>
           <tr>
+            <th>Telefono:</th>
+            <td><input type="text" id="celularField" readonly></td>
+          </tr>
+          <tr>
             <th>Rol:</th>
             <td><input type="text" id="rolField" readonly></td>
           </tr>
@@ -318,6 +322,7 @@ Consultar Usuarios
     const nombreField = document.getElementById('nombreField');
     const apellidoField = document.getElementById('apellidoField');
     const tipoIdentificacionField = document.getElementById('tipoIdentificacionField');
+    const celularField = document.getElementById('celularField');
     const rolField = document.getElementById('rolField');
     const numeroIdentificacionField = document.getElementById('numeroIdentificacionField');
     const correoSenaField = document.getElementById('correoSenaField');
@@ -325,9 +330,10 @@ Consultar Usuarios
     nombreField.value = userDataArray[0];
     apellidoField.value = userDataArray[1];
     tipoIdentificacionField.value = userDataArray[2];
-    rolField.value = userDataArray[3];
-    numeroIdentificacionField.value = userDataArray[4];
-    correoSenaField.value = userDataArray[5];
+    celularField.value = userDataArray[3];
+    rolField.value = userDataArray[4];
+    numeroIdentificacionField.value = userDataArray[5];
+    correoSenaField.value = userDataArray[6];
     modal.style.display = 'block';
   }
 

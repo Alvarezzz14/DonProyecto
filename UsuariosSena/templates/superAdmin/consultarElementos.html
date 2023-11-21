@@ -249,7 +249,7 @@ Consultar Elementos
 </section>
 
 {% block extrajs %}
-
+<script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
 <script>
   // Función para abrir el modal y mostrar la información del usuario
   function openModal(userData) {
@@ -266,7 +266,7 @@ Consultar Elementos
     const cantidadField = document.getElementById('cantidadField');
     const valorUnidadElementoField = document.getElementById('valorUnidadElementoField');
 
-    fechaElementoField.value = userDataArray[0];
+    fechaElementoField.value = userDataArray[0] + " del " + userDataArray[1];
     nombreField.value = userDataArray[2];
     categoriaField.value = userDataArray[3];
     estadoField.value = userDataArray[4];
