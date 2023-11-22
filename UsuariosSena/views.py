@@ -254,6 +254,7 @@ def formPrestamosDevolutivos_view(request):
         valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
         valorTotalElementoVar = int(request.POST.get("valorTotalElemento"))
         observacionesPrestamovar = request.POST.get("observacionesPrestamo")
+        estadoPrestamovar = request.POST.get("estadoPrestamo")
 
         try:
             elemento = ElementosDevolutivo.objects.get(
@@ -296,6 +297,7 @@ def formPrestamosDevolutivos_view(request):
                 valorUnidadElemento=valorUnidadElementoVar,
                 valorTotalElemento=valorTotalElementoVar,
                 observacionesPrestamo=observacionesPrestamovar,
+                estadoPrestamo=estadoPrestamovar,
             )
             prestamo.save()
             messages.success(request, "Elemento Guardado Exitosamente")

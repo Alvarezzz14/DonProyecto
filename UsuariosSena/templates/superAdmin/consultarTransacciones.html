@@ -86,30 +86,31 @@ Consultar Transaciones
   
   </form>
 
- <!--Barra de Busqueda--> 
 
-    <div class="flex my-16 items-center w-full h-[1rem] max-w-md " x-data="{ search: '' }">
-      <div class="w-full ">
-        <input type="search" class="w-full px-4 py-1 text-gray-800 rounded-full focus:outline-none" id="filtroEdad"
-          placeholder="Filtrar por: Prestamo... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
-      </div>
-      <div>
-        <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
-          :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
-          :disabled="search.length == 0">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-  
-    <div class="flex flex-col overflow-x-auto mt-8">
-      <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="inline-block min-w-full scroll-auto overflow-hidden align-middle sm:rounded-lg">
   {% if opcion_seleccionada == 'prestamo' %}  
-  <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
+  <!--Barra de Busqueda--> 
+
+  <div class="flex my-16 tems-center w-full h-[1rem] max-w-md " x-data="{ search: '' }">
+    <div class="w-full ">
+      <input type="search" class="w-full px-4 py-1 text-gray-800 rounded-full focus:outline-none" id="filtroPrestamo"
+        placeholder="Filtrar por: Prestamo... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
+    </div>
+    <div>
+      <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
+        :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
+        :disabled="search.length == 0">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-col overflow-x-auto mt-8">
+    <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div class="inline-block min-w-full scroll-auto overflow-hidden align-middle sm:rounded-lg">
+  <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPrestamos">
             <thead>
               <tr>
                 <th
@@ -238,7 +239,8 @@ Consultar Transaciones
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                          </svg>
-                  </button>
+                      </button>
+                  </form>
                 </td>
               </tr>
               {% endfor %}
