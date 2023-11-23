@@ -14,3 +14,5 @@ estado = [("G", "Garantia"), ("B", "Baja"), ("D", "Disponible")]
 categoriaElemento = [("C", "Consumible"), ("D", "Devolutivo")]
 tipoContratos = [("P", "Planta"), ("C", "Contratista"), ("A", "Aprendiz")]
 estadoUsuario = [("A", "Activo"), ("I", "Inactivo")]
+
+

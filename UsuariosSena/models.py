@@ -120,15 +120,14 @@ class Prestamo(models.Model):
     fechaDevolucion = models.DateField()
     nombreEntrega = models.CharField(max_length=25)
     nombreRecibe = models.CharField(max_length=25, null=False)
-    nombreElemento = models.CharField(max_length=25)
-    estado = models.CharField(max_length=10, default="ACTIVO")
+    nombreElemento = models.CharField(max_length=25)    
     serialSenaElemento = models.ForeignKey(
         ElementosDevolutivo, on_delete=models.CASCADE, related_name="prestamos"
     )
     cantidadElemento = models.IntegerField()
     valorUnidadElemento = models.IntegerField()
     valorTotalElemento = models.IntegerField(blank=True, null=True)
-    estado_prestamo = models.CharField(max_length=15)
+    estadoPrestamo = models.CharField(max_length=15)   
     firmaDigital = models.ImageField(
         upload_to="firmaDigital/", blank=True, null=True
     )  # Campo para la foto
