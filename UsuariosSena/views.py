@@ -14,7 +14,8 @@ from .models import (
 	Prestamo,
 	ElementosDevolutivo,
 	ElementosConsumible,
-	EntregaConsumible,
+	EntregaConsumible
+	,
 )
 from .forms import UsuariosSenaForm, UserLoginForm, PrestamosForm
 from .models import UsuariosSena, Prestamo
@@ -99,48 +100,59 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from .models import UsuariosSena
 
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import UsuariosSena
+
 def registroUsuario_view(request):
-	if request.method == "POST":
-		nombresVar = request.POST.get("nombres")
-		apellidosVar = request.POST.get("apellidos")
-		tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
-		numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
-		emailVar = request.POST.get("email")
-		celularVar = request.POST.get("celular")
-		rolVar = request.POST.get("rol")
-		cuentadanteVar = request.POST.get("cuentadante")
-		tipoContratoVar = request.POST.get("tipoContrato")
-		is_activeVar = request.POST.get("is_active")
-		duracionContratoVar = request.POST.get("duracionContrato")
-		passwordVar = request.POST.get("password")
-		fotoUsuarioVar = request.FILES.get(
-			"fotoUsuario", None
-		)  # Ajustado para manejar casos en los que no se suba una foto
+    if request.method == "POST":
+        nombresVar = request.POST.get("nombres")
+        apellidosVar = request.POST.get("apellidos")
+        tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
+        numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
 
-		# Cifrar la contraseña
-		password_cifrada = make_password(passwordVar)
+        # Validar si el número de identificación ya está registrado
+        if UsuariosSena.objects.filter(numeroIdentificacion=numeroIdentificacionVar).exists():
+            messages.error(request, "El número de identificación ya está registrado.")
+        else:
+            emailVar = request.POST.get("email")
 
-		user = UsuariosSena(
-			nombres=nombresVar,
-			apellidos=apellidosVar,
-			tipoIdentificacion=tipoIdentificacionVar,
-			numeroIdentificacion=numeroIdentificacionVar,
-			email=emailVar,
-			celular=celularVar,
-			rol=rolVar,
-			cuentadante=cuentadanteVar,
-			tipoContrato=tipoContratoVar,
-			is_active=is_activeVar,
-			# is_superuser=True, # puede hacer cualquier cosa
-			is_staff=True,  # puede acceder al panel de administración, pero sus acciones específicas dentro del panel estarán limitadas por sus permisos asignados.
-			duracionContrato=duracionContratoVar,
-			password=password_cifrada,
-			fotoUsuario=fotoUsuarioVar,
-		)
-		user.save()
-		messages.success(request, "Usuario Registrado con Exito")
+            # Validar si el correo electrónico ya está registrado
+            if UsuariosSena.objects.filter(email=emailVar).exists():
+                messages.error(request, "El correo electrónico ya está registrado.")
+            else:
+                celularVar = request.POST.get("celular")
+                rolVar = request.POST.get("rol")
+                cuentadanteVar = request.POST.get("cuentadante")
+                tipoContratoVar = request.POST.get("tipoContrato")
+                is_activeVar = request.POST.get("is_active")
+                duracionContratoVar = request.POST.get("duracionContrato")
+                passwordVar = request.POST.get("password")
+                fotoUsuarioVar = request.POST.get("fotoUsuario")
 
-	return render(request, "superAdmin/registroUsuario.html")
+        
+        password_cifrada = make_password(passwordVar)# Cifrar la contraseña
+
+        user = UsuariosSena(
+            nombres=nombresVar,
+            apellidos=apellidosVar,
+            tipoIdentificacion=tipoIdentificacionVar,
+            numeroIdentificacion=numeroIdentificacionVar,
+            email=emailVar,
+            celular=celularVar,
+            rol=rolVar,
+            cuentadante=cuentadanteVar,
+            tipoContrato=tipoContratoVar,
+            is_active=is_activeVar,
+            duracionContrato=duracionContratoVar,
+            password=password_cifrada,
+            fotoUsuario=fotoUsuarioVar,
+        )
+        user.save()
+        messages.success(request, "Usuario Registrado con Exito")
+
+    return render(request, "superAdmin/registroUsuario.html")
+
 
 
 
@@ -156,129 +168,156 @@ def editarUsuario_view(request, id):
 
 
 def actualizarUsuario_view(request, id):
-	if request.method == "POST":
-		nombreVar = request.POST.get("nombre")
-		apellidoVar = request.POST.get("apellidoo")
-		tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
-		numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
-		correoSenaVar = request.POST.get("correoSena")
-		celularVar = request.POST.get("celular")
-		rolVar = request.POST.get("rol")
-		cuentadanteVar = request.POST.get("cuentadante")
-		tipoContratoVar = request.POST.get("tipoContrato")
-		duracionContratoVar = request.POST.get("duracionContrato")
-		estadoUsuariovar = request.POST.get("estadoUsuario")
-		contraSenaVar = request.POST.get("contraSena")
-		validacionContraSenaVar = request.POST.get("validacionContraSena")
-		fotoUsuarioVar = request.FILES.get("fotoUsuario")
+    if request.method == "POST":
+        nombreVar = request.POST.get("nombre")
+        apellidoVar = request.POST.get("Apellidos")
+        tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
+        numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
+        correoSenaVar = request.POST.get("correoSena")
+        celularVar = request.POST.get("celular")
+        rolVar = request.POST.get("rol")
+        cuentadanteVar = request.POST.get("cuentadante")
+        tipoContratoVar = request.POST.get("tipoContrato")
+        duracionContratoVar = request.POST.get("duracionContrato")
+        estadoUsuariovar = request.POST.get("estadoUsuario")
+        passwordVar = request.POST.get("contraSena")
+        validacionContraSenaVar = request.POST.get("validacionContraSena")
+        fotoUsuarioVar = request.FILES.get("fotoUsuario")
 
-		user = UsuariosSena.objects.get(id=id)
+        user = UsuariosSena.objects.get(id=id)
 
-		user.nombre = nombreVar
-		user.apellidoo = apellidoVar
-		user.tipoIdentificacion = tipoIdentificacionVar
-		user.numeroIdentificacion = numeroIdentificacionVar
-		user.correoSena = correoSenaVar
-		user.celular = celularVar
-		user.rol = rolVar
-		user.cuentadante = cuentadanteVar
-		user.tipoContrato = tipoContratoVar
-		user.duracionContrato = duracionContratoVar
-		user.estadoUsuario = estadoUsuariovar
-		user.contraSena = contraSenaVar
-		user.validacionContraSena = validacionContraSenaVar
-		user.fotoUsuario = fotoUsuarioVar
-		user.save()
-		messages.success(request, "Usuario actualizado con Exito")  # mensaje de alerta
+        user.nombres = nombreVar
+        user.apellidos = apellidoVar
+        user.tipoIdentificacion = tipoIdentificacionVar
+        user.numeroIdentificacion = numeroIdentificacionVar
+        user.email = correoSenaVar
+        user.celular = celularVar
+        user.rol = rolVar
+        user.cuentadante = cuentadanteVar
+        user.tipoContrato = tipoContratoVar
+        user.duracionContrato = duracionContratoVar
+        user.is_active = estadoUsuariovar == 'A'  # 'A' para activo, 'I' para inactivo  
+        user.password = passwordVar      
+        user.validacionContraSena = validacionContraSenaVar
+        user.fotoUsuario = fotoUsuarioVar
+        user.save()
+        messages.success(request, "Usuario actualizado con Exito")  # mensaje de alerta
 
-		# Redirigir a la vista consultarUsuario_view para recargar los datos
-		return redirect("consultarUsuario_view")
-	else:
-		messages.warning(request, "No existe registro")
-		return redirect("consultarUsuario_view")
+        # Redirigir a la vista consultarUsuario_view para recargar los datos
+        return redirect("consultarUsuario_view")
+    else:
+        messages.warning(request, "No existe registro")
+        return redirect("consultarUsuario_view")
 
 
 def eliminarUsuario_view(request, id):
-	try:
-		user = UsuariosSena.objects.get(id=id)
-		user.delete()
-		messages.success(
-			request, "usuario eliminado correctamente"
-		)  # mensaje de alerta
+    try:
+        # Busca el usuario por ID
+        user = UsuariosSena.objects.get(id=id)
 
-		user = UsuariosSena.objects.all().values()
+        # Desactiva el usuario
+        user.is_active = False
+        user.save()
 
-		# Redirigir a la vista consultarUsuario_view para recargar los datos
-		return redirect("consultarUsuario_view")
-	except UsuariosSena.DoesNotExist:
-		messages.warning(request, "No existe registro")
-		return redirect("consultarUsuario_view")
+        # Cierra la sesión del usuario
+        logout(request)
 
+        # Mensaje de éxito
+        messages.success(request, 'Perfil descativado exitosamente.')
+
+        # Redirige a la página de inicio (ajusta la URL según tu configuración)
+        return redirect('consultarUsuario_view')
+
+    except UsuariosSena.DoesNotExist:
+        # Maneja el caso en el que el usuario no existe
+        messages.error(request, 'Usuario no encontrado.')
+        return redirect('index')
 
 def formPrestamosDevolutivos_view(request):
-	elementos = ElementosDevolutivo.objects.all().values_list(
-		"nombreElemento", "serial"
-	)
-	usuarios = UsuariosSena.objects.all()  # Obtiene todos los ususarios
-	if request.method == "POST":
-		# fechaEntregaVar = request.POST.get("fechaEntrega")
-		# Manera 1 de hacerlo
-		fechaEntregaVar = date.today()
-		fechaDevolucionVar = request.POST.get("fechaDevolucion")
-		nombreEntregavar = request.POST.get("nombreEntrega")
-		nombreRecibevar = request.POST.get("nombreRecibe")
-		nombreElementovar = request.POST.get("nombreElemento")
-		serialSenaElementovar = request.POST.get("serialSenaElemento")
-		cantidadElementoVar = int(request.POST.get("cantidadElemento"))
-		valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
-		valorTotalElementoVar = int(request.POST.get("valorTotalElemento"))
-		estadoPrestamovar = request.POST.get("estadoPrestamo")
-		observacionesPrestamovar = request.POST.get("observacionesPrestamo")
+    elementos = ElementosDevolutivo.objects.all().values_list(
+        "nombreElemento", "serial"
+    )
+    usuarios = UsuariosSena.objects.all()  # Obtiene todos los ususarios
+    if request.method == "POST":
+        fechaDevolucionVar = request.POST.get("fechaDevolucion")
 
-		try:
-			elemento = ElementosDevolutivo.objects.get(serial=serialSenaElementovar)
+        # Convertir la fecha de devolución a un objeto date
+        fechaDevolucion = date.fromisoformat(fechaDevolucionVar)
+        # Manera 1 de hacerlo
+        fechaEntregaVar = date.today()
+        fechaDevolucionVar = request.POST.get("fechaDevolucion")
+        nombreEntregavar = request.POST.get("nombreEntrega")
+        nombreRecibevar = request.POST.get("nombreRecibe")
+        nombreElementovar = request.POST.get("nombreElemento")
+        serialSenaElementovar = request.POST.get("serialSenaElemento")
+        cantidadElementoVar = int(request.POST.get("cantidadElemento"))
+        valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
+        valorTotalElementoVar = int(request.POST.get("valorTotalElemento"))
+        observacionesPrestamovar = request.POST.get("observacionesPrestamo")
+        estadoPrestamovar = request.POST.get("estadoPrestamo")
 
-			# Validar que la cantidad no sea negativa
-			if cantidadElementoVar <= 0:
-				messages.error(
-					request, "La cantidad no puede ser negativa o igual a cero"
-				)
-				return render(request, "superAdmin/formElementos.html")
+        try:
+            elemento = ElementosDevolutivo.objects.get(
+                nombreElemento=nombreElementovar, serial=serialSenaElementovar
+            )
 
-			# Validar la disponibilidad de la cantidad en el inventario
-			if cantidadElementoVar > elemento.cantidadElemento:
-				return HttpResponse(
-					f"Solo hay {elemento.cantidadElemento} unidades de {elemento.nombreElemento} disponibles en el inventario.",
-					status=400,
-				)
+            # Validar que la cantidad no sea negativa
+            if cantidadElementoVar <= 0:
+                messages.error(
+                    request, "La cantidad no puede ser negativa o igual a cero"
+                )
+                return render(request, "superAdmin/formPrestamosDevolutivos.html")
 
-			# Si las validaciones son correctas, crea el objeto Prestamo
-			prestamo = Prestamo(
-				fechaEntrega=fechaEntregaVar,
-				fechaDevolucion=fechaDevolucionVar,
-				nombreEntrega=nombreEntregavar,
-				nombreRecibe=nombreRecibevar,
-				nombreElemento=nombreElementovar,
-				serialSenaElemento=elemento,
-				cantidadElemento=cantidadElementoVar,
-				valorUnidadElemento=valorUnidadElementoVar,
-				valorTotalElemento=valorTotalElementoVar,
-				estadoPrestamo=estadoPrestamovar,
-				observacionesPrestamo=observacionesPrestamovar,
-			)
-			prestamo.save()
-			messages.success(request, "Elemento Guardado Exitosamente")
-		except ElementosDevolutivo.DoesNotExist:
-			return HttpResponse("El elemento con el serial dado no existe.", status=404)
-		except ValidationError as e:
-			# Manejar la excepción ValidationError
-			return HttpResponse(str(e), status=400)
-
-	return render(
-		request,
-		"superAdmin/formPrestamosDevolutivos.html",
-		{"elementos": elementos, "usuarios": usuarios},
-	)
+            # Validar la disponibilidad de la cantidad en el inventario
+            if cantidadElementoVar > elemento.cantidadElemento:
+                messages.error(
+                    request, "La cantidad ingresada excede el stock disponible"
+                )
+                return render(request, "superAdmin/formPrestamosDevolutivos.html")
+            # Comprobar si la fecha de devolución es anterior a la fecha actual
+            if fechaDevolucion < date.today():
+                messages.error(
+                    request,
+                    "La fecha de devolución no puede ser anterior a la fecha actual.",
+                )
+                return render(
+                    request,
+                    "superAdmin/formPrestamosDevolutivos.html",
+                    {"elementos": elementos, "usuarios": usuarios},
+                )
+            # Si las validaciones son correctas, crea el objeto Prestamo
+            prestamo = Prestamo(
+                fechaEntrega=fechaEntregaVar,
+                fechaDevolucion=fechaDevolucionVar,
+                nombreEntrega=nombreEntregavar,
+                nombreRecibe=nombreRecibevar,
+                nombreElemento=nombreElementovar,
+                serialSenaElemento=elemento,
+                cantidadElemento=cantidadElementoVar,
+                valorUnidadElemento=valorUnidadElementoVar,
+                valorTotalElemento=valorTotalElementoVar,
+                observacionesPrestamo=observacionesPrestamovar,
+                estadoPrestamo=estadoPrestamovar,
+            )
+            prestamo.save()
+            messages.success(request, "Elemento Guardado Exitosamente")
+        except ElementosDevolutivo.DoesNotExist:
+            messages.error(
+                request, "El elemento con el nombre o serial dado no existe."
+            )
+            return render(
+                request,
+                "superAdmin/formPrestamosDevolutivos.html",
+                {"elementos": elementos, "usuarios": usuarios},
+            )
+        except ValidationError as e:
+            # Manejar la excepción ValidationError
+            return HttpResponse(str(e), status=400)
+    return render(
+        request,
+        "superAdmin/formPrestamosDevolutivos.html",
+        {"elementos": elementos, "usuarios": usuarios},
+    )
 
 
 # Rellenar serial
@@ -705,7 +744,7 @@ def user_logout(request):
 
 def consultarTransacciones_view(request):
 	prestamos = Prestamo.objects.all()
-	entregas = Prestamo.objects.all()
+	entregas = EntregaConsumible.objects.all()
 	usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
 	opcion_seleccionada = request.GET.get('opcion', None)
 	data = {'opcion_seleccionada':opcion_seleccionada, "Prestamos": prestamos, "Entregas": entregas, "usuarios":usuarios}
@@ -754,10 +793,36 @@ def editarPrestamo_view(request, id):
 
 	# Si la solicitud no es POST, enviar el objeto Prestamo y Elementos a la plantilla
 	return render(request, "superAdmin/editarPrestamo.html", {"prestamo": prestamo, "elemento": elemento})
-def editarEntrega_view(request):
-	  
-	return render(request, "superAdmin/editarPrestamo.html")
 
+def editarEntrega_view(request, id):
+	# Obtener el objeto Prestamo por su ID
+	entrega = get_object_or_404(EntregaConsumible, id=id)
+	elemento = None  # Inicializar la variable fuera del bloque try
+
+	if request.method == "POST":
+		# Obtener datos del formulario		
+		cantidad_elemento = request.POST.get('txt_cantidad_prestada')		
+		observaciones_prestamo = request.POST.get('txt_observaciones_prestamo')
+				
+		try:
+			# Actualizar los campos del objeto Prestamo con los datos del formulario			
+			entrega.cantidad_prestada = cantidad_elemento			
+			entrega.observaciones_prestamo = observaciones_prestamo
+			# Resto de la lógica de actualización
+
+			entrega.save()
+
+			consultar_transacciones_url = reverse("consultarTransacciones")
+			return redirect(f"{consultar_transacciones_url}?opcion=entregas")
+
+		except ElementosConsumible.DoesNotExist as e:
+			# Manejar la excepción y mostrar un mensaje de error
+			error_message = f"Elemento no encontrado. Por favor, asegúrate de que el serial sea correcto. Detalles: {e}"
+			print(error_message)  # Imprimir mensaje de error en la consola
+			return render(request, "superAdmin/editarEntrega.html", {"entrega": entrega, "elemento": elemento, "error_message": error_message})
+
+	# Si la solicitud no es POST, enviar el objeto Prestamo y Elementos a la plantilla
+	return render(request, "superAdmin/editarEntrega.html", {"entrega": entrega, "elemento": elemento})
 # views.py
 
 from django.http import HttpResponse

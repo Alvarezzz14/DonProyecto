@@ -2,15 +2,22 @@
 
 {% load static %}
 
+
+
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/superAdmin/crearPrestamo.css' %}">
+{% endblock extrastyle %}
+    
+
+    
+    
+    {% block title %}
+        Prestamos
+    {% endblock title %}
+        
 {% block content %}
 
-<head>
-
-    <link rel="stylesheet" href="{% static 'css/superAdmin/crearPrestamo.css' %}">
-    <title>Formulario Prestamos</title>
-</head>
-
-<section class="section" style=" margin: 10px; padding: 10px">
 
     <!-- Inicio del Forumlario-->
 
@@ -21,7 +28,7 @@
             {% csrf_token %}
 
             <div class="container-1">
-                <input type="text"   name="estadoPrestamo" value="Vigente" required hidden readonly>
+                <input type="text" name="estadoPrestamo" value="VIGENTE" required hidden readonly>
                 <div class="fechaContainer">
                     <input type="date" class="inputform" placeholder="fechaDevolucion" name="fechaDevolucion" required>
                     <label for="fechaDevolucion" class="labelform">Fecha Devolución</label>
@@ -70,23 +77,24 @@
                 </div>
                 <div class="inputContainervalor">
                     <input type="text" class="inputform" placeholder="Disponibles" name="disponibles"
-                        id="campoDisponibles">
+                        id="campoDisponibles" readonly>
                     <label for="cantidadElemento" class="labelform">Disponibles</label>
                 </div>
                 <div class="selectContainer">
-                    <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento">
+                    <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento" required>
                     <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
                 </div>
 
             </div>
             <div class="container-1">
                 <div class="inputContainervalor">
-                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento" id="valorUnidad">
+                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento" id="valorUnidad"
+                        readonly>
                     <label for="valorUnidadElemento" class="labelform">Valor Unidad</label>
                 </div>
                 <div class="inputContainervalor">
                     <input type="text" class="inputform" placeholder="a" name="valorTotalElemento"
-                        id="valorTotalElemento">
+                        id="valorTotalElemento" readonly>
                     <label for="valorTotalElemento" class="labelform">Valor Total</label>
                 </div>
                 <div class="inputContainer">
@@ -108,10 +116,11 @@
             </div>
         </form>
     </div>
-</section>
+
 {% block extrajs %}
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{% static 'js/rellenarCampos.js'%}"></script>
 <script src="{% static 'js/calculoTotal.js'%}"></script>
 {% endblock extrajs %}
+
 {% endblock %}
