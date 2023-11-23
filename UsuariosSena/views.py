@@ -104,6 +104,11 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from .models import UsuariosSena
 
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import render, redirect
+from .models import UsuariosSena
+
 def registroUsuario_view(request):
     if request.method == "POST":
         nombresVar = request.POST.get("nombres")
@@ -130,28 +135,30 @@ def registroUsuario_view(request):
                 passwordVar = request.POST.get("password")
                 fotoUsuarioVar = request.POST.get("fotoUsuario")
 
-        
-        password_cifrada = make_password(passwordVar)# Cifrar la contraseña
+                # Cifrar la contraseña
+                password_cifrada = make_password(passwordVar)
 
-        user = UsuariosSena(
-            nombres=nombresVar,
-            apellidos=apellidosVar,
-            tipoIdentificacion=tipoIdentificacionVar,
-            numeroIdentificacion=numeroIdentificacionVar,
-            email=emailVar,
-            celular=celularVar,
-            rol=rolVar,
-            cuentadante=cuentadanteVar,
-            tipoContrato=tipoContratoVar,
-            is_active=is_activeVar,
-            duracionContrato=duracionContratoVar,
-            password=password_cifrada,
-            fotoUsuario=fotoUsuarioVar,
-        )
-        user.save()
-        messages.success(request, "Usuario Registrado con Exito")
+                # Crear el objeto de usuario y guardarlo en la base de datos
+                user = UsuariosSena(
+                    nombres=nombresVar,
+                    apellidos=apellidosVar,
+                    tipoIdentificacion=tipoIdentificacionVar,
+                    numeroIdentificacion=numeroIdentificacionVar,
+                    email=emailVar,
+                    celular=celularVar,
+                    rol=rolVar,
+                    cuentadante=cuentadanteVar,
+                    tipoContrato=tipoContratoVar,
+                    is_active=is_activeVar,
+                    duracionContrato=duracionContratoVar,
+                    password=password_cifrada,
+                    fotoUsuario=fotoUsuarioVar,
+                )
+                user.save()
+                messages.success(request, "Usuario Registrado con Éxito")
 
     return render(request, "superAdmin/registroUsuario.html")
+
 
 
 
