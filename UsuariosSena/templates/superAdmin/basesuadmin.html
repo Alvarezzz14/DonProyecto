@@ -33,12 +33,6 @@
             </span>
             <div class="usuario">
             
-                <div class="usuariotexto">
-                    <p>Usuario</p>
-                    <p>{% if request.user.is_authenticated %}
-                        {{ request.user.cuentadante }}</p>
-                        {% endif %}</p>
-                </div>
                 <img src="{% static 'img/usuario.png' %}" alt="Usuario">
             </div>
 
@@ -96,9 +90,10 @@
             </div>
 
             <div class="perfil">
-                <p>Bievenido <br>
+                <p>
                     {% if request.user.is_authenticated %}
-                    {{ request.user.nombres }} {{ request.user.apellidos }}</p>
+                    {{ request.user.nombres }} {{ request.user.apellidos }} <br>
+                    {{ request.user.cuentadante }}</p>
                     {% endif %}
                 <div class="bola">
 

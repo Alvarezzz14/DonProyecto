@@ -392,51 +392,10 @@ Consultar Transaciones
   </div>
 </section>
 
+{% endif %}
 
 {% block extrajs %}
   
-
-  
-<script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
-
-<script>
-  // Función para abrir el modal y mostrar la información del usuario
-  function openModal(userData) {
-    const modal = document.getElementById('userModal');
-
-    const userDataArray = userData.split(', ');
-
-    const entregaField = document.getElementById('entregaField');
-    const devolucionField = document.getElementById('devolucionField');
-    const emisorField = document.getElementById('emisorField');
-    const adquirienteField = document.getElementById('adquirienteField');
-    const elementoField = document.getElementById('elementoField');
-    const estadoField = document.getElementById('estadoField');
-
-    entregaField.value = userDataArray[0];
-    devolucionField.value = userDataArray[1];
-    emisorField.value = userDataArray[2];
-    adquirienteField.value = userDataArray[3];
-    elementoField.value = userDataArray[4];
-    estadoField.value = userDataArray[8];
-    modal.style.display = 'block';
-  }
-
-  // Función para cerrar el modal
-  function closeModal() {
-    const modal = document.getElementById('userModal');
-    modal.style.display = 'none';
-  }
-
-  // Cierra el modal si se hace clic fuera de él
-  window.onclick = function (event) {
-    const modal = document.getElementById('userModal');
-    if (event.target == modal) {
-      modal.style.display = 'none';
-    }
-  }
-</script>
-
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
 
 <script>
@@ -478,6 +437,6 @@ Consultar Transaciones
 </script>
 {% endblock extrajs %}
 
-{% endif %}
+
 
 {% endblock %}
