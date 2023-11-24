@@ -23,4 +23,3 @@ function filtrarTabla() {
       }
     }
   }
-hi
