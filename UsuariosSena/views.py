@@ -8,7 +8,8 @@ from .forms import (
 	EntregaConsumibleForm,
 	
 )
-
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 from .models import (
 	UsuariosSena,
 	Prestamo,
@@ -17,19 +18,13 @@ from .models import (
 	EntregaConsumible
 	,
 )
-from .forms import UsuariosSenaForm, UserLoginForm, PrestamosForm
-from .models import UsuariosSena, Prestamo
-from django.contrib.auth.hashers import make_password
-from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login, authenticate, logout
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.core.exceptions import ValidationError
 from datetime import date
 from django.urls import reverse
-
-
 
 # Importar biblioteca reportlab
 from io import BytesIO
@@ -45,8 +40,6 @@ from reportlab.platypus import Image
 
 # Librería excel
 import xlsxwriter
-from datetime import datetime
-from datetime import timedelta
 
 # Create your views here.
 
@@ -94,20 +87,6 @@ def logout(request):
 def consultarUsuario_view(request):
 	usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
 	return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
-
-
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .models import UsuariosSena
-
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .models import UsuariosSena
-
-from django.contrib import messages
-from django.contrib.auth.hashers import make_password
-from django.shortcuts import render, redirect
-from .models import UsuariosSena
 
 def registroUsuario_view(request):
     if request.method == "POST":
