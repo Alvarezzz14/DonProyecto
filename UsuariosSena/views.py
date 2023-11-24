@@ -115,6 +115,17 @@ def registroUsuario_view(request):
         apellidosVar = request.POST.get("apellidos")
         tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
         numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
+        emailVar = request.POST.get("email")
+        celularVar = request.POST.get("celular")
+        rolVar = request.POST.get("rol")
+        cuentadanteVar = request.POST.get("cuentadante")
+        tipoContratoVar = request.POST.get("tipoContrato")
+        is_activeVar = request.POST.get("is_active")
+        duracionContratoVar = request.POST.get("duracionContrato")
+        passwordVar = request.POST.get("password")
+        fotoUsuarioVar = request.FILES.get(
+            "fotoUsuario", None
+        )  # Ajustado para manejar casos en los que no se suba una foto
 
         # Validar si el número de identificación ya está registrado
         if UsuariosSena.objects.filter(numeroIdentificacion=numeroIdentificacionVar).exists():
@@ -453,7 +464,7 @@ def formElementos_view(request):
 				valorTotalElemento=valorTotalElementoVar,
 				serial=serialVar,
 				facturaElemento=facturaElementoVar,
-			)
+            )
 		elif categoriaElementoVar == "C":
 			elemento = ElementosConsumible(
 				nombreElemento=nombreElementoVar,
