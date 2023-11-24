@@ -2,19 +2,19 @@
 
 {% load static %}
 
-{% block content %}
 
-<head>
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/superAdmin/styleFormPrestamosConsumibles.css' %}">
+{% endblock extrastyle %}
+    
 
-    <link rel="stylesheet" href="{% static 'css/superAdmin/styleFormPrestamosConsumibles.css' %}">
-    <title>Formulario Prestamos</title>
 
-</head>
-
-<section class="section" style=" margin: 10px; padding: 50px">
-
+{% block title %}
+    Formulario Prestamos
+{% endblock title %}
+    
     <!-- Inicio del Forumlario-->
-
+{% block content %}
 
     <div class="signupFrm">
         <form action="/formPrestamosConsumibles/" class="form" method="post">
@@ -70,7 +70,5 @@
         </form>
 
     </div>
-
-</section>
 
 {% endblock %}

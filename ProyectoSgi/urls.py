@@ -46,6 +46,12 @@ urlpatterns = [
         ),
     
     path(
+        "transacciondash/",
+        views.transacciondash, 
+        name="transacciondash"
+        ),
+    
+    path(
         "regUsuario/",
         views.registroUsuario_view, 
         name="registroUsuario_view"),

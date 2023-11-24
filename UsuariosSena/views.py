@@ -78,6 +78,10 @@ def usuariodash(request):
 def inventariodash(request):
 	return render(request, "superAdmin/inventariodash.html")
 
+def transacciondash(request):
+	return render(request, "superAdmin/transaccionesdash.html")
+
+
 
 def logout(request):
 	return render(request, "indexLogin.html")

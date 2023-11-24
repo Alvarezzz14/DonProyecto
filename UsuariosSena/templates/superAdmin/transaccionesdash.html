@@ -4,24 +4,22 @@
 
 
 {% block title %}
-    DashUsuario
+    Transacciones
 {% endblock title %}
 
 
 {% block extrastyle %}
-    <link rel="stylesheet" href="{% static 'css/superAdmin/usuariodash.css' %}">
+    <link rel="stylesheet" href="{% static 'css/superAdmin/inventariodash.css' %}">
 {% endblock extrastyle %}
     
 
-
 {% block content %}
     
-    
     <section class="dashboard"> 
-        <h1>Usuarios</h1>
+        <h1>Transacciones</h1>
         <div class="caja_dash">
-            <div class="box_dash click">
-                <a class="click" href="{% url 'usuariodash' %}">Usuarios</a>
+            <div class="box_dash">
+                <a href="{% url 'usuariodash' %}">Usuarios</a>
             </div>
             <div class="box_dash">
                 <a href="{% url 'inventariodash' %}">Inventario</a>
@@ -29,21 +27,21 @@
             <div class="box_dash">
                 <a href="{% url 'elementosdash' %}">Elementos</a>
             </div>
-            <div class="box_dash">
+            <div class="box_dash click">
                 <a href="{% url 'transacciondash' %}">Transacciones</a>
             </div>
         </div>
         <div class="dashboard2">
             <div class="listaopciones">
                 <div class="opciones">
-                    <a class="opcion1" href="{% url 'registroUsuario_view' %}">
-                        Crear Usuario
+                    <a class="opcion1" href="{% url 'formPrestamosDevolutivos_view' %}">
+                        Crear Prestamo
                     </a>
-                    <a class="opcion2" href="{% url 'consultarUsuario_view' %}">
-                        Buscar Usuario
+                    <a class="opcion2" href="{% url 'formPrestamosConsumibles_view' %}">
+                        Crear Entrega
                     </a>
-                    <a class="opcion3" href="#">
-                        Salir
+                    <a class="opcion3" href="{% url 'consultarTransacciones' %}">
+                        Consultar Transacciones
                     </a>
                 </div>
             </div>
@@ -60,9 +58,10 @@
 
     
     {% block extrajs %}
-    <script src="{% static 'js/usuariodash.js' %}"></script>  
+    <script src="{% static 'js/usuariodash.js' %}"></script>    
     {% endblock extrajs %}
         
     
 
-{% endblock content %}
+
+    {% endblock content %}
