@@ -21,9 +21,8 @@ from .models import (
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login, authenticate, logout
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 from django.core.exceptions import ValidationError
-from datetime import date
 from django.urls import reverse
 
 # Importar biblioteca reportlab
