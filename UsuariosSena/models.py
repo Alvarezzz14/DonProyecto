@@ -47,7 +47,7 @@ class UsuariosSena(AbstractUser):
     apellidos = models.CharField(max_length=25)
     tipoIdentificacion = models.CharField(max_length=25, choices=tipoId, default="CC")
     numeroIdentificacion = models.CharField(max_length=25, unique=True)
-    email = models.EmailField(max_length=25)
+    email = models.EmailField(max_length=35)
     celular = models.CharField(max_length=10)
     rol = models.CharField(max_length=25, choices=roles, default="I")
     cuentadante = models.CharField(max_length=25, choices=cuentadantes, default="adminD")
