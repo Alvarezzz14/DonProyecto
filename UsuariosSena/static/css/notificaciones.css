@@ -1,0 +1,69 @@
+.listaopciones {
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.opciones {
+    display: flex;
+    flex-direction: column;
+    background-color: #e6e3e3;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: 3px 2px 1px #b0afaf;
+    transition: all 0.5s;
+}
+
+.area-notificaciones {
+    width: 95%;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, .75); 
+    backdrop-filter: blur(5px);
+    box-shadow: inset 0 0 2000px rgba(255, 255, 255, .8);
+    background: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+    border: 2px #0000007f;
+    border-style: solid;
+    border-radius: 15px;
+
+    overflow-y: auto;
+}
+.area-notificaciones::before{
+    box-shadow: inset 0 0 2000px rgba(255, 255, 255, .8);
+    filter: blur(10px);
+    background: inherit;
+}
+.area-notificaciones h2, .area-notificaciones h4, .area-notificaciones p {
+    text-shadow: 2px 2px 20px rgba(147, 255, 108, 0.5);
+}
+
+.contenido-notificaciones {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+
+}
+
+.logo-notificaciones {
+    width: 100px;
+    height: auto;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.caja-texto-notificaciones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
