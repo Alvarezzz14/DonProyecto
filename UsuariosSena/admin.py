@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import (
     UsuariosSena,
-    ElementosDevolutivo,
+    InventarioDevolutivo,
+    ProductosInventarioDevolutivo,
     ElementosConsumible,
     Prestamo,
     EntregaConsumible,
@@ -14,7 +15,8 @@ class ServicioAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UsuariosSena)
-admin.site.register(ElementosDevolutivo)
+admin.site.register(InventarioDevolutivo)
+admin.site.register(ProductosInventarioDevolutivo)
 admin.site.register(ElementosConsumible)
 admin.site.register(Prestamo)
 admin.site.register(EntregaConsumible)
