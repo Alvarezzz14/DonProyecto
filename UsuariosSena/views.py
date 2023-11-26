@@ -21,6 +21,9 @@ from datetime import timedelta, datetime, date
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
+#Limpiar Cache
+from django.core.cache import cache
+
 # Importar biblioteca reportlab
 from io import BytesIO
 from django.http import HttpResponse
@@ -143,6 +146,7 @@ def registroUsuario_view(request):
                     fotoUsuario=fotoUsuarioVar,
                 )
                 user.save()
+                cache.clear() #limpiar toda la cache
                 messages.success(request, "Usuario Registrado con Éxito")
 
     return render(request, "superAdmin/registroUsuario.html")
@@ -372,6 +376,7 @@ def formPrestamosDevolutivos_view(request):
                 observacionesPrestamo=observacionesPrestamovar,
             )
             prestamo.save()
+            cache.clear() #limpiar toda la cache
             # Disminuir la cantidad de elementos disponibles
             if inventario.producto.categoria == "D":
                 inventario.producto.disponibles = max(
