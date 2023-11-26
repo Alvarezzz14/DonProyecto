@@ -5,7 +5,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from UsuariosSena import views
-from UsuariosSena.views import get_serial_by_element_name
+
 
 
 urlpatterns = [
@@ -115,15 +115,9 @@ urlpatterns = [
     path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones"),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("listarElementos/", views.listar_elementos, name="listar_elementos"),
-    #path("eliminarElemento/<int:id>/", views.eliminarElemento, name="eliminarElemento"),  # eliminar registro de la base de datos desde consultar elementos
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
     path("generar_excel/", views.generar_excel, name="generar_excel"),
     path('logout/', views.user_logout, name='logout'),
-    path(
-        "get-serial-by-element-name",
-        get_serial_by_element_name,
-        name="get_serial_by_element_name",
-    ),
     path(
         "get-element-name-by-serial",
         views.get_element_name_by_serial,

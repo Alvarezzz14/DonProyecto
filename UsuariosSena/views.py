@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import (
     UserLoginForm,
 )
+from django.db.models import Exists, OuterRef
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from .models import (
 	UsuariosSena,
 	Prestamo,
-	ElementosDevolutivo,
+	InventarioDevolutivo,
+    ProductosInventarioDevolutivo,
 	ElementosConsumible,
 	EntregaConsumible
 	,
@@ -484,63 +486,79 @@ def listar_prestamos(request):
 
 
 def formElementos_view(request):
-	if request.method =="POST":
-		nombreElementoVar = request.POST.get("nombreElemento")
-		categoriaElementoVar = request.POST.get("categoriaElemento")
-		estadoElementoVar = request.POST.get("estadoElemento")
-		descripcionElementoVar = request.POST.get("descripcionElemento")
-		observacionElementoVar = request.POST.get("observacionElemento")
-		facturaElementoVar = request.FILES.get("facturaElemento")
-		cantidadElementoVar = int(request.POST.get("cantidadElemento"))
-		valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
-
-		# Validar que la cantidad no sea negativa
-		if cantidadElementoVar <= 0:
-			messages.error(request, "La cantidad no puede ser negativa o igual a cero")
-			return render(request, "superAdmin/formElementos.html")
-
-		valorTotalElementoVar = cantidadElementoVar * valorUnidadElementoVar
-
-		if categoriaElementoVar == "D":
-			serialVar = request.POST.get(
-				"serialSenaElemento"
-			)  # Específico para ElementosDevolutivo
-			elemento = ElementosDevolutivo(
-				nombreElemento=nombreElementoVar,
-				categoriaElemento=categoriaElementoVar,
-				estadoElemento=estadoElementoVar,
-				descripcionElemento=descripcionElementoVar,
-				observacionElemento=observacionElementoVar,
-				cantidadElemento=cantidadElementoVar,
-				valorUnidadElemento=valorUnidadElementoVar,
-				valorTotalElemento=valorTotalElementoVar,
-				serial=serialVar,
-				facturaElemento=facturaElementoVar,
+    form_data = {}
+    if request.method == "POST":
+        nombre = request.POST.get("nombre")
+        categoria = request.POST.get("categoria")
+        estado = request.POST.get("estado")
+        descripcion = request.POST.get("descripcion")
+        valor_unidad = int(request.POST.get("valor_unidad"))
+        serial = request.POST.get("serial")
+        observacion = request.POST.get("observacion")
+        factura = request.FILES.get("factura")
+        form_data = {
+            "nombre": nombre,
+            "valor_unidad": valor_unidad,
+            "serial": serial,
+            "descripcion": descripcion,
+            "observacion": observacion,
+        }
+        if categoria == "D":  # Devolutivo
+            if InventarioDevolutivo.objects.filter(serial=serial).exists():
+                messages.error(
+                    request,
+                    "El número de serial ya está registrado para un elemento devolutivo.",
+                )
+                return render(
+                    request, "superAdmin/formElementos.html", {"form_data": form_data}
+                )
+            # Verificar si el producto ya existe
+            producto, created = ProductosInventarioDevolutivo.objects.get_or_create(
+                nombre=nombre,
+                categoria=categoria,
+                estado=estado,
+                descripcion=descripcion,
+                valor_unidad=valor_unidad,
             )
-		elif categoriaElementoVar == "C":
-			elemento = ElementosConsumible(
-				nombreElemento=nombreElementoVar,
-				categoriaElemento=categoriaElementoVar,
-				estadoElemento=estadoElementoVar,
-				descripcionElemento=descripcionElementoVar,
-				observacionElemento=observacionElementoVar,
-				cantidadElemento=cantidadElementoVar,
-				costoUnidadElemento=valorUnidadElementoVar,
-				costoTotalElemento=valorTotalElementoVar,
-				lote=request.POST.get(
-					"serialSenaElemento"
-				),  # 'lote' es como el serial en devolt.
-				facturaElemento=facturaElementoVar,
-			)
-		else:
-			messages.error(request, "Categoría de elemento no válida.")
-			return render(request, "superAdmin/formElementos.html")
 
-		elemento.save()
-		messages.success(request, "Elemento Guardado Exitosamente")
-		return redirect("formElementos_view")
+            # Crear una nueva entrada en el Inventario Devolutivo
+            InventarioDevolutivo.objects.create(
+                producto=producto,
+                serial=serial,
+                observacion=observacion,
+                factura=factura,
+            )
 
-	return render(request, "superAdmin/formElementos.html")
+            # Actualizar el contador de elementos disponibles
+            producto.disponibles += 1
+            producto.save()
+
+            messages.success(request, "Elemento Devolutivo Guardado Exitosamente")
+
+        elif categoria == "C":  # Consumible
+            cantidad = int(request.POST.get("cantidadElemento"))
+            costo_total = cantidad * valor_unidad
+
+            # Crear un nuevo ElementosConsumible
+            ElementosConsumible.objects.create(
+                nombreElemento=nombre,
+                categoriaElemento=categoria,
+                estadoElemento=estado,
+                descripcionElemento=descripcion,
+                observacionElemento=observacion,
+                cantidadElemento=cantidad,
+                costoUnidadElemento=valor_unidad,
+                costoTotalElemento=costo_total,
+                facturaElemento=factura,
+            )
+            messages.success(request, "Elemento Consumible Guardado Exitosamente")
+
+        else:
+            messages.error(request, "Categoría de elemento no válida.")
+
+        return redirect("formElementos_view")
+
+    return render(request, "superAdmin/formElementos.html")
 
 def listar_elementos(request):
     inventario = InventarioDevolutivo.objects.select_related("producto").all()
