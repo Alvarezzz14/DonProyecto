@@ -4,6 +4,7 @@
 
 
 
+<<<<<<< HEAD
 
 {% block extrastyle %}
     <link rel="stylesheet" href="{% static 'css/superAdmin/crearPrestamo.css' %}">
@@ -17,6 +18,14 @@
     {% endblock title %}
         
 {% block content %}
+=======
+    {% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/superAdmin/crearPrestamo.css' %}">
+    {% endblock extrastyle %}
+
+    <title>Formulario Prestamos</title>
+</head>
+>>>>>>> Changes
 
 
     <!-- Inicio del Forumlario-->
@@ -30,12 +39,12 @@
             <div class="container-1">
                 <input type="text" name="estadoPrestamo" value="VIGENTE" required hidden readonly>
                 <div class="fechaContainer">
-                    <input type="date" class="inputform" placeholder="fechaDevolucion" name="fechaDevolucion" required>
+                    <input type="date" class="inputform" name="fechaDevolucion" value="{{ fechaDevolucion }}" required>
                     <label for="fechaDevolucion" class="labelform">Fecha Devolución</label>
                 </div>
                 <div class="inputContainer">
                     <input list="usuariosList" type="text" class="inputform" placeholder="nombreEntrega"
-                        name="nombreEntrega" autocomplete="off" required>
+                        name="nombreEntrega" value="{{ nombreEntrega }}" autocomplete="off" required>
                     <label for="" class="labelform">Instructor Entrega</label>
                     <datalist id="usuariosList">
                         {% for usuario in usuarios %}
@@ -45,7 +54,7 @@
                 </div>
                 <div class="inputContainer">
                     <input list="usuariosListRecibe" type="text" class="inputform" placeholder="nombreRecibe"
-                        name="nombreRecibe" autocomplete="off" required>
+                        name="nombreRecibe" value="{{ nombreRecibe }}" autocomplete="off" required>
                     <label for="" class="labelform">Instructor Recibe</label>
                     <datalist id="usuariosListRecibe">
                         {% for usuario in usuarios %}
@@ -57,7 +66,7 @@
             <div class="container-1">
                 <div class="inputContainer">
                     <input list="elementosList" type="text" class="inputform" placeholder="nombreElemento"
-                        name="nombreElemento" autocomplete="off" required>
+                        name="nombreElemento" value="{{ nombreElemento }}" autocomplete="off" required>
                     <label for="" class="labelform">Nombre Elemento</label>
                     <datalist id="elementosList">
                         {% for elemento, Serial in elementos %}
@@ -67,7 +76,7 @@
                 </div>
                 <div class="inputContainer">
                     <input list="serialesList" type="text" class="inputform" placeholder="serialSenaElemento"
-                        name="serialSenaElemento" autocomplete="off" required>
+                        name="serialSenaElemento" value="{{ serialSenaElemento }}" autocomplete="off" required>
                     <label for="" class="labelform">Serial Elemento</label>
                     <datalist id="serialesList">
                         {% for elemento, serial in elementos %}
@@ -77,28 +86,29 @@
                 </div>
                 <div class="inputContainervalor">
                     <input type="text" class="inputform" placeholder="Disponibles" name="disponibles"
-                        id="campoDisponibles" readonly>
+                        value="{{ disponibles }}" id="campoDisponibles" readonly>
                     <label for="cantidadElemento" class="labelform">Disponibles</label>
                 </div>
-                <div class="selectContainer">
-                    <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento" required>
-                    <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
-                </div>
-
             </div>
             <div class="container-1">
-                <div class="inputContainervalor">
-                    <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento" id="valorUnidad"
-                        readonly>
-                    <label for="valorUnidadElemento" class="labelform">Valor Unidad</label>
-                </div>
-                <div class="inputContainervalor">
-                    <input type="text" class="inputform" placeholder="a" name="valorTotalElemento"
-                        id="valorTotalElemento" readonly>
-                    <label for="valorTotalElemento" class="labelform">Valor Total</label>
+
+                <input type="text" class="inputform" placeholder="a" name="valorUnidadElemento"
+                    value="{{ valorUnidadElemento }}" id="valorUnidad" hidden readonly>
+
+
+
+                <input type="text" class="inputform" placeholder="a" name="valorTotalElemento"
+                    value="{{ valorTotalElemento }}" id="valorTotalElemento" hidden readonly>
+
+
+                <div class="selectContainer">
+                    <input type="number" class="inputcantidad" name="cantidadElemento" value="{{ cantidadElemento }}"
+                        id="cantidadElemento" min="1" step="1" required>
+                    <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="observacionesPrestamo" required>
+                    <input type="text" class="inputform" placeholder="a" name="observacionesPrestamo"
+                        value="{{ observacionesPrestamo }}" required>
                     <label for="" class="labelform">Observaciones</label>
                 </div>
                 <div class="selectorimagen">
@@ -110,17 +120,72 @@
             <div class="container-1">
                 <div class="container-botones">
                     <button type="submit" class="submitBtn">GUARDAR</button>
-                    <button type="" class="submitBtn">CANCELAR</button>
-
+                    <button type="button" class="submitBtn" onclick="confirmCancel()">CANCELAR</button>
                 </div>
             </div>
         </form>
     </div>
 
 {% block extrajs %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/avisoCancelar.js'%}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{% static 'js/rellenarCampos.js'%}"></script>
 <script src="{% static 'js/calculoTotal.js'%}"></script>
+<script src="{% static 'js/verificarValorCant.js'%}"></script>
+<script>
+    var usuarios = [
+        {% for usuario in usuarios %}
+    {
+        nombres: "{{ usuario.nombres }}",
+            apellidos: "{{ usuario.apellidos }}",
+                numeroIdentificacion: "{{ usuario.numeroIdentificacion }}",
+                    rol: "{{ usuario.get_rol_display }}" // Asume que get_rol_display está definido en tu modelo UsuariosSena
+    },
+    {% endfor %}
+    ];
+
+    // Asume que usuario_pineado está definido y tiene las propiedades nombres, apellidos y rol
+    var usuarioPineado = {
+        nombres: "{{ usuario_pinned.nombres }}",
+        apellidos: "{{ usuario_pinned.apellidos }}",
+        rol: "{{ usuario_pinned.get_rol_display }}"
+    };
+
+    function actualizarOpciones() {
+        var opcionesEntrega = '';
+        var opcionesRecibe = '';
+
+        // Usuario "pineado" solo para el datalist de "Instructor Recibe"
+        opcionesRecibe += '<option value="' + usuarioPineado.nombres + ' ' + usuarioPineado.apellidos + '">' + usuarioPineado.numeroIdentificacion + ' - ' + usuarioPineado.rol + '</option>';
+
+        usuarios.forEach(function (usuario) {
+            var nombreCompleto = usuario.nombres + ' ' + usuario.apellidos;
+            var textoOpcion = usuario.numeroIdentificacion + ' - ' + usuario.rol;
+            opcionesEntrega += '<option value="' + nombreCompleto + '">' + textoOpcion + '</option>';
+            opcionesRecibe += '<option value="' + nombreCompleto + '">' + textoOpcion + '</option>';
+        });
+
+        document.getElementById('usuariosList').innerHTML = opcionesEntrega;
+        document.getElementById('usuariosListRecibe').innerHTML = opcionesRecibe;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var entregaInput = document.getElementById('nombreEntregaInput');
+        var recibeInput = document.getElementById('nombreRecibeInput');
+
+        entregaInput.addEventListener('input', function () {
+            actualizarOpciones();
+        });
+
+        recibeInput.addEventListener('input', function () {
+            actualizarOpciones();
+        });
+
+        // Inicializar las opciones al cargar la página
+        actualizarOpciones();
+    });
+</script>
 {% endblock extrajs %}
 
 {% endblock %}

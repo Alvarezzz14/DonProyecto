@@ -131,7 +131,7 @@ class Prestamo(models.Model):
     firmaDigital = models.ImageField(
         upload_to="firmaDigital/", blank=True, null=True
     )  # Campo para la foto
-    observacionesPrestamo = models.CharField(max_length=25)
+    observacionesPrestamo = models.TextField()
     id = models.BigAutoField(primary_key=True)
 
     def __str__(self):

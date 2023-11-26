@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var cantidad = parseInt(cantidadInput.value) || 0;
         var valorUnidad = parseInt(valorUnidadInput.value) || 0;
         var valorTotal = cantidad * valorUnidad;
-        valorTotalInput.value = valorTotal; // Asegurar dos decimales
+        valorTotalInput.value = valorTotal;
     }
 
     // Evento para detectar cambios y calcular el total

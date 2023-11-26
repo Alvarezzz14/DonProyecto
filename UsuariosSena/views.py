@@ -1,12 +1,6 @@
-from django.shortcuts import render, HttpResponseRedirect, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import (
-	UsuariosSenaForm,
-	UserLoginForm,
-	ElementosDevolutivoForm,
-	PrestamosForm,
-	ElementosConsumiblesForm,
-	EntregaConsumibleForm,
-	
+    UserLoginForm,
 )
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
@@ -40,9 +34,8 @@ from reportlab.platypus import Image
 # Librería excel
 import xlsxwriter
 
+
 # Create your views here.
-
-
 def login_view(request):
 	if request.method == "POST":
 		loginForm = UserLoginForm(request.POST)
@@ -234,47 +227,121 @@ def eliminarUsuario_view(request, id):
         return redirect('index')
 
 def formPrestamosDevolutivos_view(request):
-    elementos = ElementosDevolutivo.objects.all().values_list(
-        "nombreElemento", "serial"
+    # Obtiene todos los usuarios excepto el que esta fijado de primero
+    usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
+    # usuario específico que se quiere fijar
+    try:
+        usuario_pinned = UsuariosSena.objects.get(numeroIdentificacion="12345")
+    except UsuariosSena.DoesNotExist:
+        usuario_pinned = None
+
+    # Obtiene el nombre del producto, el serial del inventario y los disponibles
+    prestamos_activos = Prestamo.objects.filter(
+        serialSenaElemento=OuterRef("pk"),
+        fechaDevolucion__gte=date.today(),
     )
-    usuarios = UsuariosSena.objects.all()  # Obtiene todos los ususarios
+
+    elementos = (
+        InventarioDevolutivo.objects.annotate(disponible=~Exists(prestamos_activos))
+        .select_related("producto")
+        .values_list(
+            "producto__nombre", "serial", "producto__descripcion", "disponible"
+        )
+    )
+    form_data = {}
     if request.method == "POST":
         fechaDevolucionVar = request.POST.get("fechaDevolucion")
-
-        # Convertir la fecha de devolución a un objeto date
-        fechaDevolucion = date.fromisoformat(fechaDevolucionVar)
-        # Manera 1 de hacerlo
+        fechaDevolucion = date.fromisoformat(
+            fechaDevolucionVar
+        )  # Convierte la fecha a objeto date
         fechaEntregaVar = date.today()
-        fechaDevolucionVar = request.POST.get("fechaDevolucion")
         nombreEntregavar = request.POST.get("nombreEntrega")
         nombreRecibevar = request.POST.get("nombreRecibe")
         nombreElementovar = request.POST.get("nombreElemento")
         serialSenaElementovar = request.POST.get("serialSenaElemento")
-        cantidadElementoVar = int(request.POST.get("cantidadElemento"))
+        # cantidadElementoVar = int(request.POST.get("cantidadElemento"))
         valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
-        valorTotalElementoVar = int(request.POST.get("valorTotalElemento"))
-        observacionesPrestamovar = request.POST.get("observacionesPrestamo")
-        estadoPrestamovar = request.POST.get("estadoPrestamo")
+        disponiblesVar = request.POST.get("disponibles", "")
 
-        try:
-            elemento = ElementosDevolutivo.objects.get(
-                nombreElemento=nombreElementovar, serial=serialSenaElementovar
+        observacionesPrestamovar = request.POST.get("observacionesPrestamo")
+        form_data = {
+            "fechaDevolucion": fechaDevolucionVar,
+            "nombreEntrega": nombreEntregavar,
+            "nombreRecibe": nombreRecibevar,
+            "nombreElemento": nombreElementovar,
+            "disponibles": disponiblesVar,
+            "valorUnidadElemento": valorUnidadElementoVar,
+            "serialSenaElemento": serialSenaElementovar,
+            "observacionesPrestamo": observacionesPrestamovar,
+        }
+        # Dividir el nombre y apellido para nombreEntrega
+        partes_nombre_entrega = nombreEntregavar.split(maxsplit=1)
+        if len(partes_nombre_entrega) == 2:
+            nombre_entrega, apellido_entrega = partes_nombre_entrega
+        else:
+            messages.error(
+                request,
+                "Formato inválido para el nombre del instructor que entrega. Por favor, ingrese nombre y apellido.",
+            )
+            return render(
+                request,
+                "superAdmin/formPrestamosDevolutivos.html",
+                {"elementos": elementos, "usuarios": usuarios},
             )
 
-            # Validar que la cantidad no sea negativa
-            if cantidadElementoVar <= 0:
-                messages.error(
-                    request, "La cantidad no puede ser negativa o igual a cero"
-                )
-                return render(request, "superAdmin/formPrestamosDevolutivos.html")
+        # Dividir el nombre y apellido para nombreRecibe
+        partes_nombre_recibe = nombreRecibevar.split(maxsplit=1)
+        if len(partes_nombre_recibe) == 2:
+            nombre_recibe, apellido_recibe = partes_nombre_recibe
+        else:
+            messages.error(
+                request,
+                "Formato inválido para el nombre del instructor que recibe. Por favor, ingrese nombre y apellido.",
+            )
+            return render(
+                request,
+                "superAdmin/formPrestamosDevolutivos.html",
+                {"elementos": elementos, "usuarios": usuarios},
+            )
+        try:
+            nombreEntregaUsuario = UsuariosSena.objects.get(
+                nombres=nombre_entrega, apellidos=apellido_entrega
+            )
+        except UsuariosSena.DoesNotExist:
+            messages.error(request, "Usuario de entrega no encontrado.")
+            return render(
+                request,
+                "superAdmin/formPrestamosDevolutivos.html",
+                {
+                    "elementos": elementos,
+                    "usuarios": usuarios,
+                    "form_data": form_data,
+                },
+            )
 
-            # Validar la disponibilidad de la cantidad en el inventario
-            if cantidadElementoVar > elemento.cantidadElemento:
-                messages.error(
-                    request, "La cantidad ingresada excede el stock disponible"
-                )
-                return render(request, "superAdmin/formPrestamosDevolutivos.html")
-            # Comprobar si la fecha de devolución es anterior a la fecha actual
+        # Obtener la instancia del usuario para el campo nombreRecibe
+        try:
+            nombreRecibeUsuario = UsuariosSena.objects.get(
+                nombres=nombre_recibe, apellidos=apellido_recibe
+            )
+        except UsuariosSena.DoesNotExist:
+            messages.error(request, "Usuario receptor no encontrado.")
+            return render(
+                request,
+                "superAdmin/formPrestamosDevolutivos.html",
+                {
+                    "elementos": elementos,
+                    "usuarios": usuarios,
+                    "form_data": form_data,
+                },
+            )
+        try:
+            # Obtiene el inventario correspondiente al nombre del producto y serial
+            inventario = InventarioDevolutivo.objects.select_related("producto").get(
+                producto__nombre=nombreElementovar, serial=serialSenaElementovar
+            )
+
+            # Validaciones
             if fechaDevolucion < date.today():
                 messages.error(
                     request,
@@ -283,114 +350,117 @@ def formPrestamosDevolutivos_view(request):
                 return render(
                     request,
                     "superAdmin/formPrestamosDevolutivos.html",
-                    {"elementos": elementos, "usuarios": usuarios},
+                    {
+                        "elementos": elementos,
+                        "usuarios": usuarios,
+                        "form_data": form_data,
+                    },
                 )
-            # Si las validaciones son correctas, crea el objeto Prestamo
+
+            # Crea el objeto Prestamo
             prestamo = Prestamo(
                 fechaEntrega=fechaEntregaVar,
                 fechaDevolucion=fechaDevolucionVar,
-                nombreEntrega=nombreEntregavar,
-                nombreRecibe=nombreRecibevar,
-                nombreElemento=nombreElementovar,
-                serialSenaElemento=elemento,
-                cantidadElemento=cantidadElementoVar,
+                nombreEntrega=nombreEntregaUsuario,  # Esto es una instancia de UsuariosSena
+                nombreRecibe=nombreRecibeUsuario,  # Esto tambien es una instancia de UsuariosSena
+                serialSenaElemento=inventario,  # Esto es una instancia de InventarioDevolutivo
+                # disponibles=disponiblesVar,
                 valorUnidadElemento=valorUnidadElementoVar,
-                valorTotalElemento=valorTotalElementoVar,
+                # valorTotalElemento=valorTotalElementoVar,
                 observacionesPrestamo=observacionesPrestamovar,
-                estadoPrestamo=estadoPrestamovar,
             )
             prestamo.save()
+            # Disminuir la cantidad de elementos disponibles
+            if inventario.producto.categoria == "D":
+                inventario.producto.disponibles = max(
+                    inventario.producto.disponibles - 1, 0
+                )
+                inventario.producto.save()
             messages.success(request, "Elemento Guardado Exitosamente")
-        except ElementosDevolutivo.DoesNotExist:
-            messages.error(
-                request, "El elemento con el nombre o serial dado no existe."
-            )
+            form_data = {}
+
+        except InventarioDevolutivo.DoesNotExist:
+            messages.error(request, "El elemento con el serial dado no existe.")
+            # Renderiza de nuevo el formulario con el mensaje de error
             return render(
                 request,
                 "superAdmin/formPrestamosDevolutivos.html",
-                {"elementos": elementos, "usuarios": usuarios},
+                {
+                    "elementos": elementos,
+                    "usuarios": usuarios,
+                    "form_data": form_data,
+                },
             )
         except ValidationError as e:
-            # Manejar la excepción ValidationError
             return HttpResponse(str(e), status=400)
+
     return render(
         request,
         "superAdmin/formPrestamosDevolutivos.html",
-        {"elementos": elementos, "usuarios": usuarios},
+        {
+            "elementos": elementos,
+            "usuario_pinned": usuario_pinned,
+            "usuarios": usuarios,
+            "form_data": form_data,
+        },
     )
-
-
-# Rellenar serial
-def get_serial_by_element_name(request):
-	element_name = request.GET.get("elementName", None)
-	if element_name:
-		try:
-			# Busca el elemento por su nombre
-			elemento = ElementosDevolutivo.objects.get(nombreElemento=element_name)
-			serial_number = elemento.serial
-			valor_unidad = elemento.valorUnidadElemento
-			stock = elemento.cantidadElemento
-			return JsonResponse(
-				{
-					"serialNumber": serial_number,
-					"valorUnidad": valor_unidad,
-					"Stock": stock,
-				}
-			)
-		except ElementosDevolutivo.DoesNotExist:
-			return JsonResponse({"error": "Element not found"}, status=404)
-	else:
-		return JsonResponse({"error": "No element name provided"}, status=400)
 
 
 # Rellenar Elemento
 def get_element_name_by_serial(request):
-	serial_number = request.GET.get("serialNumber", None)
-	if serial_number:
-		try:
-			# Busca el elemento por su número de serie
-			elemento = ElementosDevolutivo.objects.get(serial=serial_number)
-			element_name = elemento.nombreElemento
-			valor_unidad = elemento.valorUnidadElemento
-			stock = elemento.cantidadElemento
-			return JsonResponse(
-				{
-					"elementName": element_name,
-					"valorUnidad": valor_unidad,
-					"Stock": stock,
-				}
-			)
-		except ElementosDevolutivo.DoesNotExist:
-			return JsonResponse({"error": "Serial number not found"}, status=404)
-	else:
-		return JsonResponse({"error": "No serial number provided"}, status=400)
+    serial_number = request.GET.get("serialNumber", None)
+    if serial_number:
+        try:
+            inventario_item = InventarioDevolutivo.objects.get(serial=serial_number)
+            element_name = inventario_item.producto.nombre
+            valor_unidad = inventario_item.producto.valor_unidad
+            stock_disponible = inventario_item.producto.disponibles
+
+            # Verificar si el elemento ha sido prestado
+            es_prestado = Prestamo.objects.filter(
+                serialSenaElemento=serial_number,
+                fechaDevolucion__gte=date.today(),
+            ).exists()
+
+            return JsonResponse(
+                {
+                    "elementName": element_name,
+                    "valorUnidad": valor_unidad,
+                    "esPrestado": es_prestado,
+                    "Stock": stock_disponible,
+                }
+            )
+        except InventarioDevolutivo.DoesNotExist:
+            return JsonResponse({"error": "Serial number not found"}, status=404)
+    else:
+        return JsonResponse({"error": "No serial number provided"}, status=400)
 
 
-def formPrestamosConsumibles_view(request):
-	if request.method == "POST":
-		# Procesar el formulario aquí (guardar el préstamo consumible)
-		nombreElementovar = request.POST.get("nombreElemento")
-		cantidad_prestadavar = int(request.POST.get("cantidad_prestada"))
-		# fecha_entregavar = request.POST.get("fecha_entrega")
-		fecha_entregavar = date.today()  # Manera 1 de hacerlo
-		serialSenaElementovar = request.POST.get("serialSenaElemento")
-		nombre_solicitantevar = request.POST.get("nombre_solicitante")
-		observaciones_prestamovar = request.POST.get("observaciones_prestamo")
-		responsable_Entregavar = request.POST.get("responsable_Entrega")
+def formEntregasConsumibles_view(request):
+    if request.method == "POST":
+        # Procesar el formulario aquí (guardar el préstamo consumible)
+        nombreElementovar = request.POST.get("nombreElemento")
+        cantidad_prestadavar = int(request.POST.get("cantidad_prestada"))
+        # fecha_entregavar = request.POST.get("fecha_entrega")
+        fecha_entregavar = date.today()  # Manera 1 de hacerlo pero mas joda
+        serialSenaElementovar = request.POST.get("serialSenaElemento")
+        nombre_solicitantevar = request.POST.get("nombre_solicitante")
+        observaciones_prestamovar = request.POST.get("observaciones_prestamo")
+        responsable_Entregavar = request.POST.get("responsable_Entrega")
 
-		# instancia de PrestamoConsumible
-		prestamo_consumible = EntregaConsumible(
-			nombreElemento=nombreElementovar,
-			cantidad_prestada=cantidad_prestadavar,
-			fecha_entrega=fecha_entregavar,
-			serialSenaElemento=serialSenaElementovar,
-			nombre_solicitante=nombre_solicitantevar,
-			observaciones_prestamo=observaciones_prestamovar,
-			responsable_Entrega=responsable_Entregavar,
-		)
-		# Guarda la instancia en la base de datos
-		prestamo_consumible.save()
-	return render(request, "superAdmin/formPrestamosConsumibles.html")
+        # instancia de PrestamoConsumible
+        prestamo_consumible = EntregaConsumible(
+            nombreElemento=nombreElementovar,
+            cantidad_prestada=cantidad_prestadavar,
+            fecha_entrega=fecha_entregavar,
+            serialSenaElemento=serialSenaElementovar,
+            nombre_solicitante=nombre_solicitantevar,
+            observaciones_prestamo=observaciones_prestamovar,
+            responsable_Entrega=responsable_Entregavar,
+        )
+        # Guarda la instancia en la base de datos
+        prestamo_consumible.save()
+    return render(request, "superAdmin/formEntregasConsumibles.html")
 
 
 def calendario(request):
@@ -472,270 +542,144 @@ def formElementos_view(request):
 
 	return render(request, "superAdmin/formElementos.html")
 
-
-# ---------------------------------------------------------------------------
-# def formElementos_view(request):
-#     if request.method == "POST":
-#         # fechaElementoVar = request.POST.get("fechaElemento")
-#         nombreElementoVar = request.POST.get("nombreElemento")
-#         categoriaElementoVar = request.POST.get("categoriaElemento")
-#         estadoElementoVar = request.POST.get("estadoElemento")
-#         cantidadElementoVar = int(request.POST.get("cantidadElemento"))
-#         valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
-#         serialVar = request.POST.get("serialSenaElemento")
-#         descripcionElementoVar = request.POST.get("descripcionElemento")
-#         observacionElementoVar = request.POST.get("observacionElemento")
-#         facturaElementoVar = request.FILES.get(
-#             "facturaElemento"
-#         )  # Asumiendo que es un archivo
-
-#         # Validar que la cantidad no sea negativa
-#         if cantidadElementoVar <= 0:
-#             messages.error(request, "La cantidad no puede ser negativa o igual a cero")
-#             return render(request, "superAdmin/formElementos.html")
-
-#         # Calcula el valor total
-#         valorTotalElementoVar = cantidadElementoVar * valorUnidadElementoVar
-
-#         elementos = Elementos(
-#             nombreElemento=nombreElementoVar,
-#             categoriaElemento=categoriaElementoVar,
-#             estadoElemento=estadoElementoVar,
-#             cantidadElemento=cantidadElementoVar,
-#             valorUnidadElemento=valorUnidadElementoVar,
-#             valorTotalElemento=valorTotalElementoVar,
-#             serial=serialVar,
-#             descripcionElemento=descripcionElementoVar,
-#             observacionElemento=observacionElementoVar,
-#             facturaElemento=facturaElementoVar,
-#         )
-#         elementos.save()
-#         messages.success(request, "Elemento Guardado Exitosamente")
-
-#         # Redireccionar o renderizar según sea necesario
-#         return redirect("formElementos_view")
-
-#     return render(request, "superAdmin/formElementos.html")
-# ---------------------------------------------------------------------------------
-
-
 def listar_elementos(request):
-	elementos = ElementosDevolutivo.objects.all()
-	return render(request, "superAdmin/listarElemento.html", {"elementos": elementos})
+    inventario = InventarioDevolutivo.objects.select_related("producto").all()
+    return render(request, "superAdmin/listarElemento.html", {"inventario": inventario})
 
 
 def consultarElementos(request):
-	elementos = ElementosDevolutivo.objects.all()
-	return render(
-		request, "superAdmin/consultarElementos.html", {"elementos": elementos}
-	)
-
-
-# def eliminarElemento(request, id):
-#     try:
-#         # Busca el objeto con el ID especificado o devuelve un error 404 si no existe
-#         objeto = get_object_or_404(ElementosDevolutivo, id=id)
-
-# 		# Realiza la eliminación del objeto
-# 		objeto.delete()
-
-# 		messages.warning(
-# 			request, "¿Esta Seguro Que Desea Eliminar el Elemento?"
-# 		)  # mensaje de alerta
-
-# 		# Si se elimina correctamente, devuelve una respuesta JSON con un mensaje de éxito
-# 		# response_data = {'mensaje': 'Registro eliminado correctamente'}
-# 		# return JsonResponse(response_data)
-
-# 	except Exception as e:
-# 		# Si se produce un error, devuelve una respuesta JSON con un mensaje de error
-# 		messages.error(request, "No se encontro el Elemento Seleccionado")
-
-# 		return redirect("consultarElementos")
-
-# 	return redirect("consultarElementos")
-
+    inventario = InventarioDevolutivo.objects.select_related("producto").all()
+    return render(
+        request, "superAdmin/consultarElementos.html", {"inventario": inventario}
+    )
 
 def generar_pdf(request):
-	elementos = ElementosDevolutivo.objects.all()
-	elements = []
-	# Crear un objeto BytesIO para almacenar el archivo PDF generado
-	buffer = BytesIO()
-	response = HttpResponse(content_type="application/pdf")
-	response[
-		"Content-Disposition"
-	] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.pdf"'
+    buffer = BytesIO()
+    response = HttpResponse(content_type="application/pdf")
+    response[
+        "Content-Disposition"
+    ] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.pdf"'
 
-	custom_page_size = (21.59 * inch, 27.94 * inch)
+    doc = SimpleDocTemplate(
+        buffer,
+        rightMargin=inch,
+        leftMargin=inch,
+        topMargin=inch,
+        bottomMargin=inch,
+        pagesize=(21.59 * inch, 27.94 * inch),
+    )
 
-	left_margin = 1 * inch
-	right_margin = 1 * inch
-	top_margin = 1 * inch
-	bottom_margin = 1 * inch
+    elementos = []
+    data = [
+        [
+            "Fecha Registro",
+            "Nombre Producto",
+            "Categoría",
+            "Estado",
+            "Descripción",
+            "Valor Unidad",
+            "Serial",
+            "Observación",
+            "Factura",
+        ]
+    ]
 
-	# Crear el documento PDF, usando landscape para un formato apaisado
-	doc = SimpleDocTemplate(
-		buffer,
-		pagesize=custom_page_size,
-		leftMargin=left_margin,
-		rightMargin=right_margin,
-		topMargin=top_margin,
-		bottomMargin=bottom_margin,
-	)
+    for inventario in InventarioDevolutivo.objects.select_related("producto").all():
+        producto = inventario.producto
+        data.append(
+            [
+                inventario.fecha_Registro.strftime("%Y-%m-%d"),
+                producto.nombre,
+                producto.categoria,
+                producto.estado,
+                producto.descripcion,
+                producto.valor_unidad,
+                inventario.serial,
+                inventario.observacion,
+                "Factura",  # Aquí puedes añadir una lógica para manejar la imagen de la factura
+            ]
+        )
 
-	# image_path = 'img/logo-sena-negro-png-2022.png'
-	# logo = Image(image_path, width=1.5 * inch, height=1.5 * inch)  # Ajusta el ancho y alto de la imagen según tus necesidades
-	# logo.hAlign = 'LEFT'  # Alinea la imagen a la izquierda
+    table = Table(data, colWidths=[1.5 * inch] * 9)
+    table_style = TableStyle(
+        [
+            ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+            ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+            ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        ]
+    )
 
-	data = [
-		[
-			"Fecha",
-			"Nombre",
-			"Categoría",
-			"Estado",
-			"Cantidad",
-			"Valor Unidad",
-			"Valor Total",
-			"Descripción",
-			"Observación",
-			"Factura",
-		]
-	]
-	for elemento in elementos:
-		data.append(
-			[
-				elemento.fechaElemento,
-				elemento.nombreElemento,
-				elemento.categoriaElemento,
-				elemento.estadoElemento,
-				elemento.cantidadElemento,
-				elemento.valorUnidadElemento,
-				elemento.valorTotalElemento,
-				elemento.descripcionElemento,
-				elemento.observacionElemento,
-				elemento.facturaElemento,
-			]
-		)
-	table = Table(data)
+    table.setStyle(table_style)
+    elementos.append(table)
+    doc.build(elementos)
 
-	row_style = TableStyle(
-		[("BACKGROUND", (0, 0), (-1, 0), colors.grey)]
-	)  # Color de fondo gris para la primera fila
-
-	table.setStyle(row_style)
-	title = "Lista de elementos"
-	title_style = TableStyle(
-		[
-			("ALIGN", (0, 0), (-1, -1), "CENTER"),
-			("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-			("FONTSIZE", (0, 0), (-1, 0), 20),  # Tamaño del título
-			("BOTTOMPADDING", (0, 0), (-1, 0), 12),
-		]
-	)
-	title_data = [[title]]  # Coloca el título en una lista dentro de una lista
-	title_table = Table(
-		title_data, colWidths=[custom_page_size[0]]
-	)  # Ancho igual al ancho de la página
-	title_table.setStyle(title_style)
-	style = TableStyle(
-		[
-			("BACKGROUND", (0, 0), (-1, 0), colors.grey),
-			("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
-			("ALIGN", (0, 0), (-1, -1), "CENTER"),
-			("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-			("BOTTOMPADDING", (0, 0), (-1, 0), 12),
-			("BACKGROUND", (0, 1), (-1, -1), colors.green),
-			("GRID", (0, 0), (-1, -1), 1, colors.black),
-		]
-	)
-
-	# Tamaño letra
-	style = TableStyle(
-		[
-			("FONTSIZE", (0, 0), (-1, -1), 16),
-		]
-	)
-	table.setStyle(style)
-
-	col_widths = [
-		1.5 * inch,
-		1.5 * inch,
-		1.5 * inch,
-		1.5 * inch,
-		1.0 * inch,
-		1.0 * inch,
-		1.0 * inch,
-		2.0 * inch,
-		2.0 * inch,
-		1.5 * inch,
-	]
-	table = Table(data, colWidths=col_widths)
-
-	# agrega la tabla al doc. y genera PDF
-	# si la ruta de la imagen está activa, agregar mediante comas 'image_path'
-	elements = [title_table, table]
-	doc.build(elements)
-
-	# Obtener el valor del buffer y establecerlo como la respuesta HTTP
-	pdf = buffer.getvalue()
-	buffer.close()
-	response.write(pdf)
-	return response
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+    return response
 
 
 def generar_excel(request):
-	elementos = ElementosDevolutivo.objects.all()
-	elements = []
-	buffer = BytesIO()
-	workbook = xlsxwriter.Workbook(buffer, {"in_memory": True})
-	worksheet = workbook.add_worksheet()
+    buffer = BytesIO()
+    workbook = xlsxwriter.Workbook(buffer, {"in_memory": True})
+    worksheet = workbook.add_worksheet()
 
-	header_format = workbook.add_format(
-		{"bold": True, "align": "center", "valign": "vcenter", "bg_color": "gray"}
-	)
-	header_format.set_border(1)
+    header_format = workbook.add_format(
+        {
+            "bold": True,
+            "align": "center",
+            "valign": "vcenter",
+            "bg_color": "gray",
+            "border": 1,
+        }
+    )
 
-	headers = [
-		"Fecha",
-		"Nombre",
-		"Categoría",
-		"Estado",
-		"Cantidad",
-		"Valor Unidad",
-		"Valor Total",
-		"Descripción",
-		"Observación",
-	]
+    headers = [
+        "Fecha Registro",
+        "Nombre Producto",
+        "Categoría",
+        "Estado",
+        "Descripción",
+        "Valor Unidad",
+        "Serial",
+        "Observación",
+    ]
 
-	for col_num, header in enumerate(headers):
-		worksheet.write(0, col_num, header, header_format)
+    for col_num, header in enumerate(headers):
+        worksheet.write(0, col_num, header, header_format)
 
-	# Datos de la base de datos
-	for row_num, elemento in enumerate(elementos, start=1):
-		worksheet.write(row_num, 0, elemento.fechaElemento)
-		worksheet.write(row_num, 1, elemento.nombreElemento)
-		worksheet.write(row_num, 2, elemento.categoriaElemento)
-		worksheet.write(row_num, 3, elemento.estadoElemento)
-		worksheet.write(row_num, 4, elemento.cantidadElemento)
-		worksheet.write(row_num, 5, elemento.valorUnidadElemento)
-		worksheet.write(row_num, 6, elemento.valorTotalElemento)
-		worksheet.write(row_num, 7, elemento.descripcionElemento)
-		worksheet.write(row_num, 8, elemento.observacionElemento)
-		# worksheet.write(row_num, 9, elemento.facturaElemento)
+    row_num = 1
+    for inventario in InventarioDevolutivo.objects.select_related("producto").all():
+        producto = inventario.producto
+        worksheet.write(row_num, 0, inventario.fecha_Registro.strftime("%Y-%m-%d"))
+        worksheet.write(row_num, 1, producto.nombre)
+        worksheet.write(row_num, 2, producto.categoria)
+        worksheet.write(row_num, 3, producto.estado)
+        worksheet.write(row_num, 4, producto.descripcion)
+        worksheet.write(row_num, 5, producto.valor_unidad)
+        worksheet.write(row_num, 6, inventario.serial)
+        worksheet.write(row_num, 7, inventario.observacion)
+        row_num += 1
 
-	for col_num, header in enumerate(headers):
-		worksheet.set_column(col_num, col_num, len(header) + 2)
+    for col_num, header in enumerate(headers):
+        worksheet.set_column(col_num, col_num, max(len(header), 15))
 
-	workbook.close()
+    workbook.close()
 
-	response = HttpResponse(content_type="application/vnd.ms-excel")
-	response[
-		"Content-Disposition"
-	] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.xlsx"'
-	response.write(buffer.getvalue())
-	# una región temporal de memoria
-	buffer.close()
-	return response
+    response = HttpResponse(
+        buffer.getvalue(),
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response[
+        "Content-Disposition"
+    ] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.xlsx"'
+    buffer.close()
+    return response
+
 
 def user_logout(request):
 	logout(request)
