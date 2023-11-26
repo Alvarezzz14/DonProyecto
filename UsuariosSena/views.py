@@ -340,7 +340,7 @@ def formPrestamosDevolutivos_view(request):
                 )
                 inventario.producto.save()
             messages.success(request, "Elemento Guardado Exitosamente")
-            form_data = {}
+            return redirect("formPrestamosDevolutivos_view")
 
         except InventarioDevolutivo.DoesNotExist:
             messages.error(request, "El elemento con el serial dado no existe.")
