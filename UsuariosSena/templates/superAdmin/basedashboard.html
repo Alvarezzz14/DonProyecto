@@ -52,14 +52,18 @@ Home SUAdmin
                                     <div class="logo-notificaciones">
                                         <img src="{% static 'img/notificaciones.png' %}" alt="" class="logo-notificaciones">
                                         <!-- Acciones Notificaciones-->
-                                        <button></button>
-                                        <button></button>
+                                        
+                                    </div>
+                                    <div class="acciones">
+                                        <a href="#"><img src="{% static 'img/vision.png' %}" title="Visualizar Prestamo" alt="" class=""></a>
+                                        <a href="#"><img src="{% static 'img/editar.png' %}" title="Editar Prestamo" alt="" class=""></a>
+                                        <a href="#"><img src="{% static 'img/finalizar.png' %}" title="Finalizar Prestamo" alt="" class=""></a>
                                     </div>
                                     <div class="caja-texto-notificaciones">
                                         <div>
                                             <h2>{{ Prestamos.nombreRecibe }}: <br>
                                                 {{ Prestamos.fechaDevolucion }} </h2>
-                                                <p>{{ Prestamos.serialSenaElemento }}</p>
+                                                <p>{{ Prestamos.serial }}</p>
                                                 <p>{{ Prestamos.observacionesPrestamo }}</p>
                                         </div>
                                     </div>
@@ -68,8 +72,7 @@ Home SUAdmin
                             </div>
                             {% endfor %}
                         {% else %}
-                        <h1>NO AHI PRESTAMOS PENDIENTES</h1>
-                        
+                        <h1>NO TENEMOS PRESTAMOS PENDIENTES</h1>
                         {% endif %}
                         
                         </div>

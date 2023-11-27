@@ -18,12 +18,14 @@
     border-radius: 20px;
     box-shadow: 0px 0px 10px rgba(255, 165, 0, 0.5) #b0afaf;
     transition: all 0.5s;
+    
 }
 
 .area-notificaciones {
+    
     width: 95%;
     height: 30%;
-    padding: 0px;
+    padding: auto;
     background-color: rgba(255, 255, 255, .75); 
     
     box-shadow: 0px 0px 10px rgb(255, 166, 0) #b0afaf;
@@ -34,9 +36,9 @@
     align-items: center;
     margin: 5px;
     margin-bottom:2rem;
-    border: 2px rgb(147, 197, 255);
-    border-style:ridge ;
-    border-radius: 300px;
+    border: 0.15rem #fc7323;
+    border-style:solid ;
+    border-radius: 100px;
     overflow-y: auto;
 }
 .area-notificaciones::before{
@@ -54,20 +56,33 @@
     align-items: center;
     flex-direction: row;
     width: 100%;
-    
-    justify-content: space-around;
+    gap: 3rem;
+    padding-left: 3rem;
+    justify-content: flex-start;
 
 }
 
 .logo-notificaciones {
-    width: 100px;
+    width: 4rem;
     height: auto;
-    padding: 5px;
     border-radius: 50%;
+
 }
 
 .caja-texto-notificaciones {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.acciones{
+    display: flex;
+    flex-direction: column;
+    gap:5px ;
+    margin:1%;
+    
+}
+
+.vista_usuario{
+    padding: 1rem;
 }
