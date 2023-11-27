@@ -53,7 +53,7 @@ class UsuariosSena(AbstractUser):
     numeroIdentificacion = models.CharField(
         max_length=25, unique=True, primary_key=True
     )
-    email = models.EmailField(max_length=25)
+    email = models.EmailField(max_length=35)
     celular = models.CharField(max_length=10)
     rol = models.CharField(max_length=25, choices=roles, default="I")
     cuentadante = models.CharField(
@@ -62,12 +62,11 @@ class UsuariosSena(AbstractUser):
     tipoContrato = models.CharField(max_length=25, choices=tipoContratos, default="P")
     is_active = models.BooleanField(default=1)
     duracionContrato = models.CharField(max_length=25)
-    password = models.CharField(max_length=30, default="")
+    password = models.CharField(max_length=100, default="")
     recovery_token = models.CharField(max_length=30, blank=True, null=True)
     fotoUsuario = models.ImageField(
         upload_to="usuarioFoto/", blank=True, null=True
     )  # Campo para la foto
-    id = models.BigAutoField(primary_key=True)
 
     objects = UsuariosSenaManager()
 
@@ -103,7 +102,7 @@ class InventarioDevolutivo(models.Model):
     factura = models.ImageField(upload_to="facturaElemento/", blank=True, null=True)
 
     def __str__(self):
-        return f"Serial: {self.serial} - {self.producto.nombre}"
+        return f"{self.serial} - {self.producto.nombre}"
 
 
 # -------------------------------------------------------------------------------

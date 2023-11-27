@@ -880,7 +880,7 @@ def finalizarPrestamo_view(request, id):
             return redirect(f"{consultar_transacciones_url}?opcion=prestamo")
 
         except Exception as e:
-            print(f"Error al actualizar el estado del préstamo: {e}")
+            messages.error(request, f"Error al actualizar el estado del préstamo: {e}")
 
     return render(
         request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
