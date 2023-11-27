@@ -15,7 +15,7 @@
 
 .dashboard h1{
     padding: 20px 40px;
-    font-size: 30px;
+    font-size: 2rem;
 }
 .caja_dash{
     display: grid;
