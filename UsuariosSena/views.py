@@ -41,6 +41,28 @@ from reportlab.platypus import Image
 import xlsxwriter
 
 # Create your views here.
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.http import HttpResponse
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    def post(self, request, *args, **kwargs):
+        # Aquí puedes agregar mensajes de depuración
+        print("Protocol:", request.scheme)
+        print("Domain:", request.META['HTTP_HOST'])
+        print("uid:", kwargs['uidb64'])
+        print("token:", kwargs['token'])
+
+        # También puedes registrar mensajes en los registros
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.debug(f"Protocol: {request.scheme}")
+        logger.debug(f"Domain: {request.META['HTTP_HOST']}")
+        logger.debug(f"uid: {kwargs['uidb64']}")
+        logger.debug(f"token: {kwargs['token']}")
+
+        # Tu lógica existente aquí
+        return super().post(request, *args, **kwargs)
+
 
 
 def login_view(request):

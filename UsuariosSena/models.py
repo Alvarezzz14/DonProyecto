@@ -47,7 +47,7 @@ class UsuariosSena(AbstractUser):
     apellidos = models.CharField(max_length=25)
     tipoIdentificacion = models.CharField(max_length=25, choices=tipoId, default="CC")
     numeroIdentificacion = models.CharField(max_length=25, unique=True)
-    email = models.EmailField(max_length=25)
+    email = models.EmailField(max_length=35)
     celular = models.CharField(max_length=10)
     rol = models.CharField(max_length=25, choices=roles, default="I")
     cuentadante = models.CharField(max_length=25, choices=cuentadantes, default="adminD")
@@ -55,6 +55,7 @@ class UsuariosSena(AbstractUser):
     is_active = models.BooleanField(default=1)
     duracionContrato = models.CharField(max_length=25)
     password = models.CharField(max_length=30, default="")
+    recovery_token = models.CharField(max_length=30, blank= True,  null=True)
     fotoUsuario = models.ImageField(upload_to="usuarioFoto/", blank=True, null=True)  # Campo para la foto
     id = models.BigAutoField(primary_key=True)
 
