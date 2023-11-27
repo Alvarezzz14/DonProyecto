@@ -8,6 +8,16 @@ from UsuariosSena import views
 
 
 
+from django.contrib.auth.views import (
+	PasswordResetView,
+	PasswordResetDoneView,
+	PasswordResetConfirmView,
+	PasswordResetCompleteView,	
+	)
+from django.urls import path
+
+
+
 urlpatterns = [
     path(
         "admin/", 
@@ -123,7 +133,10 @@ urlpatterns = [
         views.get_element_name_by_serial,
         name="get-element-name-by-serial",
     ),
-    
+    path('reset_password/', PasswordResetView.as_view(), name='password_reset'),
+    path('reset_password/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     
 ]
 
