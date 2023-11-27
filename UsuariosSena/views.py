@@ -182,7 +182,7 @@ def registroUsuario_view(request):
                     cuentadante=cuentadanteVar,
                     tipoContrato=tipoContratoVar,
                     is_active=is_activeVar,
-                    is_staff=True, #Permitiru ingreso al admin, creados por la aplicacion
+                    #is_staff=True, #Permitiru ingreso al admin, creados por la aplicacion
                     duracionContrato=duracionContratoVar,
                     password=password_cifrada,
                     fotoUsuario=fotoUsuarioVar,
