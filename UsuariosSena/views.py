@@ -64,7 +64,15 @@ def login_view(request):
 
 
 def homedash(request):
-	return render(request, "superAdmin/basedashboard.html")
+	prestamos = Prestamo.objects.all().order_by('fechaDevolucion')
+	entregas = EntregaConsumible.objects.all()
+	usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
+	opcion_seleccionada = request.GET.get('opcion', None)
+	data = {'opcion_seleccionada':opcion_seleccionada, "Prestamos": prestamos, "Entregas": entregas, "usuarios":usuarios}
+
+	return render(
+		request, "superAdmin/basedashboard.html", data)
+
 
 def elementosdash(request):
 	return render(request, "superAdmin/elementosdash.html")
@@ -810,3 +818,4 @@ def finalizarPrestamo_view(request, id):
             print(f'Error al actualizar el estado del préstamo: {e}')
 
     return render(request, "superAdmin/consultarTransacciones.html", {'prestamo': prestamo})
+

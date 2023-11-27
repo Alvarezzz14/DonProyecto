@@ -17,8 +17,10 @@ Home SUAdmin
     
 
         <body>
+            
             <section class="dashboard"> 
                 <h1>Inicio</h1>
+            
                 <div class="caja_dash">
                     <div class="box_dash">
                         <a href="{% url 'usuariodash' %}">Usuarios</a>
@@ -33,64 +35,35 @@ Home SUAdmin
                         <a href="{% url 'transacciondash' %}">Transacciones</a>
                     </div>
                 </div>
+                
                 <div class="dashboard2">
                     <div class="vista_usuario">
                         <div class="usuarios_dash">
                             <!-- Area de notificaciones plantilla-->
+                            {% for Prestamos  in Prestamos %}
                             <div class="area-notificaciones">
-                                <h2>Título de la notificación</h2>
+                                
+                               
                                 <div class="contenido-notificaciones">
                                     <div class="logo-notificaciones">
                                         <img src="{% static 'img/imgdashboard/senaL.png' %}" alt="" class="logo-notificaciones">
-                                        <!-- Reemplazar con imagen personalizada-->
+                                        <!-- Acciones Notificaciones-->
+                                        <button></button>
+                                        <button></button>
                                     </div>
                                     <div class="caja-texto-notificaciones">
                                         <div>
-                                            <h4>Origen</h4>
-                                        </div>
-                                        <div class="caja-texto-notificaciones">
-                                            <p>Contenido: Una acción ha sido realizada</p>
-                                            <a href="#">ver más...</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="area-notificaciones">
-                                <h2>Título de la notificación</h2>
-                                <div class="contenido-notificaciones">
-                                    <div class="logo-notificaciones">
-                                        <img src="{% static 'img/imgdashboard/senaL.png' %}" alt="" class="logo-notificaciones">
-                                        <!-- Reemplazar con imagen personalizada-->
-                                    </div>
-                                    <div class="caja-texto-notificaciones">
-                                        <div>
-                                            <h4>Origen</h4>
-                                        </div>
-                                        <div class="caja-texto-notificaciones">
-                                            <p>Contenido: Una acción ha sido realizada</p>
-                                            <a href="#">ver más...</a>
+                                            <h2>{{ Prestamos.nombreRecibe }}: <br>
+                                                {{ Prestamos.fechaDevolucion }} </h2>
+                                                <p>{{ Prestamos.serialSenaElemento }}</p>
+                                                <p>{{ Prestamos.observacionesPrestamo }}</p>
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
-                            <div class="area-notificaciones">
-                                <h2>Título de la notificación</h2>
-                                <div class="contenido-notificaciones">
-                                    <div class="logo-notificaciones">
-                                        <img src="{% static 'img/imgdashboard/senaL.png' %}" alt="" class="logo-notificaciones">
-                                        <!-- Reemplazar con imagen personalizada-->
-                                    </div>
-                                    <div class="caja-texto-notificaciones">
-                                        <div>
-                                            <h4>Origen</h4>
-                                        </div>
-                                        <div class="caja-texto-notificaciones">
-                                            <p>Contenido: Una acción ha sido realizada</p>
-                                            <a href="#">ver más...</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
+                        
                         </div>
                     </div>
         
@@ -104,6 +77,7 @@ Home SUAdmin
                     </div>
                 </div>
             </section>
+            
         <!-- fin Cotenido principal -->
 
         {% endblock content %}
