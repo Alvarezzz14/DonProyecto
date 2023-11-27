@@ -4,12 +4,41 @@
 {% block extrastyle %}
     <link rel="stylesheet" href="{% static 'css/superAdmin/styledashboard.css' %}">
     <link rel="stylesheet" href="{% static 'css/notificaciones.css' %}">
+    <link rel="stylesheet" href="{% static 'css/superAdmin/modal.css' %}">
 {% endblock extrastyle %}
 
 {% block title %}
 Home SUAdmin
 {% endblock title %}
 
+
+{% block extrascript %}
+
+<script>
+    // Este script muestra una confirmación SweetAlert cuando se hace clic en el botón
+    document.getElementById('confirmarBtn').addEventListener('click', function() {
+        Swal.fire({
+            "title": "¿Estás seguro de FInalizar el Préstamo?",
+            "text": "El Elemento Devolutivo Retornara al Inventario",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "Cancelar",
+            "confirmButtonText": "Aceptar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#fc7323",
+            "iconColor": "#fc7323",
+          
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario hace clic en "Sí, confirmar", enviar el formulario
+                document.getElementById('miFormulario').submit();
+            }
+        });
+    });
+  </script>
+    
+{% endblock extrascript %}
+    
 
 {% block content %}
     
@@ -55,9 +84,21 @@ Home SUAdmin
                                         
                                     </div>
                                     <div class="acciones">
-                                        <a href="#"><img src="{% static 'img/vision.png' %}" title="Visualizar Prestamo" alt="" class=""></a>
-                                        <a href="#"><img src="{% static 'img/editar.png' %}" title="Editar Prestamo" alt="" class=""></a>
-                                        <a href="#"><img src="{% static 'img/finalizar.png' %}" title="Finalizar Prestamo" alt="" class=""></a>
+                                        <a href="#" ><img src="{% static 'img/vision.png' %}" title="Visualizar Prestamo" alt="" class=""></a>
+                                        <a href="{% url 'editarPrestamo_view' id=Prestamos.id %}"><img src="{% static 'img/editar.png' %}" title="Editar Prestamo" alt="" class=""></a>
+                                
+                                        
+
+                                        <form id="miFormulario" method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="txt_nuevo_estado" value="Finalizado">
+                                            
+                                            <!-- Cambia type="submit" por type="button" -->
+                                            <button type="button" id="confirmarBtn">
+                                                <img src="{% static 'img/finalizar.png' %}" title="Finalizar Préstamo" alt="" class="">
+                                            </button>
+                                        </form>
+                                        
                                     </div>
                                     <div class="caja-texto-notificaciones">
                                         <div>
@@ -87,6 +128,42 @@ Home SUAdmin
                         </div>
                     </div>
                 </div>
+                <div id="userModal" class="modal">
+                    <div class="modal-content">
+                      <thead>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                      </thead>
+                      <div id="userData">
+                        <h1> Información del prestamo</h1>
+                        <table class="tabla">
+                          <tr>
+                            <th>Fecha de Entrega:</th>
+                            <td><input type="datetime" id="entregaField" readonly></td>
+                          </tr>
+                          <tr>
+                            <th>Fecha de Devolucion:</th>
+                            <td><input type="datetime" id="devolucionField" readonly></td>
+                          </tr>
+                          <tr>
+                            <th>Emisor:</th>
+                            <td><input type="text" id="emisorField" readonly></td>
+                          </tr>
+                          <tr>
+                            <th>Adquiriente:</th>
+                            <td><input type="text" id="adquirienteField" readonly></td>
+                          </tr>
+                          <tr>
+                            <th>Elemento:</th>
+                            <td><input type="text" id="elementoField" readonly></td>
+                          </tr>
+                          <tr>
+                            <th>Estado del prestamo:</th>
+                            <td><input type="text" id="estadoField" readonly></td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
             </section>
             
         <!-- fin Cotenido principal -->
@@ -96,5 +173,46 @@ Home SUAdmin
    
    {% block extrajs %}
    <script src="{% static 'js/dashboard.js' %}"></script>  
+   <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
+   
+
+<script>
+  // Función para abrir el modal y mostrar la información del usuario
+  function openModal(userData) {
+    const modal = document.getElementById('userModal');
+
+    const userDataArray = userData.split(', ');
+
+    const entregaField = document.getElementById('entregaField');
+    const emisorField = document.getElementById('emisorField');
+    const adquirienteField = document.getElementById('adquirienteField');
+    const serialField = document.getElementById('serialField');
+    const cantidadField = document.getElementById('cantidadField');
+    const observacionesField = document.getElementById('observacionesField');
+
+    entregaField.value = userDataArray[0];
+    emisorField.value = userDataArray[1];
+    adquirienteField.value = userDataArray[2];
+    serialField.value = userDataArray[3];
+    cantidadField.value = userDataArray[4];
+    observacionesField.value = userDataArray[5];
+    modal.style.display = 'block';
+  }
+
+  // Función para cerrar el modal
+  function closeModal() {
+    const modal = document.getElementById('userModal');
+    modal.style.display = 'none';
+  }
+
+  // Cierra el modal si se hace clic fuera de él
+  window.onclick = function (event) {
+    const modal = document.getElementById('userModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+</script>
+
    {% endblock extrajs %}
     
