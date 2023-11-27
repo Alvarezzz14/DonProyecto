@@ -2,14 +2,13 @@
 
 {% load static %}
 
-
-
 {% block title %}
 Consultar Usuarios
 {% endblock title %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/superAdmin/modal.css' %}">
+<link rel="stylesheet" href="{% static 'css/superAdmin/stylesregusuario.css' %}">
 <script src="https://cdn.tailwindcss.com"></script>
 {% endblock extrastyle %}
 <!--Script Contenido Estilos de Tailwindcss-->
@@ -266,6 +265,7 @@ Consultar Usuarios
       </div>
     </div>
   </div>
+ 
   <!-- Modal para mostrar la información del usuario -->
 
   <div id="userModal" class="modal">
@@ -307,8 +307,20 @@ Consultar Usuarios
       </div>
     </div>
   </div>
+  <div class="container-1">
+  </div>
+  <div class="container-botones">
+      <button type="button" class="submitBtn" id="cancelBtn"><span>ATRAS</span></button>
+  </div>
 </section>
+
 {% block extrajs %}
+<script>
+  document.getElementById("cancelBtn").onclick = function() {
+    window.location.href = "/usuariodash/";
+  };
+</script>
+
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
 
 <script>

@@ -6,11 +6,10 @@
 Consultar Elementos
 {% endblock title %}
 
-
 <!--Script Contenido Estilos de Tailwindcss-->
-
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/superAdmin/modal.css' %}">
+<link rel="stylesheet" href="{% static 'css/superAdmin/stylesregusuario.css' %}">
 <script src="https://cdn.tailwindcss.com"></script>
 {% endblock extrastyle %}
 
@@ -200,6 +199,10 @@ Consultar Elementos
       </div>
     </div>
   </div>
+    <br>
+    <div class="container-botones">
+      <button type="button" class="submitBtn" id="cancelBtn"><span>ATRAS</span></button>
+    </div>
   </div>
     <!-- Modal para mostrar la información del usuario -->
 
@@ -291,5 +294,16 @@ Consultar Elementos
     }
   }
 </script>
+ 
+</section>
+{% block extrajs %}
+<script>
+  document.getElementById("cancelBtn").onclick = function() {
+    window.location.href = "/elementosdash/";
+  };
+  </script>
+
+<script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
+
 {% endblock extrajs %}
 {% endblock %}
