@@ -93,8 +93,8 @@ Home SUAdmin
                                             {% csrf_token %}
                                             <input type="hidden" name="txt_nuevo_estado" value="Finalizado">
                                             
-                                            <!-- Cambia type="submit" por type="button" -->
-                                            <button type="button" id="confirmarBtn">
+                                            
+                                            <button type="submit" id="confirmarBtn">
                                                 <img src="{% static 'img/finalizar.png' %}" title="Finalizar Préstamo" alt="" class="">
                                             </button>
                                         </form>

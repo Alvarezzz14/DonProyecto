@@ -83,6 +83,11 @@
     
 }
 
+#confirmarBtn{
+    border: none;
+    cursor: pointer;
+}
+
 .vista_usuario{
     padding: 1rem;
 }
