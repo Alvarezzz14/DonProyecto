@@ -40,6 +40,10 @@ Home SUAdmin
                     <div class="vista_usuario">
                         <div class="usuarios_dash">
                             <!-- Area de notificaciones plantilla-->
+                            
+                            {% if Prestamos  %}
+                                
+                                
                             {% for Prestamos  in Prestamos %}
                             <div class="area-notificaciones">
                                 
@@ -63,6 +67,10 @@ Home SUAdmin
                                 
                             </div>
                             {% endfor %}
+                        {% else %}
+                        <h1>NO AHI PRESTAMOS PENDIENTES</h1>
+                        
+                        {% endif %}
                         
                         </div>
                     </div>
