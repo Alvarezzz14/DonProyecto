@@ -1,4 +1,4 @@
-roles = [("superAdmin", "super Administrador"), ("I", "instructor"), ("M", "Monitor")]
+roles = [("superAdmin", "Super Administrador"), ("I", "Instructor"), ("M", "Monitor")]
 cuentadantes = [
     ("adminS", "administrador Solidario"),
     ("adminD", "administrador Directo"),

@@ -20,7 +20,11 @@ from django.contrib.auth.models import User
 
 class UsuariosSenaManager(BaseUserManager):
     def create_user(self, numeroIdentificacion, email, password=None, **extra_fields):
-        user = self.model(numeroIdentificacion=numeroIdentificacion, email=self.normalize_email(email), **extra_fields)
+        user = self.model(
+            numeroIdentificacion=numeroIdentificacion,
+            email=self.normalize_email(email),
+            **extra_fields,
+        )
         user = self.model(
             numeroIdentificacion=numeroIdentificacion,
             email=self.normalize_email(email),
@@ -46,7 +50,9 @@ class UsuariosSena(AbstractUser):
     nombres = models.CharField(max_length=25)
     apellidos = models.CharField(max_length=25)
     tipoIdentificacion = models.CharField(max_length=25, choices=tipoId, default="CC")
-    numeroIdentificacion = models.CharField(max_length=25, unique=True, primary_key=True)
+    numeroIdentificacion = models.CharField(
+        max_length=25, unique=True, primary_key=True
+    )
     email = models.EmailField(max_length=35)
     celular = models.CharField(max_length=10)
     rol = models.CharField(max_length=25, choices=roles, default="I")
@@ -57,9 +63,10 @@ class UsuariosSena(AbstractUser):
     is_active = models.BooleanField(default=1)
     duracionContrato = models.CharField(max_length=25)
     password = models.CharField(max_length=100, default="")
-    recovery_token = models.CharField(max_length=30, blank= True,  null=True)
-    fotoUsuario = models.ImageField(upload_to="usuarioFoto/", blank=True, null=True)  # Campo para la foto
-    
+    recovery_token = models.CharField(max_length=30, blank=True, null=True)
+    fotoUsuario = models.ImageField(
+        upload_to="usuarioFoto/", blank=True, null=True
+    )  # Campo para la foto
 
     objects = UsuariosSenaManager()
 

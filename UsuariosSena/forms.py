@@ -1,6 +1,3 @@
-# #prueba loginnnnnnnnnnnnn
-# from django import forms
-
 from django import forms
 from .models import (
     UsuariosSena,
@@ -20,7 +17,6 @@ class UsuariosSenaForm(forms.ModelForm):
 class UserLoginForm(forms.Form):
     numeroIdentificacion = forms.CharField(label="numeroIdentificacion")
     password = forms.CharField(widget=forms.PasswordInput, label="password")
-
 
 
 class ElementosConsumiblesForm(forms.ModelForm):
