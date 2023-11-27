@@ -68,14 +68,14 @@ urlpatterns = [
         "consultarUsuario/", views.consultarUsuario_view, name="consultarUsuario_view"
     ),
     path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
-    path("listarPrestamos/", views.listar_prestamos, name="listar_prestamos"),
+   
     path(
         "consultarTransacciones/",
         views.consultarTransacciones_view,
         name="consultarTransacciones",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
-    path("listarElementos/", views.listar_elementos, name="listar_elementos"),
+    
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
     path("generar_excel/", views.generar_excel, name="generar_excel"),
     path("logout/", views.user_logout, name="logout"),
