@@ -34,9 +34,12 @@
         <div class="dashboard2">
             <div class="listaopciones">
                 <div class="opciones">
+                    {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
                     <a class="opcion1" href="{% url 'formElementos_view' %}">
                         Crear Elemento
-                    </a>
+                    </a>                    
+                    {% endif %}
+                        
                     <a class="opcion2" href="{% url 'consultarElementos' %}">
                         Consultar Elemento
                     </a>

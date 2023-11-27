@@ -173,7 +173,10 @@ Consultar Transaciones
                     <path d="m39.4 32c0 4.1-3.4 7.5-7.5 7.5s-7.5-3.4-7.5-7.5 3.4-7.5 7.5-7.5 7.5 3.4 7.5 7.5"
                       fill="#231f20" />
                   </svg>
-                </button>              
+                </button>
+                
+                {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
+
               <button onclick="" title="Editar Prestamo">
                 <a href="/editarPrestamo/{{Prestamos.id}}">
                 <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarPrestamo.html"
@@ -190,6 +193,9 @@ Consultar Transaciones
                   <img src="{% static 'img/finalizar.png' %}" width="500rem" alt="">
             </button>
             </form>
+    
+              {% endif %}
+              
           </td>
         </tr>
               {% endfor %}

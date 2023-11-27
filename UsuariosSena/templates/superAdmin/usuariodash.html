@@ -36,9 +36,14 @@
         <div class="dashboard2">
             <div class="listaopciones">
                 <div class="opciones">
+
+                    {% if request.user.cuentadante == 'superAdmin' %}
                     <a class="opcion1" href="{% url 'registroUsuario_view' %}">
                         Crear Usuario
                     </a>
+                    
+                    {% endif %}
+                        
                     <a class="opcion2" href="{% url 'consultarUsuario_view' %}">
                         Buscar Usuario
                     </a>

@@ -83,8 +83,12 @@ Home SUAdmin
                                         <!-- Acciones Notificaciones-->
                                         
                                     </div>
+                                      
                                     <div class="acciones">
                                         <a href="#" ><img src="{% static 'img/vision.png' %}" title="Visualizar Prestamo" alt="" class=""></a>
+
+                                        {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
+
                                         <a href="{% url 'editarPrestamo_view' id=Prestamos.id %}"><img src="{% static 'img/editar.png' %}" title="Editar Prestamo" alt="" class=""></a>
                                 
                                         
@@ -98,7 +102,7 @@ Home SUAdmin
                                                 <img src="{% static 'img/finalizar.png' %}" title="Finalizar Préstamo" alt="" class="">
                                             </button>
                                         </form>
-                                        
+                                        {% endif %}
                                     </div>
                                     <div class="caja-texto-notificaciones">
                                         <div>
