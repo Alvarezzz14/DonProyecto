@@ -10,10 +10,21 @@ from .choices import (
     tipoId,
     tipoContratos,
 )
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import User
+
+
+# Create your models here.
 
 
 class UsuariosSenaManager(BaseUserManager):
     def create_user(self, numeroIdentificacion, email, password=None, **extra_fields):
+        user = self.model(
+            numeroIdentificacion=numeroIdentificacion,
+            email=self.normalize_email(email),
+            **extra_fields,
+        )
         user = self.model(
             numeroIdentificacion=numeroIdentificacion,
             email=self.normalize_email(email),
@@ -51,10 +62,12 @@ class UsuariosSena(AbstractUser):
     tipoContrato = models.CharField(max_length=25, choices=tipoContratos, default="P")
     is_active = models.BooleanField(default=1)
     duracionContrato = models.CharField(max_length=25)
-    password = models.CharField(max_length=100, default="")
+    password = models.CharField(max_length=30, default="")
+    recovery_token = models.CharField(max_length=30, blank=True, null=True)
     fotoUsuario = models.ImageField(
         upload_to="usuarioFoto/", blank=True, null=True
     )  # Campo para la foto
+    id = models.BigAutoField(primary_key=True)
 
     objects = UsuariosSenaManager()
 
@@ -66,7 +79,7 @@ class UsuariosSena(AbstractUser):
     USERNAME_FIELD = "numeroIdentificacion"
 
 
-# ----Informacion General Producto (Repetitiva)---------------------------------------------------------------------------
+# ----Informacion General Producto (Repetitiva + Sumatoria Productos)---------------------------------------------------------------------------
 class ProductosInventarioDevolutivo(models.Model):
     nombre = models.CharField(max_length=75)
     categoria = models.CharField(max_length=25, choices=categoriaElemento, default="C")

@@ -1,21 +1,5 @@
-"""
-URL configuration for ProyectoSgi project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 # Media
 from django.conf import settings
@@ -23,13 +7,40 @@ from django.conf.urls.static import static
 from UsuariosSena import views
 
 
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+)
+from django.urls import path
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include(("UsuariosSena.urls", "usu"), namespace="usu")),
     path("", views.login_view, name="login_view"),
     path("dashboard/", views.homedash, name="homedash"),
+    path("usuariodash/", views.usuariodash, name="usuariodash"),
+    path("inventariodash/", views.inventariodash, name="inventariodash"),
+    path("elementosdash/", views.elementosdash, name="elementosdash"),
+    path("transacciondash/", views.transacciondash, name="transacciondash"),
     path("regUsuario/", views.registroUsuario_view, name="registroUsuario_view"),
     path(
         "editarUsuario/<int:id>/", views.editarUsuario_view, name="editarUsuario_view"
+    ),
+    path(
+        "finalizarPrestamo/<int:id>/",
+        views.finalizarPrestamo_view,
+        name="finalizarPrestamo_view",
+    ),
+    path(
+        "editarPrestamo/<int:id>/",
+        views.editarPrestamo_view,
+        name="editarPrestamo_view",
+    ),
+    path(
+        "editarEntrega/<int:id>/", views.editarEntrega_view, name="editarEntrega_view"
     ),
     path(
         "actualizarUsuario/<int:id>",
@@ -58,17 +69,36 @@ urlpatterns = [
     ),
     path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
     path("listarPrestamos/", views.listar_prestamos, name="listar_prestamos"),
+    path(
+        "consultarTransacciones/",
+        views.consultarTransacciones_view,
+        name="consultarTransacciones",
+    ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("listarElementos/", views.listar_elementos, name="listar_elementos"),
-    path(
-        "eliminarElemento/<int:id>/", views.eliminarElemento, name="eliminarElemento"
-    ),  # eliminar registro de la base de datos desde consultar elementos
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
     path("generar_excel/", views.generar_excel, name="generar_excel"),
+    path("logout/", views.user_logout, name="logout"),
     path(
         "get-element-name-by-serial",
         views.get_element_name_by_serial,
         name="get-element-name-by-serial",
+    ),
+    path("reset_password/", PasswordResetView.as_view(), name="password_reset"),
+    path(
+        "reset_password/done/",
+        PasswordResetDoneView.as_view(),
+        name="password_reset_done",
+    ),
+    path(
+        "reset/<uidb64>/<token>/",
+        PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path(
+        "reset/done/",
+        PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
     ),
 ]
 

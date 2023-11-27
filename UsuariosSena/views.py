@@ -3,6 +3,9 @@ from django.db.models import Exists, OuterRef
 from .forms import (
     UserLoginForm,
 )
+from django.db.models import Exists, OuterRef
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 from .models import (
     UsuariosSena,
     Prestamo,
@@ -11,14 +14,15 @@ from .models import (
     ElementosConsumible,
     EntregaConsumible,
 )
-from django.contrib.auth.hashers import make_password
-from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login, authenticate, logout
+from datetime import timedelta, datetime, date
 from django.core.exceptions import ValidationError
-from datetime import date
+from django.urls import reverse
 
+# Limpiar Cache
+from django.core.cache import cache
 
 # Importar biblioteca reportlab
 from io import BytesIO
@@ -34,8 +38,31 @@ from reportlab.platypus import Image
 
 # Librería excel
 import xlsxwriter
-from datetime import datetime
-from datetime import timedelta
+
+# Create your views here.
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.http import HttpResponse
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    def post(self, request, *args, **kwargs):
+        # Aquí puedes agregar mensajes de depuración
+        print("Protocol:", request.scheme)
+        print("Domain:", request.META["HTTP_HOST"])
+        print("uid:", kwargs["uidb64"])
+        print("token:", kwargs["token"])
+
+        # También puedes registrar mensajes en los registros
+        import logging
+
+        logger = logging.getLogger(__name__)
+        logger.debug(f"Protocol: {request.scheme}")
+        logger.debug(f"Domain: {request.META['HTTP_HOST']}")
+        logger.debug(f"uid: {kwargs['uidb64']}")
+        logger.debug(f"token: {kwargs['token']}")
+
+        # Tu lógica existente aquí
+        return super().post(request, *args, **kwargs)
 
 
 # Create your views here.
@@ -62,7 +89,34 @@ def login_view(request):
 
 
 def homedash(request):
-    return render(request, "superAdmin/basedashboard.html")
+    prestamos = Prestamo.objects.all().order_by("fechaDevolucion")
+    entregas = EntregaConsumible.objects.all()
+    usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
+    opcion_seleccionada = request.GET.get("opcion", None)
+    data = {
+        "opcion_seleccionada": opcion_seleccionada,
+        "Prestamos": prestamos,
+        "Entregas": entregas,
+        "usuarios": usuarios,
+    }
+
+    return render(request, "superAdmin/basedashboard.html", data)
+
+
+def elementosdash(request):
+    return render(request, "superAdmin/elementosdash.html")
+
+
+def usuariodash(request):
+    return render(request, "superAdmin/usuariodash.html")
+
+
+def inventariodash(request):
+    return render(request, "superAdmin/inventariodash.html")
+
+
+def transacciondash(request):
+    return render(request, "superAdmin/transaccionesdash.html")
 
 
 def logout(request):
@@ -92,28 +146,49 @@ def registroUsuario_view(request):
             "fotoUsuario", None
         )  # Ajustado para manejar casos en los que no se suba una foto
 
-        # Cifrar la contraseña
-        password_cifrada = make_password(passwordVar)
+        # Validar si el número de identificación ya está registrado
+        if UsuariosSena.objects.filter(
+            numeroIdentificacion=numeroIdentificacionVar
+        ).exists():
+            messages.error(request, "El número de identificación ya está registrado.")
+        else:
+            emailVar = request.POST.get("email")
 
-        user = UsuariosSena(
-            nombres=nombresVar,
-            apellidos=apellidosVar,
-            tipoIdentificacion=tipoIdentificacionVar,
-            numeroIdentificacion=numeroIdentificacionVar,
-            email=emailVar,
-            celular=celularVar,
-            rol=rolVar,
-            cuentadante=cuentadanteVar,
-            tipoContrato=tipoContratoVar,
-            is_active=is_activeVar,
-            # is_superuser=True, # puede hacer cualquier cosa
-            is_staff=True,  # puede acceder al panel de administración, pero sus acciones específicas dentro del panel estarán limitadas por sus permisos asignados.
-            duracionContrato=duracionContratoVar,
-            password=password_cifrada,
-            fotoUsuario=fotoUsuarioVar,
-        )
-        user.save()
-        messages.success(request, "Usuario Registrado con Exito")
+            # Validar si el correo electrónico ya está registrado
+            if UsuariosSena.objects.filter(email=emailVar).exists():
+                messages.error(request, "El correo electrónico ya está registrado.")
+            else:
+                celularVar = request.POST.get("celular")
+                rolVar = request.POST.get("rol")
+                cuentadanteVar = request.POST.get("cuentadante")
+                tipoContratoVar = request.POST.get("tipoContrato")
+                is_activeVar = request.POST.get("is_active")
+                duracionContratoVar = request.POST.get("duracionContrato")
+                passwordVar = request.POST.get("password")
+                fotoUsuarioVar = request.POST.get("fotoUsuario")
+
+                # Cifrar la contraseña
+                password_cifrada = make_password(passwordVar)
+
+                # Crear el objeto de usuario y guardarlo en la base de datos
+                user = UsuariosSena(
+                    nombres=nombresVar,
+                    apellidos=apellidosVar,
+                    tipoIdentificacion=tipoIdentificacionVar,
+                    numeroIdentificacion=numeroIdentificacionVar,
+                    email=emailVar,
+                    celular=celularVar,
+                    rol=rolVar,
+                    cuentadante=cuentadanteVar,
+                    tipoContrato=tipoContratoVar,
+                    is_active=is_activeVar,
+                    duracionContrato=duracionContratoVar,
+                    password=password_cifrada,
+                    fotoUsuario=fotoUsuarioVar,
+                )
+                user.save()
+                cache.clear()  # limpiar toda la cache
+                messages.success(request, "Usuario Registrado con Éxito")
 
     return render(request, "superAdmin/registroUsuario.html")
 
@@ -132,7 +207,7 @@ def editarUsuario_view(request, id):
 def actualizarUsuario_view(request, id):
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
-        apellidoVar = request.POST.get("apellidoo")
+        apellidoVar = request.POST.get("Apellidos")
         tipoIdentificacionVar = request.POST.get("tipoIdentificacion")
         numeroIdentificacionVar = request.POST.get("numeroIdentificacion")
         correoSenaVar = request.POST.get("correoSena")
@@ -142,24 +217,24 @@ def actualizarUsuario_view(request, id):
         tipoContratoVar = request.POST.get("tipoContrato")
         duracionContratoVar = request.POST.get("duracionContrato")
         estadoUsuariovar = request.POST.get("estadoUsuario")
-        contraSenaVar = request.POST.get("contraSena")
+        passwordVar = request.POST.get("contraSena")
         validacionContraSenaVar = request.POST.get("validacionContraSena")
         fotoUsuarioVar = request.FILES.get("fotoUsuario")
 
         user = UsuariosSena.objects.get(id=id)
 
-        user.nombre = nombreVar
-        user.apellidoo = apellidoVar
+        user.nombres = nombreVar
+        user.apellidos = apellidoVar
         user.tipoIdentificacion = tipoIdentificacionVar
         user.numeroIdentificacion = numeroIdentificacionVar
-        user.correoSena = correoSenaVar
+        user.email = correoSenaVar
         user.celular = celularVar
         user.rol = rolVar
         user.cuentadante = cuentadanteVar
         user.tipoContrato = tipoContratoVar
         user.duracionContrato = duracionContratoVar
-        user.estadoUsuario = estadoUsuariovar
-        user.contraSena = contraSenaVar
+        user.is_active = estadoUsuariovar == "A"  # 'A' para activo, 'I' para inactivo
+        user.password = passwordVar
         user.validacionContraSena = validacionContraSenaVar
         user.fotoUsuario = fotoUsuarioVar
         user.save()
@@ -174,19 +249,26 @@ def actualizarUsuario_view(request, id):
 
 def eliminarUsuario_view(request, id):
     try:
+        # Busca el usuario por ID
         user = UsuariosSena.objects.get(id=id)
-        user.delete()
-        messages.success(
-            request, "usuario eliminado correctamente"
-        )  # mensaje de alerta
 
-        user = UsuariosSena.objects.all().values()
+        # Desactiva el usuario
+        user.is_active = False
+        user.save()
 
-        # Redirigir a la vista consultarUsuario_view para recargar los datos
+        # Cierra la sesión del usuario
+        logout(request)
+
+        # Mensaje de éxito
+        messages.success(request, "Perfil descativado exitosamente.")
+
+        # Redirige a la página de inicio (ajusta la URL según tu configuración)
         return redirect("consultarUsuario_view")
+
     except UsuariosSena.DoesNotExist:
-        messages.warning(request, "No existe registro")
-        return redirect("consultarUsuario_view")
+        # Maneja el caso en el que el usuario no existe
+        messages.error(request, "Usuario no encontrado.")
+        return redirect("index")
 
 
 def formPrestamosDevolutivos_view(request):
@@ -534,17 +616,6 @@ def consultarElementos(request):
     )
 
 
-def eliminarElemento(request, serial):
-    try:
-        objeto = get_object_or_404(InventarioDevolutivo, serial=serial)
-        objeto.delete()
-        messages.warning(request, "¿Esta Seguro Que Desea Eliminar el Elemento?")
-    except Exception as e:
-        messages.error(request, "No se encontro el Elemento Seleccionado")
-        return redirect("consultarElementos")
-    return redirect("consultarElementos")
-
-
 def generar_pdf(request):
     buffer = BytesIO()
     response = HttpResponse(content_type="application/pdf")
@@ -671,3 +742,146 @@ def generar_excel(request):
     ] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.xlsx"'
     buffer.close()
     return response
+
+
+def user_logout(request):
+    logout(request)
+    return redirect("login_view")
+
+
+def consultarTransacciones_view(request):
+    prestamos = Prestamo.objects.all()
+    entregas = EntregaConsumible.objects.all()
+    usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
+    opcion_seleccionada = request.GET.get("opcion", None)
+    data = {
+        "opcion_seleccionada": opcion_seleccionada,
+        "Prestamos": prestamos,
+        "Entregas": entregas,
+        "usuarios": usuarios,
+    }
+
+    return render(request, "superAdmin/consultarTransacciones.html", data)
+
+
+def editarPrestamo_view(request, id):
+    # Obtener el objeto Prestamo por su ID
+    prestamo = get_object_or_404(Prestamo, id=id)
+    elemento = None  # Inicializar la variable fuera del bloque try
+
+    if request.method == "POST":
+        # Obtener datos del formulario
+        fecha_entrega = request.POST.get("txt_fechaentrega")
+        fecha_devolucion = request.POST.get("txt_fechaDevolucion")
+        nombre_entrega = request.POST.get("txt_nombreEntrega")
+        nombre_recibe = request.POST.get("txt_nombreRecibe")
+        nombre_elemento = request.POST.get("txt_nombreElemento")
+        cantidad_elemento = request.POST.get("txt_cantidadElemento")
+        valor_unidad = request.POST.get("txt_valorUnidadElemento")
+        observaciones_prestamo = request.POST.get("txt_observacionesPrestamo")
+
+        try:
+            # Actualizar los campos del objeto Prestamo con los datos del formulario
+            prestamo.fechaEntrega = fecha_entrega
+            prestamo.fechaDevolucion = fecha_devolucion
+            prestamo.nombreEntrega = nombre_entrega
+            prestamo.nombreRecibe = nombre_recibe
+            prestamo.nombreElemento = nombre_elemento
+            prestamo.cantidadElemento = cantidad_elemento
+            prestamo.valorUnidadElemento = valor_unidad
+            prestamo.observacionesPrestamo = observaciones_prestamo
+            # Resto de la lógica de actualización
+
+            prestamo.save()
+
+            consultar_transacciones_url = reverse("consultarTransacciones")
+            return redirect(f"{consultar_transacciones_url}?opcion=prestamo")
+
+        except ElementosDevolutivo.DoesNotExist as e:
+            # Manejar la excepción y mostrar un mensaje de error
+            error_message = f"Elemento no encontrado. Por favor, asegúrate de que el serial sea correcto. Detalles: {e}"
+            print(error_message)  # Imprimir mensaje de error en la consola
+            return render(
+                request,
+                "superAdmin/editarPrestamo.html",
+                {
+                    "prestamo": prestamo,
+                    "elemento": elemento,
+                    "error_message": error_message,
+                },
+            )
+
+    # Si la solicitud no es POST, enviar el objeto Prestamo y Elementos a la plantilla
+    return render(
+        request,
+        "superAdmin/editarPrestamo.html",
+        {"prestamo": prestamo, "elemento": elemento},
+    )
+
+
+def editarEntrega_view(request, id):
+    # Obtener el objeto Prestamo por su ID
+    entrega = get_object_or_404(EntregaConsumible, id=id)
+    elemento = None  # Inicializar la variable fuera del bloque try
+
+    if request.method == "POST":
+        # Obtener datos del formulario
+        cantidad_elemento = request.POST.get("txt_cantidad_prestada")
+        observaciones_prestamo = request.POST.get("txt_observaciones_prestamo")
+
+        try:
+            # Actualizar los campos del objeto Prestamo con los datos del formulario
+            entrega.cantidad_prestada = cantidad_elemento
+            entrega.observaciones_prestamo = observaciones_prestamo
+            # Resto de la lógica de actualización
+
+            entrega.save()
+
+            consultar_transacciones_url = reverse("consultarTransacciones")
+            return redirect(f"{consultar_transacciones_url}?opcion=entregas")
+
+        except ElementosConsumible.DoesNotExist as e:
+            # Manejar la excepción y mostrar un mensaje de error
+            error_message = f"Elemento no encontrado. Por favor, asegúrate de que el serial sea correcto. Detalles: {e}"
+            print(error_message)  # Imprimir mensaje de error en la consola
+            return render(
+                request,
+                "superAdmin/editarEntrega.html",
+                {
+                    "entrega": entrega,
+                    "elemento": elemento,
+                    "error_message": error_message,
+                },
+            )
+
+    # Si la solicitud no es POST, enviar el objeto Prestamo y Elementos a la plantilla
+    return render(
+        request,
+        "superAdmin/editarEntrega.html",
+        {"entrega": entrega, "elemento": elemento},
+    )
+
+
+# views.py
+
+from django.http import HttpResponse
+
+
+def finalizarPrestamo_view(request, id):
+    prestamo = get_object_or_404(Prestamo, id=id)
+
+    if request.method == "POST":
+        nuevo_estado = request.POST.get("txt_nuevo_estado")
+        try:
+            prestamo.estadoPrestamo = nuevo_estado
+            prestamo.save()
+            # Redirige a la vista 'consultarTransacciones' por su nombre de URL
+            consultar_transacciones_url = reverse("consultarTransacciones")
+            return redirect(f"{consultar_transacciones_url}?opcion=prestamo")
+
+        except Exception as e:
+            print(f"Error al actualizar el estado del préstamo: {e}")
+
+    return render(
+        request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
+    )

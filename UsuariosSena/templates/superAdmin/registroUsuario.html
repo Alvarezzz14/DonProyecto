@@ -64,7 +64,6 @@
                     <label for="rol" class="labelformselect">Rol</label>
                     <div>
                         <select class="selector" name="rol" id="rol">
-                            <option value="superAdmin">SuperAdmin</option>
                             <option value="I">Instructor</option>
                             <option value="M">Monitor</option>
                         </select>
@@ -74,8 +73,8 @@
                     <label for="cuentadante" class="labelformselect">Tipo Cuentadante</label>
                     <div>
                         <select class="selector" name="cuentadante" id="cuentadante">
-                            <option value="adminS">adminSolidario</option>
                             <option value="adminD">adminDirecto</option>
+                            <option value="adminS">adminSolidario</option>
                             <option value="monitor">monitor</option>
                         </select>
                     </div>
@@ -113,6 +112,11 @@
                     <input type="password" class="inputform" placeholder="a" name="password" required>
                     <label for="password" class="labelform">Contraseña</label>
                 </div>
+                <div class="inputContainer">
+                    <input type="password" class="inputform" placeholder="a" name="password" required>
+                    <label for="password" class="labelform">Confirmar Contraseña</label>
+                </div>
+
                 <div class="selectorimagen">
                     <label for="fotoUsuario" class="">Adjuntar Foto</label>
                     <input type="file" name="fotoUsuario" class="inputsubirfoto">
@@ -125,10 +129,14 @@
             <div class="container-botones">
 
                 <button type="submit" class="submitBtn"><span id="span">GUARDAR</span></button>
-                <button type="submit" class="submitBtn"><span>CANCELAR</span></button>
+                <button type="button" class="submitBtn" id="cancelBtn"><span>CANCELAR</span></button>
 
             </div>
-
+            <script>
+                document.getElementById("cancelBtn").onclick = function() {
+                  window.location.href = "/usuariodash/";
+                };
+              </script>
         </form>
 
     </div>
