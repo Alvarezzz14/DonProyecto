@@ -51,7 +51,7 @@ Consultar Elementos
   <form method="GET" action="{% url 'consultarElementos' %}">
     <div class="flex flex-col md:flex-row items-center">
       <label class="text-sm font-medium underline underline-offset-8 text-gray-900 mb-2 md:mb-0 md:mr-4 order-1 md:order-none">Selecciona una Categoria de Elementos para Listar:</label>
-      <select id="opcion" name="opcion" class="mb-2 md:mb-0 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-2/12 p-2.5 order-3 md:order-none">
+      <select id="opcion" name="opcion" value="Elementos Devolutivos" class="mb-2 md:mb-0 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-2/12 p-2.5 order-3 md:order-none">
           <optgroup label="Elementos">
               <option value="elementosconsu">Elementos Consumibles</option>
               <option value="elementosdevo">Elementos Devolutivos</option>
@@ -306,6 +306,8 @@ Consultar Elementos
                     fill="#231f20" />
                 </svg>
               </button>
+
+              {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
               <button onclick="">
                 <a href="/editarElementodevo/{{elemento.serial}}">
                   <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarElemento.html"
@@ -322,6 +324,9 @@ Consultar Elementos
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </button>
+              
+              {% endif %}
+                
             </td>
           </tr>
           {% endfor %}
@@ -436,8 +441,6 @@ Consultar Elementos
     window.location.href = "/elementosdash/";
   };
   </script>
-
-<script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
 
 {% endblock extrajs %}
 
