@@ -56,8 +56,8 @@
     align-items: center;
     flex-direction: row;
     width: 100%;
-    gap: 3rem;
-    padding-left: 3rem;
+    gap: 5rem;
+    padding-left: 5rem;
     justify-content: flex-start;
 
 }
@@ -66,6 +66,7 @@
     width: 4rem;
     height: auto;
     border-radius: 50%;
+    animation: pulse 2s infinite; /* Cambia la duración según tu preferencia */
 
 }
 
@@ -90,4 +91,17 @@
 
 .vista_usuario{
     padding: 1rem;
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
