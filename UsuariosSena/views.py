@@ -6,6 +6,7 @@ from .forms import (
 from django.db.models import Exists, OuterRef
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from .models import (
     UsuariosSena,
     Prestamo,
@@ -754,6 +755,14 @@ def user_logout(request):
 #@login_required
 def consultarTransacciones_view(request):
     prestamos = Prestamo.objects.all()
+    for prestamo in prestamos:
+        prestamo.nombre_del_producto = prestamo.serialSenaElemento.producto.nombre
+        # Comprobación de la fecha de devolución PERO VA DE LA MANO CON LA LOGICA CUANDO SE FINALICE EL PRODUCTO
+        if prestamo.fechaDevolucion < timezone.now().date():
+            prestamo.estado = "FINALIZADO"
+        else:
+            prestamo.estado = "ACTIVO"
+
     entregas = EntregaConsumible.objects.all()
     usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
     opcion_seleccionada = request.GET.get("opcion", None)
