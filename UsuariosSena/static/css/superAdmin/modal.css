@@ -35,6 +35,10 @@
   font-size: 1.5em;
   text-decoration: none;
 }
+input{
+  border: solid 1px #000;
+  background: transparent;
+}
 
 th{
   padding: 20px 15px;
@@ -47,4 +51,7 @@ td{
 }
 thead{
   background: #f01d1d;
+}
+.tabla tr,td{
+  border-bottom: 1px solid #000;
 }

@@ -2,22 +2,22 @@
 
 {% load static %}
 
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/superAdmin/styleFormPrestamosConsumibles.css' %}">
+{% endblock extrastyle %}
+    
+
+
+{% block title %}
+    Formulario Prestamos
+{% endblock title %}
+    
+    <!-- Inicio del Forumlario-->
 {% block content %}
 
-<head>
-
-    <link rel="stylesheet" href="{% static 'css/superAdmin/styleFormPrestamosConsumibles.css' %}">
-    <title>Formulario Prestamos</title>
-
-</head>
-
-<section class="section" style=" margin: 10px; padding: 50px">
-
-    <!-- Inicio del Forumlario-->
-
-
     <div class="signupFrm">
-        <form action="/formPrestamosConsumibles/" class="form" method="post">
+        <form action="/formEntregasConsumibles/" class="form" method="post">
             <h1 class="title">Crear Entrega Consumible</h1>
 
             {% csrf_token %}
@@ -70,7 +70,5 @@
         </form>
 
     </div>
-
-</section>
 
 {% endblock %}

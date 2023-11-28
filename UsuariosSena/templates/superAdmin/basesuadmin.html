@@ -16,7 +16,9 @@
     {% endblock extrastyle %}
 
 
-    {% block extrascript %} {% endblock extrascript %}
+    {% block extrascript %}
+    
+    {% endblock extrascript %}
 
 
 
@@ -32,11 +34,7 @@
                 menu
             </span>
             <div class="usuario">
-
-                <div>
-                    <p>Usuario</p>
-                    <p>Super Administrado</p>
-                </div>
+            
                 <img src="{% static 'img/usuario.png' %}" alt="Usuario">
             </div>
 
@@ -59,6 +57,7 @@
                         <li><a href="{% url 'usuariodash' %}"><span class="material-icons-sharp">supervisor_account</span><p>Usuarios</p> </a></li>
                         <li><a href="{% url 'inventariodash' %}"><span class="material-icons-sharp">inventory</span><p>Inventario</p> </a></li>
                         <li><a href="{% url 'elementosdash' %}"><span class="material-icons-sharp">category</span><p>Elementos</p> </a></li>
+                        <li><a href="{% url 'transacciondash' %}"><span class="material-icons-sharp">swap_horiz</span><p>Transacciones</p></a></li>
                         <li><a href="{% url 'calendario' %}"><span class="material-icons-sharp">calendar_month</span><p>Calendario</p></a></li>
                     </ul>
 
@@ -93,8 +92,11 @@
             </div>
 
             <div class="perfil">
-                <p>Bievenido <br>
-                    Administrador</p>
+                <p>
+                    {% if request.user.is_authenticated %}
+                    {{ request.user.nombres }} {{ request.user.apellidos }} <br>
+                    {{ request.user.cuentadante }}</p>
+                    {% endif %}
                 <div class="bola">
 
                 </div>

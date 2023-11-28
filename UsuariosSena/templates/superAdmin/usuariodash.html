@@ -20,8 +20,8 @@
     <section class="dashboard"> 
         <h1>Usuarios</h1>
         <div class="caja_dash">
-            <div class="box_dash">
-                <a href="{% url 'usuariodash' %}">Usuarios</a>
+            <div class="box_dash click">
+                <a class="click" href="{% url 'usuariodash' %}">Usuarios</a>
             </div>
             <div class="box_dash">
                 <a href="{% url 'inventariodash' %}">Inventario</a>
@@ -30,15 +30,20 @@
                 <a href="{% url 'elementosdash' %}">Elementos</a>
             </div>
             <div class="box_dash">
-                <a href="{% url 'calendario' %}">Calendario</a>
+                <a href="{% url 'transacciondash' %}">Transacciones</a>
             </div>
         </div>
         <div class="dashboard2">
             <div class="listaopciones">
                 <div class="opciones">
+
+                    {% if request.user.cuentadante == 'superAdmin' %}
                     <a class="opcion1" href="{% url 'registroUsuario_view' %}">
                         Crear Usuario
                     </a>
+                    
+                    {% endif %}
+                        
                     <a class="opcion2" href="{% url 'consultarUsuario_view' %}">
                         Buscar Usuario
                     </a>

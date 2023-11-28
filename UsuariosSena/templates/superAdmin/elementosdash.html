@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "../superAdmin/basesuadmin.html" %}
 
 {% load static %}
@@ -65,3 +66,75 @@
 
 
     {% endblock content %}
+=======
+{% extends "../superAdmin/basesuadmin.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    DashElementos
+{% endblock title %}
+
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/superAdmin/inventariodash.css' %}">
+{% endblock extrastyle %}
+    
+
+{% block content %}
+    
+    <section class="dashboard"> 
+        <h1>Elementos</h1>
+        <div class="caja_dash">
+            <div class="box_dash">
+                <a href="{% url 'usuariodash' %}">Usuarios</a>
+            </div>
+            <div class="box_dash">
+                <a href="{% url 'inventariodash' %}">Inventario</a>
+            </div>
+            <div class="box_dash click">
+                <a href="{% url 'elementosdash' %}">Elementos</a>
+            </div>
+            <div class="box_dash">
+                <a href="{% url 'transacciondash' %}">Transacciones</a>
+            </div>
+        </div>
+        <div class="dashboard2">
+            <div class="listaopciones">
+                <div class="opciones">
+                    {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
+                    <a class="opcion1" href="{% url 'formElementos_view' %}">
+                        Crear Elemento
+                    </a>                    
+                    {% endif %}
+                        
+                    <a class="opcion2" href="{% url 'consultarElementos' %}">
+                        Consultar Elemento
+                    </a>
+                    <a class="opcion3" href="#">
+                        Salir
+                    </a>
+                </div>
+            </div>
+            <div class="fechas">
+                <div class="logo">
+                    <img src="{% static 'img/imgdashboard/senaL.png' %}" alt="" width="100px">
+                </div>
+                <div id="fechaHora">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    {% block extrajs %}
+    <script src="{% static 'js/usuariodash.js' %}"></script>    
+    {% endblock extrajs %}
+        
+    
+
+
+    {% endblock content %}
+>>>>>>> cdb7362a0ee854762045e8b8632e77e484239084
