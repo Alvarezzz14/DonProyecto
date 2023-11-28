@@ -17,7 +17,7 @@ Consultar Usuarios
   const botonEliminar = (id) => {
     Swal.fire({
       "title": "¿Estás seguro de inhabilitar el usuario?",
-      "text": "Esta accion no se puede deshacer",
+      "text": "El usuario perdera todos los permisos",
       "icon": "question",
       "showCancelButton": true,
       "cancelButtonText": "Cancelar",
@@ -80,9 +80,15 @@ Consultar Usuarios
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
       </button>
+      
+    </div>
+    <div class="imgretorno">
+      <a href="/usuariodash/" >
+        <img src="{% static 'img/flecha-atras.png' %}" alt="" >
+    </a>
     </div>
   </div>
-
+  
   <div class="flex flex-col overflow-x-auto mt-8">
     <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
       <div class="inline-block min-w-full scroll-auto overflow-hidden align-middle sm:rounded-lg">
@@ -312,20 +318,9 @@ Consultar Usuarios
       </div>
     </div>
   </div>
-  <div class="container-1">
-  </div>
-  <div class="container-botones">
-      <button type="button" class="submitBtn" id="cancelBtn"><span>ATRAS</span></button>
-  </div>
 </section>
 
 {% block extrajs %}
-<script>
-  document.getElementById("cancelBtn").onclick = function() {
-    window.location.href = "/usuariodash/";
-  };
-</script>
-
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
 
 <script>

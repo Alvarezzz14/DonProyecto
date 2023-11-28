@@ -108,17 +108,15 @@ Prestamos
                 <input type="file" accept="image/*" class="inputsubirfoto">
 
             </div>
-        </div>
-        <div class="container-1">
-            <div class="container-botones">
-                <button type="submit" class="submitBtn">GUARDAR</button>
-                <button type="button" class="submitBtn" onclick="confirmCancel()">CANCELAR</button>
+            <div class="container-1">
+                <div class="container-botones">
+                    <button type="submit" class="submitBtn">GUARDAR</button>
+                    <a href="{% url 'transacciondash' %}"> <button type="button" class="submitBtn">CANCELAR</button></a>
 
+                </div>
             </div>
-            
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 </section>
 {% block extrajs %}
 <script src="{% static 'js/validarSeleccionElemento.js'%}"></script>

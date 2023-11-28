@@ -10,6 +10,7 @@ Consultar Elementos
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/superAdmin/modal.css' %}">
 <link rel="stylesheet" href="{% static 'css/superAdmin/stylesregusuario.css' %}">
+
 <script src="https://cdn.tailwindcss.com"></script>
 {% endblock extrastyle %}
 
@@ -39,6 +40,11 @@ Consultar Elementos
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
       </button>
+    </div>
+    <div class="imgretorno">
+      <a href="/usuariodash/" >
+        <img src="{% static 'img/flecha-atras.png' %}" alt="" >
+    </a>
     </div>
   </div>
 
@@ -333,10 +339,6 @@ Consultar Elementos
       </div>
     </div>
   </div>
-    <br>
-    <div class="container-botones">
-      <button type="button" class="submitBtn" id="cancelBtn"><span>ATRAS</span></button>
-    </div>
   </div>
     <!-- Modal para mostrar la información del usuario -->
 
