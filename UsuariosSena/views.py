@@ -13,9 +13,9 @@ from .models import (
     ElementosDevolutivo,
     ElementosConsumible,
     EntregaConsumible,
+    InventarioDevolutivo
 )
 from .forms import UsuariosSenaForm, UserLoginForm, PrestamosForm
-from .models import UsuariosSena, Prestamo
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.http import JsonResponse
@@ -44,7 +44,8 @@ from reportlab.platypus import Image
 import xlsxwriter
 from datetime import datetime
 from datetime import timedelta
-
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 # Create your views here.
 
 
@@ -93,9 +94,6 @@ def consultarUsuario_view(request):
 	return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
 
 
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .models import UsuariosSena
 
 def registroUsuario_view(request):
     if request.method == "POST":
@@ -152,6 +150,111 @@ def editarUsuario_view(request, id):
 		messages.warning(request, "No existe registro")
 		return redirect("consultarUsuario_view")
 
+
+
+def consultarElementos_view(request):
+    elementosconsu = ElementosConsumible.objects.all()
+    elementosdevo = ElementosDevolutivo.objects.all()
+    opcion_seleccionada = request.GET.get('opcion', None)
+    data = {'opcion_seleccionada': opcion_seleccionada, "ElementosConsumibles": elementosconsu, "ElementosDevolutivos": elementosdevo}
+    return render(request, "superAdmin/consultarElementos.html", data)
+
+
+
+def editarElementosconsu_view(request, id):
+    # Obtener el objeto ElementosConsumible por su ID
+    elemento = get_object_or_404(ElementosConsumible, id=id)
+
+    if request.method == "POST":
+        # Obtener datos del formulario
+        fecha_adquisicion = request.POST.get('txt_fechaadquisicion')
+        nombre_elemento = request.POST.get('txt_nombreElemento')
+        categoria_elemento = request.POST.get('txt_categoriaElemento')
+        estado_elemento = request.POST.get('txt_estadoElemento')
+        descripcion_elemento = request.POST.get('txt_descripcionElemento')
+        observacion_elemento = request.POST.get('txt_observacionElemento')
+        cantidad_elemento = request.POST.get('txt_cantidadElemento')
+        costo_unidad_elemento = request.POST.get('txt_costoUnidadElemento')
+        costo_total_elemento = request.POST.get('txt_costoTotalElemento')
+        factura_elemento = request.FILES.get('txt_facturaElemento')
+
+        try:
+            # Actualizar los campos del objeto ElementosConsumible con los datos del formulario
+            elemento.fechaAdquisicion = fecha_adquisicion
+            elemento.nombreElemento = nombre_elemento
+            elemento.categoriaElemento = categoria_elemento
+            elemento.estadoElemento = estado_elemento
+            elemento.descripcionElemento = descripcion_elemento
+            elemento.observacionElemento = observacion_elemento
+            elemento.cantidadElemento = cantidad_elemento
+            elemento.costoUnidadElemento = costo_unidad_elemento
+            elemento.costoTotalElemento = costo_total_elemento
+            elemento.facturaElemento = factura_elemento
+
+            elemento.save()
+
+            consultar_elementosconsu_url = reverse("consultarelementosconsu")
+            return redirect(f"{consultar_elementosconsu_url}?opcion=elemento_consumible")
+
+        except ElementosConsumible.DoesNotExist as e:
+            # Manejar la excepción y mostrar un mensaje de error
+            error_message = f"Elemento consumible no encontrado. Detalles: {e}"
+            print(error_message)  # Imprimir mensaje de error en la consola
+            return render(request, "superAdmin/editarElementoconsu.html", {"elemento": elemento, "error_message": error_message})
+
+    # Si la solicitud no es POST, enviar el objeto ElementosConsumible a la plantilla
+    return render(request, "superAdmin/editarElementoconsu.html", {"elemento": elemento})
+
+
+
+def editarElementosdevo_view(request, serial):
+    # Obtener el objeto InventarioDevolutivo por su serial
+    inventario_elemento = get_object_or_404(InventarioDevolutivo, serial=serial)
+    elemento = inventario_elemento.elemento_devolutivo  # Obtener el elemento asociado
+
+    if request.method == "POST":
+        # Obtener datos del formulario
+        serial_elemento = request.POST.get('txt_serial')
+        fechaAdquisicion = request.POST.get('txt_fechaAdquisicion')
+        nombre_elemento = request.POST.get('txt_nombreElemento')
+        categoria_elemento = request.POST.get('txt_categoriaElemento')
+        estado_elemento = request.POST.get('txt_estadoElemento')
+        descripcion_elemento = request.POST.get('txt_descripcionElemento')
+        observacion_elemento = request.POST.get('txt_observacionElemento')
+        cantidad_elemento = float(request.POST.get('txt_cantidadElemento'))
+        valor_unidad_elemento = float(request.POST.get('txt_valorUnidadElemento'))
+        factura_elemento = request.FILES.get('txt_facturaElemento')
+
+        try:
+            # Actualizar los campos del objeto ElementosDevolutivo con los datos del formulario
+            elemento.serial = serial_elemento
+            elemento.fechaAdquisicion = fechaAdquisicion
+            elemento.nombreElemento = nombre_elemento
+            elemento.categoriaElemento = categoria_elemento
+            elemento.estadoElemento = estado_elemento
+            elemento.descripcionElemento = descripcion_elemento
+            elemento.observacionElemento = observacion_elemento
+            elemento.save()
+
+            # Actualizar los campos del objeto InventarioDevolutivo
+            inventario_elemento.serial = serial_elemento
+            inventario_elemento.fecha_Registro = fechaAdquisicion
+            inventario_elemento.observacion = observacion_elemento
+            inventario_elemento.factura = factura_elemento
+            inventario_elemento.disponibles = cantidad_elemento
+            inventario_elemento.save()
+
+            consultar_elementodevo_url = reverse("consultarElementos_view")
+            return redirect(f"{consultar_elementodevo_url}?opcion=elemento_devolutivo")
+
+        except ElementosDevolutivo.DoesNotExist as e:
+            # Manejar la excepción y mostrar un mensaje de error
+            error_message = f"Elemento devolutivo no encontrado. Detalles: {e}"
+            print(error_message)  # Imprimir mensaje de error en la consola
+            return render(request, "superAdmin/editarElementodevo.html", {"elemento": elemento, "error_message": error_message, "valor_total_actual": inventario_elemento.valorTotalElemento})
+
+    # Si la solicitud no es POST, enviar el objeto ElementosDevolutivo a la plantilla
+    return render(request, "superAdmin/editarElementodevo.html", {"elemento": elemento, "valor_total_actual": inventario_elemento.valorTotalElemento})
 
 def actualizarUsuario_view(request, id):
 	if request.method == "POST":
@@ -467,16 +570,9 @@ def formElementos_view(request):
 # ---------------------------------------------------------------------------------
 
 
-def listar_elementos(request):
-    elementos = ElementosDevolutivo.objects.all()
-    return render(request, "superAdmin/listarElemento.html", {"elementos": elementos})
 
 
-def consultarElementos(request):
-    elementos = ElementosDevolutivo.objects.all()
-    return render(
-        request, "superAdmin/consultarElementos.html", {"elementos": elementos}
-    )
+
 
 
 # def eliminarElemento(request, id):

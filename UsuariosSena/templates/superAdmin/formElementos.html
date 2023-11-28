@@ -17,6 +17,7 @@
 
     <div class="signupFrm">
         <form action="/formElementos/" class="form" method="post">
+            <form method="post" enctype="multipart/form-data">
             <h1 class="title">Registrar Elemento</h1>
             {% csrf_token %}
 
@@ -40,9 +41,10 @@
                     <label for="estadoElemento" class="labelformselect">Estado</label>
                     <div>
                         <select class="selector" name="estadoElemento" id="estadoElemento">
-                            <option value="D">Disponible</option>
-                            <option value="G">Garantia</option>
-                            <option value="B">Baja</option>
+                        <option value="Disponible">Disponible</option>
+                        <option value="Garantia">Garantia</option>
+                        <option value="Baja">Baja</option>
+                        <option value="Prestamo">Prestamo</option>
                         </select>
                     </div>
                 </div>
@@ -75,9 +77,8 @@
                     <label for="observacionElemento" class="labelform">Observaciones</label>
                 </div>
                 <div class="selectorimagen">
-                    <input type="file" accept="image/*" class="inputsubirfoto" name="facturaElemento">
-                    <label for="facturaElemento" class="labelsubirfoto">Adjuntar Soporte</label>
-
+                    <label for="facturaElemento" class="labelsubirfoto">Factura elemento</label>
+                    <input type="file" name="facturaElemento" accept="image/*" class="inputsubirfoto">
                 </div>
             </div>
             <div class="container-1">

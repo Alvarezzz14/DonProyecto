@@ -55,6 +55,20 @@ urlpatterns = [
         views.editarUsuario_view, 
         name="editarUsuario_view"
     ),
+    
+    path(
+        "editarElementoconsu/<int:id>/",
+        views.editarElementosconsu_view, 
+        name="editarElementosconsu_view"
+    ),
+    
+    path(
+        "editarElementodevo/<int:serial>/",
+        views.editarElementosdevo_view, 
+        name="editarElementosdevo_view"
+        
+    ),
+    
     path(
         "editarPrestamo/<int:id>/", views.editarPrestamo_view, name="editarPrestamo_view"
     ),
@@ -92,15 +106,14 @@ urlpatterns = [
     
     path(
         "consultarElementos/",
-        views.consultarElementos,
-        name="consultarElementos"
+        views.consultarElementos_view,
+        name="consultarElementos_view"
     ),
     
     
     path("listarPrestamos/", views.listar_prestamos, name="listar_prestamos"),
     path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones"),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
-    path("listarElementos/", views.listar_elementos, name="listar_elementos"),
     #path("eliminarElemento/<int:id>/", views.eliminarElemento, name="eliminarElemento"),  # eliminar registro de la base de datos desde consultar elementos
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
     path("generar_excel/", views.generar_excel, name="generar_excel"),

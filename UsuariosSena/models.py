@@ -70,12 +70,12 @@ class UsuariosSena(AbstractUser):
 
 
 class ElementosDevolutivo(models.Model):
-    fechaElemento = models.DateField(auto_now_add=True)  # Manera 2 de hacerlo
+    fechaAdquisicion = models.DateField(auto_now_add=True)  # Manera 2 de hacerlo
     nombreElemento = models.CharField(max_length=25)
     categoriaElemento = models.CharField(
         max_length=25, choices=categoriaElemento, default="C"
     )
-    estadoElemento = models.CharField(max_length=25, choices=estado, default="D")
+    estadoElemento = models.CharField(max_length=25, choices=estado)
     descripcionElemento = models.CharField(max_length=25)
     observacionElemento = models.CharField(max_length=25)
 
@@ -83,9 +83,9 @@ class ElementosDevolutivo(models.Model):
     valorUnidadElemento = models.IntegerField()
     valorTotalElemento = models.IntegerField(blank=True, null=True)
     serial = models.CharField(max_length=25, primary_key=True)
-    facturaElemento = models.ImageField(
-        upload_to="facturaElemento/", blank=True, null=True
-    )  # Campo para la foto
+    facturaElemento = models.FileField(
+    upload_to="facturaElemento/", blank=True, null=True
+    ) # Campo para la foto
 
     def __str__(self):
         return self.nombreElemento
@@ -95,10 +95,15 @@ class ElementosConsumible(models.Model):
     fechaAdquisicion = models.DateField(auto_now_add=True)
     nombreElemento = models.CharField(max_length=25)
     categoriaElemento = models.CharField(
-        max_length=25, choices=[("D", "Devolutivo"), ("C", "Consumible")], default="C"
+        max_length=25, choices=[("Devolutivo", "Devolutivo"), ("Consumible", "Consumible")],
     )
     estadoElemento = models.CharField(
-        max_length=25, choices=[("D", "Disponible"), ("A", "Agotado")], default="D"
+        max_length=25, choices=[
+    ("Garantia", "Garantia"), 
+    ("Baja", "Baja"), 
+    ("Disponible", "Disponible"), 
+    ("Prestamo", "Prestamo"),
+    ], default="Disponible"
     )
     descripcionElemento = models.CharField(max_length=25)
     observacionElemento = models.CharField(max_length=25)
