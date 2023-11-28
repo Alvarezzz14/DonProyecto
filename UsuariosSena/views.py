@@ -16,12 +16,6 @@ from .models import (
     EntregaConsumible,
     InventarioDevolutivo
 )
-<<<<<<< HEAD
-from .forms import UsuariosSenaForm, UserLoginForm, PrestamosForm
-from django.contrib.auth.hashers import make_password
-from django.contrib import messages
-=======
->>>>>>> cdb7362a0ee854762045e8b8632e77e484239084
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
@@ -51,14 +45,6 @@ from reportlab.platypus import Image
 
 # Librería excel
 import xlsxwriter
-<<<<<<< HEAD
-from datetime import datetime
-from datetime import timedelta
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
-=======
-
->>>>>>> cdb7362a0ee854762045e8b8632e77e484239084
 # Create your views here.
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.http import HttpResponse
@@ -144,15 +130,8 @@ def logout(request):
 
 #@login_required
 def consultarUsuario_view(request):
-<<<<<<< HEAD
-	usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
-	return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
-
-
-=======
     usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
     return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
->>>>>>> cdb7362a0ee854762045e8b8632e77e484239084
 
 #@login_required
 #@verificar_superadmin
@@ -233,7 +212,6 @@ def editarUsuario_view(request, id):
         messages.warning(request, "No existe registro")
         return redirect("consultarUsuario_view")
 
-<<<<<<< HEAD
 
 def consultarElementos_view(request):
     elementosconsu = ElementosConsumible.objects.all()
@@ -339,10 +317,8 @@ def editarElementosdevo_view(request, serial):
     # Si la solicitud no es POST, enviar el objeto ElementosDevolutivo a la plantilla
     return render(request, "superAdmin/editarElementodevo.html", {"elemento": elemento, "valor_total_actual": inventario_elemento.valorTotalElemento})
 
-=======
 #@login_required
 #@verificar_superadmin
->>>>>>> cdb7362a0ee854762045e8b8632e77e484239084
 def actualizarUsuario_view(request, id):
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
@@ -741,65 +717,12 @@ def formElementos_view(request):
 
     return render(request, "superAdmin/formElementos.html")
 
-<<<<<<< HEAD
-
-# ---------------------------------------------------------------------------
-# def formElementos_view(request):
-#     if request.method == "POST":
-#         # fechaElementoVar = request.POST.get("fechaElemento")
-#         nombreElementoVar = request.POST.get("nombreElemento")
-#         categoriaElementoVar = request.POST.get("categoriaElemento")
-#         estadoElementoVar = request.POST.get("estadoElemento")
-#         cantidadElementoVar = int(request.POST.get("cantidadElemento"))
-#         valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
-#         serialVar = request.POST.get("serialSenaElemento")
-#         descripcionElementoVar = request.POST.get("descripcionElemento")
-#         observacionElementoVar = request.POST.get("observacionElemento")
-#         facturaElementoVar = request.FILES.get(
-#             "facturaElemento"
-#         )  # Asumiendo que es un archivo
-
-#         # Validar que la cantidad no sea negativa
-#         if cantidadElementoVar <= 0:
-#             messages.error(request, "La cantidad no puede ser negativa o igual a cero")
-#             return render(request, "superAdmin/formElementos.html")
-
-#         # Calcula el valor total
-#         valorTotalElementoVar = cantidadElementoVar * valorUnidadElementoVar
-
-#         elementos = Elementos(
-#             nombreElemento=nombreElementoVar,
-#             categoriaElemento=categoriaElementoVar,
-#             estadoElemento=estadoElementoVar,
-#             cantidadElemento=cantidadElementoVar,
-#             valorUnidadElemento=valorUnidadElementoVar,
-#             valorTotalElemento=valorTotalElementoVar,
-#             serial=serialVar,
-#             descripcionElemento=descripcionElementoVar,
-#             observacionElemento=observacionElementoVar,
-#             facturaElemento=facturaElementoVar,
-#         )
-#         elementos.save()
-#         messages.success(request, "Elemento Guardado Exitosamente")
-
-#         # Redireccionar o renderizar según sea necesario
-#         return redirect("formElementos_view")
-
-#     return render(request, "superAdmin/formElementos.html")
-# ---------------------------------------------------------------------------------
-
-
-
-
-
-=======
 #@login_required
 def consultarElementos(request):
     inventario = InventarioDevolutivo.objects.select_related("producto").all()
     return render(
         request, "superAdmin/consultarElementos.html", {"inventario": inventario}
     )
->>>>>>> cdb7362a0ee854762045e8b8632e77e484239084
 
 
 def generar_pdf(request):

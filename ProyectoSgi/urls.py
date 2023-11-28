@@ -76,31 +76,6 @@ urlpatterns = [
         views.eliminarUsuario_view,
         name="eliminarUsuario_view",
     ),
-<<<<<<< HEAD
-    path(
-        "formElementos/", views.formElementos_view, 
-         name="formElementos_view"
-    ),
-    
-    path("calendario/", views.calendario, name="calendario"),
-    
-    path
-    ("consultarUsuario/",
-     views.consultarUsuario_view,
-     name="consultarUsuario_view"),
-    
-    path(
-        "consultarElementos/",
-        views.consultarElementos_view,
-        name="consultarElementos_view"
-    ),
-    
-    
-    path("listarPrestamos/", views.listar_prestamos, name="listar_prestamos"),
-    path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones"),
-    path("formElementos/", views.formElementos_view, name="formElementos_view"),
-    #path("eliminarElemento/<int:id>/", views.eliminarElemento, name="eliminarElemento"),  # eliminar registro de la base de datos desde consultar elementos
-=======
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("calendario/", views.calendario, name="calendario"),
     path(
@@ -115,7 +90,6 @@ urlpatterns = [
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     
->>>>>>> cdb7362a0ee854762045e8b8632e77e484239084
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
     path("generar_excel/", views.generar_excel, name="generar_excel"),
     path("logout/", views.user_logout, name="logout"),
