@@ -18,8 +18,8 @@ from .models import (
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
-#decoradores para uso de Permisos en las visats de usuario y de inicia de sesion
-from django.contrib.auth.decorators import login_required 
+# decoradores para uso de Permisos en las visats de usuario y de inicia de sesion
+from django.contrib.auth.decorators import login_required
 from .decorators import verificar_cuentadante, verificar_superadmin
 
 from django.contrib.auth import login, authenticate, logout
@@ -93,7 +93,8 @@ def login_view(request):
 
     return render(request, "indexLogin.html", {"form": loginForm})
 
-#@login_required
+
+# @login_required
 def homedash(request):
     prestamos = Prestamo.objects.all().order_by("fechaDevolucion")
     entregas = EntregaConsumible.objects.all()
@@ -108,19 +109,23 @@ def homedash(request):
 
     return render(request, "superAdmin/basedashboard.html", data)
 
-#@login_required
+
+# @login_required
 def elementosdash(request):
     return render(request, "superAdmin/elementosdash.html")
 
-#@login_required
+
+# @login_required
 def usuariodash(request):
     return render(request, "superAdmin/usuariodash.html")
 
-#@login_required
+
+# @login_required
 def inventariodash(request):
     return render(request, "superAdmin/inventariodash.html")
 
-#@login_required
+
+# @login_required
 def transacciondash(request):
     return render(request, "superAdmin/transaccionesdash.html")
 
@@ -128,13 +133,15 @@ def transacciondash(request):
 def logout(request):
     return render(request, "indexLogin.html")
 
-#@login_required
+
+# @login_required
 def consultarUsuario_view(request):
     usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
     return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
 
-#@login_required
-#@verificar_superadmin
+
+# @login_required
+# @verificar_superadmin
 def registroUsuario_view(request):
     if request.method == "POST":
         nombresVar = request.POST.get("nombres")
@@ -189,7 +196,7 @@ def registroUsuario_view(request):
                     cuentadante=cuentadanteVar,
                     tipoContrato=tipoContratoVar,
                     is_active=is_activeVar,
-                    #is_staff=True, #Permitiru ingreso al admin, creados por la aplicacion
+                    # is_staff=True, #Permitiru ingreso al admin, creados por la aplicacion
                     duracionContrato=duracionContratoVar,
                     password=password_cifrada,
                     fotoUsuario=fotoUsuarioVar,
@@ -200,8 +207,9 @@ def registroUsuario_view(request):
 
     return render(request, "superAdmin/registroUsuario.html")
 
-#@login_required
-#@verificar_superadmin
+
+# @login_required
+# @verificar_superadmin
 def editarUsuario_view(request, id):
     try:
         user = UsuariosSena.objects.get(id=id)
@@ -212,8 +220,9 @@ def editarUsuario_view(request, id):
         messages.warning(request, "No existe registro")
         return redirect("consultarUsuario_view")
 
-#@login_required
-#@verificar_superadmin
+
+# @login_required
+# @verificar_superadmin
 def actualizarUsuario_view(request, id):
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
@@ -256,8 +265,9 @@ def actualizarUsuario_view(request, id):
         messages.warning(request, "No existe registro")
         return redirect("consultarUsuario_view")
 
-#@login_required
-#@verificar_superadmin
+
+# @login_required
+# @verificar_superadmin
 def eliminarUsuario_view(request, id):
     try:
         # Busca el usuario por ID
@@ -281,8 +291,9 @@ def eliminarUsuario_view(request, id):
         messages.error(request, "Usuario no encontrado.")
         return redirect("index")
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def formPrestamosDevolutivos_view(request):
     # Obtiene todos los usuarios excepto el que esta fijado de primero
     usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
@@ -492,8 +503,9 @@ def get_element_name_by_serial(request):
     else:
         return JsonResponse({"error": "No serial number provided"}, status=400)
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def formEntregasConsumibles_view(request):
     if request.method == "POST":
         # Procesar el formulario aquí (guardar el préstamo consumible)
@@ -520,7 +532,8 @@ def formEntregasConsumibles_view(request):
         prestamo_consumible.save()
     return render(request, "superAdmin/formEntregasConsumibles.html")
 
-#@login_required
+
+# @login_required
 def calendario(request):
     prestamos = Prestamo.objects.all()
     eventos = []
@@ -535,8 +548,9 @@ def calendario(request):
 
     return render(request, "superAdmin/calendario.html", {"eventos": eventos})
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def formElementos_view(request):
     form_data = {}
     if request.method == "POST":
@@ -612,7 +626,8 @@ def formElementos_view(request):
 
     return render(request, "superAdmin/formElementos.html")
 
-#@login_required
+
+# @login_required
 def consultarElementos(request):
     inventario = InventarioDevolutivo.objects.select_related("producto").all()
     return render(
@@ -752,7 +767,8 @@ def user_logout(request):
     logout(request)
     return redirect("login_view")
 
-#@login_required
+
+# @login_required
 def consultarTransacciones_view(request):
     prestamos = Prestamo.objects.all()
     for prestamo in prestamos:
@@ -775,8 +791,9 @@ def consultarTransacciones_view(request):
 
     return render(request, "superAdmin/consultarTransacciones.html", data)
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def editarPrestamo_view(request, id):
     # Obtener el objeto Prestamo por su ID
     prestamo = get_object_or_404(Prestamo, id=id)
@@ -831,8 +848,9 @@ def editarPrestamo_view(request, id):
         {"prestamo": prestamo, "elemento": elemento},
     )
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def editarEntrega_view(request, id):
     # Obtener el objeto Prestamo por su ID
     entrega = get_object_or_404(EntregaConsumible, id=id)
@@ -880,8 +898,9 @@ def editarEntrega_view(request, id):
 
 from django.http import HttpResponse
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def finalizarPrestamo_view(request, id):
     prestamo = get_object_or_404(Prestamo, id=id)
 
@@ -900,6 +919,3 @@ def finalizarPrestamo_view(request, id):
     return render(
         request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
     )
-    
-    
-
