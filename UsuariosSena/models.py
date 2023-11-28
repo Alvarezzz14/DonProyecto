@@ -79,25 +79,6 @@ class UsuariosSena(AbstractUser):
     USERNAME_FIELD = "numeroIdentificacion"
 
 
-<<<<<<< HEAD
-class ElementosDevolutivo(models.Model):
-    fechaAdquisicion = models.DateField(auto_now_add=True)  # Manera 2 de hacerlo
-    nombreElemento = models.CharField(max_length=25)
-    categoriaElemento = models.CharField(
-        max_length=25, choices=categoriaElemento, default="C"
-    )
-    estadoElemento = models.CharField(max_length=25, choices=estado)
-    descripcionElemento = models.CharField(max_length=25)
-    observacionElemento = models.CharField(max_length=25)
-
-    cantidadElemento = models.IntegerField()
-    valorUnidadElemento = models.IntegerField()
-    valorTotalElemento = models.IntegerField(blank=True, null=True)
-    serial = models.CharField(max_length=25, primary_key=True)
-    facturaElemento = models.FileField(
-    upload_to="facturaElemento/", blank=True, null=True
-    ) # Campo para la foto
-=======
 # ----Informacion General Producto (Repetitiva + Sumatoria Productos)---------------------------------------------------------------------------
 class ProductosInventarioDevolutivo(models.Model):
     nombre = models.CharField(max_length=75)
@@ -106,7 +87,6 @@ class ProductosInventarioDevolutivo(models.Model):
     descripcion = models.CharField(max_length=255)
     valor_unidad = models.IntegerField()
     disponibles = models.IntegerField(default=0)
->>>>>>> cdb7362a0ee854762045e8b8632e77e484239084
 
     def __str__(self):
         return self.nombre
