@@ -749,7 +749,7 @@ def editarPrestamo_view(request, id):
 			prestamo.fechaDevolucion = fecha_devolucion
 			prestamo.nombreEntrega = nombre_entrega
 			prestamo.nombreRecibe = nombre_recibe
-			prestamo.nombreElemento = nombre_elemento
+			prestamo.serialSenaElemento = nombre_elemento
 			prestamo.cantidadElemento = cantidad_elemento
 			prestamo.valorUnidadElemento = valor_unidad
 			prestamo.observacionesPrestamo = observaciones_prestamo

@@ -8,6 +8,7 @@ Consultar Transaciones
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/superAdmin/modal.css' %}">
+<link rel="stylesheet" href="{% static 'css/superAdmin/stylesregusuario.css' %}">
 <script src="https://cdn.tailwindcss.com"></script>
 {% endblock extrastyle %}
 <!--Script Contenido Estilos de Tailwindcss-->
@@ -53,6 +54,11 @@ Consultar Transaciones
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
         </button>
+      </div>
+      <div class="imgretorn">
+        <a href="/transacciondash/" >
+          <img src="{% static 'img/flecha-atras.png' %}" alt="" >
+      </a>
       </div>
     </div>
   
@@ -125,7 +131,7 @@ Consultar Transaciones
                   </div>
                 </td>
                 <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreElemento }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.serialSenaElemento.producto.nombre }}
   
                   </div>
                 </td>
@@ -135,7 +141,7 @@ Consultar Transaciones
                   </div>
                 </td>
                 <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-                    <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.cantidadElemento }}
+                    <div class="text-[0.7rem] leading-5 text-gray-500">{{ 1 }}
     
                     </div>
                 </td>
@@ -297,7 +303,7 @@ Consultar Transaciones
                   </div>
                 </td>
                 <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.nombreElemento }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.nombre_Elemento }}
   
                   </div>
                 </td>
@@ -320,7 +326,7 @@ Consultar Transaciones
                 <td
                   class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
                   <button
-                    onclick="openModal('{{Entregas.fecha_entrega}}, {{Entregas.responsable_Entrega}}, {{Entregas.nombre_solicitante}},  {{Entregas.nombreElemento}}, {{Entregas.serialSenaElemento }}, {{ Entregas.cantidad_prestada }}, {{ Entregas.observaciones_prestamo }}')"
+                    onclick="openModal('{{Entregas.fecha_entrega}}, {{Entregas.responsable_Entrega}}, {{Entregas.nombre_solicitante}},  {{Entregas.nombre_Elemento}}, {{Entregas.serialSenaElemento }}, {{ Entregas.cantidad_prestada }}, {{ Entregas.observaciones_prestamo }}')"
                     ,>
                     <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                       <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />

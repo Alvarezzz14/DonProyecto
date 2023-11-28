@@ -97,7 +97,7 @@ class InventarioDevolutivo(models.Model):
     factura = models.ImageField(upload_to="facturaElemento/", blank=True, null=True)
 
     def __str__(self):
-        return f"Serial: {self.serial} - {self.producto.nombre}"
+        return f"{self.serial}"
 
 
 # -------------------------------------------------------------------------------

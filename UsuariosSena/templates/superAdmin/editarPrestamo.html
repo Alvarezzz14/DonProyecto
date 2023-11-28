@@ -42,11 +42,11 @@
                     <label for="nombreRecibe" class="labelform">Adquiriente</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="©" name="txt_nombreElemento" value="{{prestamo.nombreElemento}}" required readonly>
+                    <input type="text" class="inputform" placeholder="©" name="txt_nombreElemento" value="{{prestamo.serialSenaElemento}}" required readonly>
                     <label for="nombreElemento" class="labelform">Elemento</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="txt_cantidadElemento" value="{{prestamo.cantidadElemento}}" required>
+                    <input type="text" class="inputform" placeholder="a" name="txt_cantidadElemento" value="1" required>
                     <label for="cantidadElemento" class="labelform">Cantidad Prestada </label>
                 </div>
             </div>
@@ -69,7 +69,7 @@
             </div>
             <div class="container-botones">
                 <button type="submit" class="submitBtn">GUARDAR</button>
-                <button type="button" class="submitBtn">CANCELAR</button>
+                <a href="{% url 'consultarTransacciones' %}"> <button type="button" class="submitBtn">CANCELAR</button></a>
             </div>
         </form>
     </div>
