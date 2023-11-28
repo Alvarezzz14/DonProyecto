@@ -215,7 +215,7 @@ def editarUsuario_view(request, id):
 
 def consultarElementos_view(request):
     elementosconsu = ElementosConsumible.objects.all()
-    elementosdevo = ElementosDevolutivo.objects.all()
+    elementosdevo = InventarioDevolutivo.objects.all()
     opcion_seleccionada = request.GET.get('opcion', None)
     data = {'opcion_seleccionada': opcion_seleccionada, "ElementosConsumibles": elementosconsu, "ElementosDevolutivos": elementosdevo}
     return render(request, "superAdmin/consultarElementos.html", data)
@@ -720,9 +720,12 @@ def formElementos_view(request):
 #@login_required
 def consultarElementos(request):
     inventario = InventarioDevolutivo.objects.select_related("producto").all()
-    return render(
-        request, "superAdmin/consultarElementos.html", {"inventario": inventario}
-    )
+    elementosconsu = ElementosConsumible.objects.all()
+    elementosdevo = InventarioDevolutivo.objects.select_related("producto").all()
+    opcion_seleccionada = request.GET.get('opcion', None)
+    data = {'opcion_seleccionada': opcion_seleccionada, "ElementosConsumibles": elementosconsu, "ElementosDevolutivos": elementosdevo}
+    return render(request, "superAdmin/consultarElementos.html", data)
+    
 
 
 def generar_pdf(request):
