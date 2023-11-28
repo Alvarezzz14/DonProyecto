@@ -34,12 +34,16 @@
         <div class="dashboard2">
             <div class="listaopciones">
                 <div class="opciones">
+                    {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
                     <a class="opcion1" href="{% url 'formPrestamosDevolutivos_view' %}">
                         Crear Prestamo
                     </a>
                     <a class="opcion2" href="{% url 'formEntregasConsumibles_view' %}">
                         Crear Entrega
                     </a>
+
+                    {% endif %}
+                        
                     <a class="opcion3" href="{% url 'consultarTransacciones' %}">
                         Consultar Transacciones
                     </a>

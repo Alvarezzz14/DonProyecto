@@ -20,7 +20,11 @@ from django.contrib.auth.models import User
 
 class UsuariosSenaManager(BaseUserManager):
     def create_user(self, numeroIdentificacion, email, password=None, **extra_fields):
-        user = self.model(numeroIdentificacion=numeroIdentificacion, email=self.normalize_email(email), **extra_fields)
+        user = self.model(
+            numeroIdentificacion=numeroIdentificacion,
+            email=self.normalize_email(email),
+            **extra_fields,
+        )
         user = self.model(
             numeroIdentificacion=numeroIdentificacion,
             email=self.normalize_email(email),
@@ -33,6 +37,7 @@ class UsuariosSenaManager(BaseUserManager):
     def create_superuser(self, numeroIdentificacion, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("cuentadante", "superAdmin") #Predeterminamos el tipo cuentadante al crear super User que quede como SuperAdmin en el aplicativo
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True.")
@@ -49,7 +54,7 @@ class UsuariosSena(AbstractUser):
     numeroIdentificacion = models.CharField(
         max_length=25, unique=True, primary_key=True
     )
-    email = models.EmailField(max_length=25)
+    email = models.EmailField(max_length=35)
     celular = models.CharField(max_length=10)
     rol = models.CharField(max_length=25, choices=roles, default="I")
     cuentadante = models.CharField(
@@ -59,6 +64,7 @@ class UsuariosSena(AbstractUser):
     is_active = models.BooleanField(default=1)
     duracionContrato = models.CharField(max_length=25)
     password = models.CharField(max_length=100, default="")
+    recovery_token = models.CharField(max_length=30, blank=True, null=True)
     fotoUsuario = models.ImageField(
         upload_to="usuarioFoto/", blank=True, null=True
     )  # Campo para la foto
@@ -107,10 +113,15 @@ class ElementosConsumible(models.Model):
     fechaAdquisicion = models.DateField(auto_now_add=True)
     nombreElemento = models.CharField(max_length=25)
     categoriaElemento = models.CharField(
-        max_length=25, choices=[("D", "Devolutivo"), ("C", "Consumible")], default="C"
+        max_length=25, choices=[("Devolutivo", "Devolutivo"), ("Consumible", "Consumible")],
     )
     estadoElemento = models.CharField(
-        max_length=25, choices=[("D", "Disponible"), ("A", "Agotado")], default="D"
+        max_length=25, choices=[
+    ("Garantia", "Garantia"), 
+    ("Baja", "Baja"), 
+    ("Disponible", "Disponible"), 
+    ("Prestamo", "Prestamo"),
+    ], default="Disponible"
     )
     descripcionElemento = models.CharField(max_length=25)
     observacionElemento = models.CharField(max_length=25)

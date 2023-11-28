@@ -16,27 +16,29 @@
     justify-content: center;
     align-items: center;
     border-radius: 20px;
-    box-shadow: 3px 2px 1px #b0afaf;
+    box-shadow: 0px 0px 10px rgba(255, 165, 0, 0.5) #b0afaf;
     transition: all 0.5s;
+    
 }
 
 .area-notificaciones {
+    
     width: 95%;
     height: 30%;
-    padding: 0px;
+    padding: auto;
     background-color: rgba(255, 255, 255, .75); 
-    backdrop-filter: blur(5px);
-    box-shadow: inset 0 0 2000px rgba(255, 255, 255, 0.22);
-    background: inherit;
+    
+    box-shadow: 0px 0px 10px rgb(255, 166, 0) #b0afaf;
+    
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
     margin: 5px;
     margin-bottom:2rem;
-    border: 2px rgb(11, 61, 84);
-    border-style: solid;
-    border-radius: 300px;
+    border: 0.15rem #fc7323;
+    border-style:solid ;
+    border-radius: 100px;
     overflow-y: auto;
 }
 .area-notificaciones::before{
@@ -54,20 +56,52 @@
     align-items: center;
     flex-direction: row;
     width: 100%;
-    
-    justify-content: space-around;
+    gap: 5rem;
+    padding-left: 5rem;
+    justify-content: flex-start;
 
 }
 
 .logo-notificaciones {
-    width: 100px;
+    width: 4rem;
     height: auto;
-    padding: 5px;
     border-radius: 50%;
+    animation: pulse 2s infinite; /* Cambia la duración según tu preferencia */
+
 }
 
 .caja-texto-notificaciones {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.acciones{
+    display: flex;
+    flex-direction: column;
+    gap:5px ;
+    margin:1%;
+    
+}
+
+#confirmarBtn{
+    border: none;
+    cursor: pointer;
+}
+
+.vista_usuario{
+    padding: 1rem;
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
