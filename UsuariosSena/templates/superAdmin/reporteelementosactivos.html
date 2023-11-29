@@ -75,15 +75,15 @@
 
                     {% for elemento in ElementosConsumibles %}
                         
-                    {% if elemento.estadoElemento == 'D' %}
+                    {% if elemento.productoConsumible.estadoElemento == 'D' %}
 
                 <tr>
-                    <td>{{ elemento.nombreElemento }}</td>
-                    {% if elemento.categoriaElemento == 'C' %}
+                    <td>{{ elemento.productoConsumible.nombreElemento }}</td>
+                    {% if elemento.productoConsumible.categoriaElemento == 'C' %}
                     <td> Consumible </td>
                     {% endif %}
                     <td>Disponible</td>
-                    <td>{{ elemento.descripcionElemento }}</td>
+                    <td>{{ elemento.productoConsumible.descripcionElemento }}</td>
                     <td>{{ elemento.cantidadElemento }}</td>
                     <td>{{ elemento.observacionElemento }}</td>           
                                      

@@ -60,7 +60,7 @@ Consultar Elementos
   
   </form>
 
-  <div class="flex flex-col max-w-full overflow-x-auto mt-8">
+  <div class="flex m-auto flex-col max-w-full overflow-x-auto mt-8">
     <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
       <div class="inline-block scroll-auto overflow-hidden align-middle sm:rounded-lg">
 {% if opcion_seleccionada == 'elementosconsu' %} 
@@ -102,31 +102,32 @@ Consultar Elementos
                 </div>
               </td>
               <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.nombreElemento }}
+                <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.productoConsumible.nombreElemento }}
+                                                                    
                 </div>
               </td>
               <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                {% if elemento.categoriaElemento == 'C' %}
+                {% if elemento.productoConsumible.categoriaElemento == 'C' %}
                 <span
                   class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
                   Consumible</span>
-                {% elif elemento.categoriaElemento == 'D' %}
+                {% elif elemento.productoConsumible.categoriaElemento == 'D' %}
                 <span
                   class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-red-800 bg-red-100 rounded-full">
                   Devolutivo</span>
                 {% endif %}
               </td>
               <td class=" px-3 py-2 whitespace-no-wrap  border-b border-gray-200">
-                {% if elemento.estadoElemento == 'D' %}
+                {% if elemento.productoConsumible.estadoElemento == 'D' %}
                 <span
                   class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-green-800 bg-green-100 rounded-full">Disponible</span>
-                {% elif elemento.estadoElemento == 'G' %}
+                {% elif elemento.productoConsumible.estadoElemento == 'G' %}
                 <span
                   class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-yellow-800 bg-yellow-100 rounded-full">Garantia</span>
-                {% elif elemento.estadoElemento == 'B' %}
+                {% elif elemento.productoConsumible.estadoElemento == 'B' %}
                 <span
                   class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-orange-800 bg-orange-100 rounded-full">Baja</span>
-                {% elif elemento.estadoElemento == 'P' %}
+                {% elif elemento.productoConsumible.estadoElemento == 'P' %}
                 <span
                   class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-orange-800 bg-orange-100 rounded-full">Entregado</span>
                 {% endif %}
@@ -136,7 +137,7 @@ Consultar Elementos
                 </div>
               </td>
               <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-[0.7rem] leading-5 text-gray-500">${{ elemento.costoUnidadElemento }}
+                <div class="text-[0.7rem] leading-5 text-gray-500">${{ elemento.productoConsumible.costoUnidadElemento }}
                 </div>
               </td>
               <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
@@ -144,7 +145,7 @@ Consultar Elementos
                 </div>
               </td>
               <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.descripcionElemento }}
+                <div class="text-[0.7rem] leading-5 text-gray-500">{{ elemento.productoConsumible.descripcionElemento }}
                 </div>
               </td>
               <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
@@ -167,7 +168,7 @@ Consultar Elementos
               <!--Botones de Visualizar Editar y ELiminar-->
               <td
                 class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-l border-gray-200 gap-2">
-                <button title="Visualizar Elemento" onclick="openModal('{{elemento.fechaElemento}}, {{elemento.nombreElemento}}, {{elemento.categoriaElemento}},  {{elemento.estadoElemento}}, {{ elemento.descripcionElemento }}, {{ elemento.observacionElemento }}, {{elemento.cantidadElemento }}, {{ elemento.costoUnidadElemento }} ')",>
+                <button title="Visualizar Elemento" onclick="openModal('{{ elemento.fechaAdquisicion }}, {{ elemento.productoConsumible.nombreElemento }}, {{elemento.productoConsumible.categoriaElemento}},  {{elemento.productoConsumible.estadoElemento}}, {{ elemento.productoConsumible.descripcionElemento }}, {{ elemento.observacionElemento }}, {{elemento.cantidadElemento }}, {{ elemento.productoConsumible.costoUnidadElemento }} ')",>
                   <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                     <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
                     <path
@@ -246,6 +247,7 @@ Consultar Elementos
                 </div>
               </div>
             </div>
+        
 
             {% endfor %}
 
@@ -369,7 +371,7 @@ Consultar Elementos
                   </svg>
                 </a>
               </button>
-              <button title="Eliminar Elemento" onclick="botonEliminar('{{Entregas.id}}')">
+              <button title="Inhabilitar Elemento" onclick="botonEliminar('{{Entregas.id}}')">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -381,9 +383,15 @@ Consultar Elementos
                 
             </td>
           </tr>
-          {% endfor %}
+          
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+  
+{% endfor %}
+{% endif %}  
   
         <!-- Botones para generar PDF y Excel -->
         <div class="flex w-20 gap-4 justify-end">
@@ -391,12 +399,10 @@ Consultar Elementos
           <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
               alt=""></a>
         </div>
-      </div>
-    </div>
-  </div>
-  </div>
+      
+    
 
-  {% endif %}
+
     <!-- Modal para mostrar la información del usuario -->
 
 
@@ -444,6 +450,7 @@ Consultar Elementos
     </div>
   </div>
 </div>
+
 {% endblock %}
 {% block extrajs %}
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
@@ -519,11 +526,6 @@ Consultar Elementos
   }
 </script>
 
-<script>
-  document.getElementById("cancelBtn").onclick = function() {
-    window.location.href = "/elementosdash/";
-  };
-  </script>
 
 {% endblock extrajs %}
 
