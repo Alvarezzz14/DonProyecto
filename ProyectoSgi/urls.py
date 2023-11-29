@@ -78,14 +78,12 @@ urlpatterns = [
         "consultarUsuario/", views.consultarUsuario_view, name="consultarUsuario_view"
     ),
     path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
-   
     path(
         "consultarTransacciones/",
         views.consultarTransacciones_view,
         name="consultarTransacciones",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
-    
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
     path("generar_excel/", views.generar_excel, name="generar_excel"),
     path("logout/", views.user_logout, name="logout"),
@@ -93,6 +91,11 @@ urlpatterns = [
         "get-element-name-by-serial",
         views.get_element_name_by_serial,
         name="get-element-name-by-serial",
+    ),
+    path(
+        "get_element_consum_info/",
+        views.get_element_consum_info,
+        name="get_element_consum_info",
     ),
     path("reset_password/", PasswordResetView.as_view(), name="password_reset"),
     path(

@@ -12,15 +12,16 @@ from .models import (
     Prestamo,
     InventarioDevolutivo,
     ProductosInventarioDevolutivo,
-    ElementosConsumible,
+    ProductosInventarioConsumible,
+    InventarioConsumible,
     EntregaConsumible,
     InventarioDevolutivo
 )
 from django.http import JsonResponse 
 from django.views.decorators.http import require_POST
 
-#decoradores para uso de Permisos en las visats de usuario y de inicia de sesion
-from django.contrib.auth.decorators import login_required 
+# decoradores para uso de Permisos en las visats de usuario y de inicia de sesion
+from django.contrib.auth.decorators import login_required
 from .decorators import verificar_cuentadante, verificar_superadmin
 
 from django.contrib.auth import login, authenticate, logout
@@ -47,7 +48,6 @@ from reportlab.platypus import Image
 import xlsxwriter
 # Create your views here.
 from django.contrib.auth.views import PasswordResetConfirmView
-from django.http import HttpResponse
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
@@ -93,7 +93,8 @@ def login_view(request):
 
     return render(request, "indexLogin.html", {"form": loginForm})
 
-#@login_required
+
+# @login_required
 def homedash(request):
     prestamos = Prestamo.objects.all().order_by("fechaDevolucion")
     entregas = EntregaConsumible.objects.all()
@@ -108,19 +109,23 @@ def homedash(request):
 
     return render(request, "superAdmin/basedashboard.html", data)
 
-#@login_required
+
+# @login_required
 def elementosdash(request):
     return render(request, "superAdmin/elementosdash.html")
 
-#@login_required
+
+# @login_required
 def usuariodash(request):
     return render(request, "superAdmin/usuariodash.html")
 
-#@login_required
+
+# @login_required
 def inventariodash(request):
     return render(request, "superAdmin/inventariodash.html")
 
-#@login_required
+
+# @login_required
 def transacciondash(request):
     return render(request, "superAdmin/transaccionesdash.html")
 
@@ -128,13 +133,15 @@ def transacciondash(request):
 def logout(request):
     return render(request, "indexLogin.html")
 
-#@login_required
+
+# @login_required
 def consultarUsuario_view(request):
     usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
     return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
 
-#@login_required
-#@verificar_superadmin
+
+# @login_required
+# @verificar_superadmin
 def registroUsuario_view(request):
     if request.method == "POST":
         nombresVar = request.POST.get("nombres")
@@ -189,7 +196,7 @@ def registroUsuario_view(request):
                     cuentadante=cuentadanteVar,
                     tipoContrato=tipoContratoVar,
                     is_active=is_activeVar,
-                    #is_staff=True, #Permitiru ingreso al admin, creados por la aplicacion
+                    # is_staff=True, #Permitiru ingreso al admin, creados por la aplicacion
                     duracionContrato=duracionContratoVar,
                     password=password_cifrada,
                     fotoUsuario=fotoUsuarioVar,
@@ -200,10 +207,10 @@ def registroUsuario_view(request):
 
     return render(request, "superAdmin/registroUsuario.html")
 
-#@login_required
-#@verificar_superadmin
-def editarUsuario_view(request, numeroIdentificacion):
-    print(numeroIdentificacion)
+
+# @login_required
+# @verificar_superadmin
+def editarUsuario_view(request, id):
     try:
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
         datos = {"user": user}
@@ -215,7 +222,7 @@ def editarUsuario_view(request, numeroIdentificacion):
         return redirect("consultarUsuario_view")
 
 
-def consultarElementos_view(request):
+def consultarElementos_view(request, id):
     elementosconsu = ElementosConsumible.objects.all()
     elementosdevo = InventarioDevolutivo.objects.all()
     opcion_seleccionada = request.GET.get('opcion', None)
@@ -321,7 +328,7 @@ def editarElementosdevo_view(request, serial):
 
 #@login_required
 #@verificar_superadmin
-def actualizarUsuario_view(request, numeroIdentificacion):
+def actualizarUsuario_view(request, numeroIdentificacion, id):
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
         apellidoVar = request.POST.get("Apellidos")
@@ -365,9 +372,10 @@ def actualizarUsuario_view(request, numeroIdentificacion):
         messages.warning(request, "No existe registro")
         return redirect("consultarUsuario_view")
 
-#@login_required
-#@verificar_superadmin
-def eliminarUsuario_view(request, numeroIdentificacion):
+
+# @login_required
+# @verificar_superadmin
+def eliminarUsuario_view(request, id):
     try:
         # Busca el usuario por ID
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
@@ -390,8 +398,9 @@ def eliminarUsuario_view(request, numeroIdentificacion):
         messages.error(request, "Usuario no encontrado.")
         return redirect("index")
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def formPrestamosDevolutivos_view(request):
     # Obtiene todos los usuarios excepto el que esta fijado de primero
     usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
@@ -601,35 +610,149 @@ def get_element_name_by_serial(request):
     else:
         return JsonResponse({"error": "No serial number provided"}, status=400)
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def formEntregasConsumibles_view(request):
+    # Obtiene todos los usuarios excepto el que esta fijado de primero
+    usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
+    # usuario específico que se quiere fijar
+    try:
+        usuario_pinned = UsuariosSena.objects.get(numeroIdentificacion="12345")
+    except UsuariosSena.DoesNotExist:
+        usuario_pinned = None
+    elementos = (
+        ProductosInventarioConsumible.objects.all()
+    )  # Obtiene todos los elementos
+
     if request.method == "POST":
-        # Procesar el formulario aquí (guardar el préstamo consumible)
-        nombreElementovar = request.POST.get("nombreElemento")
-        cantidad_prestadavar = int(request.POST.get("cantidad_prestada"))
-        # fecha_entregavar = request.POST.get("fecha_entrega")
-        fecha_entregavar = date.today()  # Manera 1 de hacerlo pero mas joda
-        serialSenaElementovar = request.POST.get("serialSenaElemento")
-        nombre_solicitantevar = request.POST.get("nombre_solicitante")
-        observaciones_prestamovar = request.POST.get("observaciones_prestamo")
-        responsable_Entregavar = request.POST.get("responsable_Entrega")
-
-        # instancia de PrestamoConsumible
-        prestamo_consumible = EntregaConsumible(
-            nombreElemento=nombreElementovar,
-            cantidad_prestada=cantidad_prestadavar,
-            fecha_entrega=fecha_entregavar,
-            serialSenaElemento=serialSenaElementovar,
-            nombre_solicitante=nombre_solicitantevar,
-            observaciones_prestamo=observaciones_prestamovar,
-            responsable_Entrega=responsable_Entregavar,
+        responsable_Entrega_nombre = request.POST.get("responsable_Entrega")
+        nombre_solicitante_nombre = request.POST.get("nombre_solicitante")
+        idC_id = request.POST.get("idC")  # Este es el ID del InventarioConsumible
+        cantidad_prestada = request.POST.get("cantidadElemento")
+        observaciones_prestamo = request.POST.get("observaciones_prestamo")
+        firmaDigital = (
+            request.FILES.get("firmaDigital")
+            if "firmaDigital" in request.FILES
+            else None
         )
-        # Guarda la instancia en la base de datos
-        prestamo_consumible.save()
-    return render(request, "superAdmin/formEntregasConsumibles.html")
 
-#@login_required
+        # Dividir el nombre y apellido para responsable_Entrega
+        partes_nombre_responsable = responsable_Entrega_nombre.split(maxsplit=1)
+        if len(partes_nombre_responsable) == 2:
+            nombre_responsable, apellido_responsable = partes_nombre_responsable
+        else:
+            messages.error(
+                request,
+                "Debe ingresar tanto el nombre como el apellido del responsable de la entrega.",
+            )
+            return render(
+                request,
+                "superAdmin/formEntregasConsumibles.html",
+                {"usuarios": usuarios, "elementos": elementos},
+            )
+
+        # Dividir el nombre y apellido para nombre_solicitante
+        partes_nombre_solicitante = nombre_solicitante_nombre.split(maxsplit=1)
+        if len(partes_nombre_solicitante) == 2:
+            nombre_solicitante, apellido_solicitante = partes_nombre_solicitante
+        else:
+            messages.error(
+                request,
+                "Debe ingresar tanto el nombre como el apellido del solicitante.",
+            )
+            return render(
+                request,
+                "superAdmin/formEntregasConsumibles.html",
+                {"usuarios": usuarios, "elementos": elementos},
+            )
+        try:
+            responsable_Entrega = UsuariosSena.objects.get(
+                nombres=nombre_responsable, apellidos=apellido_responsable
+            )
+            nombre_solicitante = UsuariosSena.objects.get(
+                nombres=nombre_solicitante, apellidos=apellido_solicitante
+            )
+            inventarioConsumible = InventarioConsumible.objects.get(id=idC_id)
+
+            # Obtener el producto consumible y verificar la cantidad disponible
+            producto_consumible = ProductosInventarioConsumible.objects.get(id=idC_id)
+            cantidad_solicitada = int(cantidad_prestada)
+
+            if producto_consumible.disponible >= cantidad_solicitada:
+                # Actualizar la cantidad disponible y crear la entrega
+                producto_consumible.disponible -= cantidad_solicitada
+                producto_consumible.save()
+
+                entrega_consumible = EntregaConsumible(
+                    fecha_entrega=timezone.now(),
+                    responsable_Entrega=responsable_Entrega,
+                    nombre_solicitante=nombre_solicitante,
+                    idC=inventarioConsumible,
+                    cantidad_prestada=cantidad_solicitada,
+                    observaciones_prestamo=observaciones_prestamo,
+                    firmaDigital=firmaDigital,
+                )
+                entrega_consumible.save()
+                messages.success(request, "Entrega de consumible guardada exitosamente")
+                return redirect("formEntregasConsumibles_view")
+            else:
+                messages.error(request, "Cantidad no disponible.")
+
+        except UsuariosSena.DoesNotExist:
+            messages.error(request, "Usuario no encontrado.")
+        except InventarioConsumible.DoesNotExist:
+            messages.error(request, "Elemento consumible no encontrado.")
+        except Exception as e:
+            messages.error(request, f"Error al procesar la solicitud: {str(e)}")
+        # En caso de cualquier otro error, también debes manejarlo.
+
+    return render(
+        request,
+        "superAdmin/formEntregasConsumibles.html",
+        {
+            "usuarios": usuarios,
+            "elementos": elementos,
+            "usuario_pinned": usuario_pinned,
+            "form_data": request.POST,
+        },
+    )
+
+
+# Rellenar info del elemento consumible seleccionado
+def get_element_consum_info(request):
+    consumible_id = request.GET.get("consumibleId", None)
+    element_id = request.GET.get("id", None)
+
+    if consumible_id:
+        try:
+            consumible_item = ProductosInventarioConsumible.objects.get(
+                id=consumible_id
+            )
+            nombre_elemento = consumible_item.nombreElemento
+            stock_disponible = consumible_item.disponible
+            return JsonResponse(
+                {"nombreElemento": nombre_elemento, "disponible": stock_disponible}
+            )
+        except ProductosInventarioConsumible.DoesNotExist:
+            return JsonResponse({"error": "ID de consumible no encontrado"}, status=404)
+    elif element_id:
+        try:
+            elemento = ProductosInventarioConsumible.objects.get(id=element_id)
+            return JsonResponse(
+                {"nombre": elemento.nombreElemento, "disponible": elemento.disponible}
+            )
+        except ProductosInventarioConsumible.DoesNotExist:
+            return JsonResponse(
+                {"error": "Elemento con el ID proporcionado no encontrado"}, status=404
+            )
+    else:
+        return JsonResponse(
+            {"error": "No se proporcionó ID o nombre de consumible"}, status=400
+        )
+
+
+# @login_required
 def calendario(request):
     prestamos = Prestamo.objects.all()
     eventos = []
@@ -644,8 +767,9 @@ def calendario(request):
 
     return render(request, "superAdmin/calendario.html", {"eventos": eventos})
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def formElementos_view(request):
     form_data = {}
     if request.method == "POST":
@@ -700,18 +824,25 @@ def formElementos_view(request):
             cantidad = int(request.POST.get("cantidadElemento"))
             costo_total = cantidad * valor_unidad
 
-            # Crear un nuevo ElementosConsumible
-            ElementosConsumible.objects.create(
+            producto, created = ProductosInventarioConsumible.objects.get_or_create(
                 nombreElemento=nombre,
                 categoriaElemento=categoria,
                 estadoElemento=estado,
                 descripcionElemento=descripcion,
-                observacionElemento=observacion,
-                cantidadElemento=cantidad,
                 costoUnidadElemento=valor_unidad,
+            )
+
+            InventarioConsumible.objects.create(
+                productoConsumible=producto,
+                cantidadElemento=cantidad,
                 costoTotalElemento=costo_total,
+                observacionElemento=observacion,
                 facturaElemento=factura,
             )
+
+            producto.disponible += cantidad
+            producto.save()
+
             messages.success(request, "Elemento Consumible Guardado Exitosamente")
 
         else:
@@ -721,7 +852,8 @@ def formElementos_view(request):
 
     return render(request, "superAdmin/formElementos.html")
 
-#@login_required
+
+# @login_required
 def consultarElementos(request):
     inventario = InventarioDevolutivo.objects.select_related("producto").all()
     elementosconsu = ElementosConsumible.objects.all()
@@ -864,7 +996,8 @@ def user_logout(request):
     logout(request)
     return redirect("login_view")
 
-#@login_required
+
+# @login_required
 def consultarTransacciones_view(request):
     prestamos = Prestamo.objects.all()
     for prestamo in prestamos:
@@ -887,8 +1020,9 @@ def consultarTransacciones_view(request):
 
     return render(request, "superAdmin/consultarTransacciones.html", data)
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def editarPrestamo_view(request, id):
     # Obtener el objeto Prestamo por su ID
     prestamo = get_object_or_404(Prestamo, id=id)
@@ -943,8 +1077,9 @@ def editarPrestamo_view(request, id):
         {"prestamo": prestamo, "elemento": elemento},
     )
 
-#@login_required
-#@verificar_cuentadante
+
+# @login_required
+# @verificar_cuentadante
 def editarEntrega_view(request, id):
     # Obtener el objeto Prestamo por su ID
     entrega = get_object_or_404(EntregaConsumible, id=id)
@@ -966,7 +1101,7 @@ def editarEntrega_view(request, id):
             consultar_transacciones_url = reverse("consultarTransacciones")
             return redirect(f"{consultar_transacciones_url}?opcion=entregas")
 
-        except ElementosConsumible.DoesNotExist as e:
+        except InventarioConsumible.DoesNotExist as e:
             # Manejar la excepción y mostrar un mensaje de error
             error_message = f"Elemento no encontrado. Por favor, asegúrate de que el serial sea correcto. Detalles: {e}"
             print(error_message)  # Imprimir mensaje de error en la consola
@@ -988,12 +1123,8 @@ def editarEntrega_view(request, id):
     )
 
 
-# views.py
-
-from django.http import HttpResponse
-
-#@login_required
-#@verificar_cuentadante
+# @login_required
+# @verificar_cuentadante
 def finalizarPrestamo_view(request, id):
     prestamo = get_object_or_404(Prestamo, id=id)
 
