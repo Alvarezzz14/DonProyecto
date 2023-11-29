@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extrastyle %}
-    <link rel="stylesheet" href="{% static 'css/superAdmin/styledashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/superAdmin/styledashboard2.css' %}">
     <link rel="stylesheet" href="{% static 'css/notificaciones.css' %}">
     <link rel="stylesheet" href="{% static 'css/superAdmin/modal.css' %}">
 {% endblock extrastyle %}
@@ -51,19 +51,31 @@ Home SUAdmin
                 <h1>Inicio</h1>
             
                 <div class="caja_dash">
-                    <div class="box_dash">
-                        <a href="{% url 'usuariodash' %}">Usuarios</a>
-                    </div>
-                    <div class="box_dash">
-                        <a href="{% url 'inventariodash' %}">Inventario</a>
-                    </div>
-                    <div class="box_dash">
-                        <a href="{% url 'elementosdash' %}">Elementos</a>
-                    </div>
-                    <div class="box_dash">
-                        <a href="{% url 'transacciondash' %}">Transacciones</a>
-                    </div>
-                </div>
+                  <div class="box_dash click">
+                      <span class="material-icons-sharp" style="color: aliceblue; margin:0  10px;">
+                          account_circle
+                          </span>
+                      <a class="click" href="{% url 'usuariodash' %}">Usuarios</a>
+                  </div>
+                  <div class="box_dash">
+                      <span class="material-icons-sharp" style="color: aliceblue; margin:0  10px;">
+                          inventory_2
+                          </span>
+                      <a href="{% url 'inventariodash' %}">Inventario</a>
+                  </div>
+                  <div class="box_dash">
+                      <span class="material-icons-sharp" style="color: aliceblue; margin:0  10px;">
+                          extension
+                          </span>
+                      <a href="{% url 'elementosdash' %}">Elementos</a>
+                  </div>
+                  <div class="box_dash">
+                      <span class="material-icons-sharp" style="color: aliceblue; margin:0  10px;">
+                          sync_alt
+                          </span>
+                      <a href="{% url 'transacciondash' %}">Transacciones</a>
+                  </div>
+              </div>
                 
                 <div class="dashboard2">
                     <div class="vista_usuario">

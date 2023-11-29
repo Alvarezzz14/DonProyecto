@@ -9,7 +9,7 @@
 
 
 {% block extrastyle %}
-    <link rel="stylesheet" href="{% static 'css/superAdmin/usuariodash.css' %}">
+    <link rel="stylesheet" href="{% static 'css/superAdmin/inventariodash2.css' %}">
 {% endblock extrastyle %}
     
 
@@ -20,18 +20,18 @@
     <section class="dashboard"> 
         <h1>Usuarios</h1>
         <div class="caja_dash">
-            <div class="box_dash click">
-                <a class="click" href="{% url 'usuariodash' %}">Usuarios</a>
-            </div>
-            <div class="box_dash">
-                <a href="{% url 'inventariodash' %}">Inventario</a>
-            </div>
-            <div class="box_dash">
-                <a href="{% url 'elementosdash' %}">Elementos</a>
-            </div>
-            <div class="box_dash">
-                <a href="{% url 'transacciondash' %}">Transacciones</a>
-            </div>
+            <a class="box_dash" href="{% url 'usuariodash' %}">
+                <p>Usuarios</p>
+                </a>
+            <a class="box_dash" href="{% url 'inventariodash' %}">
+                <p>Inventario</p>
+                </a>
+            <a class="box_dash click" href="{% url 'elementosdash' %}">
+                <p>Elementos</p>
+                </a>
+            <a class="box_dash" href="{% url 'transacciondash' %}">
+                <p>Transacciones</p>
+            </a>
         </div>
         <div class="dashboard2">
             <div class="listaopciones">
