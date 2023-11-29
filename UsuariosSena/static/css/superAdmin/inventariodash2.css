@@ -8,6 +8,9 @@
     text-decoration: none;
 }
 
+.box_dash p{
+    color: #fff;
+}
 
 .dashboard{
     margin: 20px;
@@ -25,18 +28,31 @@
     text-align: center;
 }
 
-.box_dash{
+.box_dash {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 80%;
-    padding:20px 1px;
+    padding: 20px 1px;
     background: #fc7323;
     box-shadow: 1px 2px 1px #b0afaf;
     border-radius: 5px;
     transition: 0.5s;
     cursor: pointer;
-}
+    animation: changeColor 3s;
+  }
+  
+  @keyframes changeColor {
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+  
+
 
 .box_dash:hover{
     box-shadow: none;

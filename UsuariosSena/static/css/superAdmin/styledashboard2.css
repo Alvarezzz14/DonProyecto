@@ -46,7 +46,18 @@
     border-radius: 5px;
     transition: 0.5s;
     cursor: pointer;
-    
+    animation: changeColor 3s;
+  }
+  
+@keyframes changeColor {
+0% {
+    opacity: 0;
+}
+
+100% {
+    opacity: 1;
+}
+
 }
 
 .box_dash:hover{
