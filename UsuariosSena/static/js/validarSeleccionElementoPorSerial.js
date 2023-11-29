@@ -6,7 +6,6 @@ function actualizarEstadoFormulario(agotado) {
         'input[name="observacionesPrestamo"]',
         'input[type="file"]',
         'button[type="submit"]',
-        'button[type="button"]'
     ];
 
     campos.forEach(function (selector) {
@@ -56,3 +55,4 @@ $(document).ready(function () {
         }
     });
 });
+

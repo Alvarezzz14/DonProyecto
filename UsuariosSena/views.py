@@ -12,7 +12,8 @@ from .models import (
     Prestamo,
     InventarioDevolutivo,
     ProductosInventarioDevolutivo,
-    ElementosConsumible,
+    ProductosInventarioConsumible,
+    InventarioConsumible,
     EntregaConsumible,
 )
 from django.http import JsonResponse
@@ -47,7 +48,6 @@ import xlsxwriter
 
 # Create your views here.
 from django.contrib.auth.views import PasswordResetConfirmView
-from django.http import HttpResponse
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
@@ -507,30 +507,142 @@ def get_element_name_by_serial(request):
 # @login_required
 # @verificar_cuentadante
 def formEntregasConsumibles_view(request):
-    if request.method == "POST":
-        # Procesar el formulario aquí (guardar el préstamo consumible)
-        nombreElementovar = request.POST.get("nombreElemento")
-        cantidad_prestadavar = int(request.POST.get("cantidad_prestada"))
-        # fecha_entregavar = request.POST.get("fecha_entrega")
-        fecha_entregavar = date.today()  # Manera 1 de hacerlo pero mas joda
-        serialSenaElementovar = request.POST.get("serialSenaElemento")
-        nombre_solicitantevar = request.POST.get("nombre_solicitante")
-        observaciones_prestamovar = request.POST.get("observaciones_prestamo")
-        responsable_Entregavar = request.POST.get("responsable_Entrega")
+    # Obtiene todos los usuarios excepto el que esta fijado de primero
+    usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
+    # usuario específico que se quiere fijar
+    try:
+        usuario_pinned = UsuariosSena.objects.get(numeroIdentificacion="12345")
+    except UsuariosSena.DoesNotExist:
+        usuario_pinned = None
+    elementos = (
+        ProductosInventarioConsumible.objects.all()
+    )  # Obtiene todos los elementos
 
-        # instancia de PrestamoConsumible
-        prestamo_consumible = EntregaConsumible(
-            nombreElemento=nombreElementovar,
-            cantidad_prestada=cantidad_prestadavar,
-            fecha_entrega=fecha_entregavar,
-            serialSenaElemento=serialSenaElementovar,
-            nombre_solicitante=nombre_solicitantevar,
-            observaciones_prestamo=observaciones_prestamovar,
-            responsable_Entrega=responsable_Entregavar,
+    if request.method == "POST":
+        responsable_Entrega_nombre = request.POST.get("responsable_Entrega")
+        nombre_solicitante_nombre = request.POST.get("nombre_solicitante")
+        idC_id = request.POST.get("idC")  # Este es el ID del InventarioConsumible
+        cantidad_prestada = request.POST.get("cantidadElemento")
+        observaciones_prestamo = request.POST.get("observaciones_prestamo")
+        firmaDigital = (
+            request.FILES.get("firmaDigital")
+            if "firmaDigital" in request.FILES
+            else None
         )
-        # Guarda la instancia en la base de datos
-        prestamo_consumible.save()
-    return render(request, "superAdmin/formEntregasConsumibles.html")
+
+        # Dividir el nombre y apellido para responsable_Entrega
+        partes_nombre_responsable = responsable_Entrega_nombre.split(maxsplit=1)
+        if len(partes_nombre_responsable) == 2:
+            nombre_responsable, apellido_responsable = partes_nombre_responsable
+        else:
+            messages.error(
+                request,
+                "Debe ingresar tanto el nombre como el apellido del responsable de la entrega.",
+            )
+            return render(
+                request,
+                "superAdmin/formEntregasConsumibles.html",
+                {"usuarios": usuarios, "elementos": elementos},
+            )
+
+        # Dividir el nombre y apellido para nombre_solicitante
+        partes_nombre_solicitante = nombre_solicitante_nombre.split(maxsplit=1)
+        if len(partes_nombre_solicitante) == 2:
+            nombre_solicitante, apellido_solicitante = partes_nombre_solicitante
+        else:
+            messages.error(
+                request,
+                "Debe ingresar tanto el nombre como el apellido del solicitante.",
+            )
+            return render(
+                request,
+                "superAdmin/formEntregasConsumibles.html",
+                {"usuarios": usuarios, "elementos": elementos},
+            )
+        try:
+            responsable_Entrega = UsuariosSena.objects.get(
+                nombres=nombre_responsable, apellidos=apellido_responsable
+            )
+            nombre_solicitante = UsuariosSena.objects.get(
+                nombres=nombre_solicitante, apellidos=apellido_solicitante
+            )
+            inventarioConsumible = InventarioConsumible.objects.get(id=idC_id)
+
+            # Obtener el producto consumible y verificar la cantidad disponible
+            producto_consumible = ProductosInventarioConsumible.objects.get(id=idC_id)
+            cantidad_solicitada = int(cantidad_prestada)
+
+            if producto_consumible.disponible >= cantidad_solicitada:
+                # Actualizar la cantidad disponible y crear la entrega
+                producto_consumible.disponible -= cantidad_solicitada
+                producto_consumible.save()
+
+                entrega_consumible = EntregaConsumible(
+                    fecha_entrega=timezone.now(),
+                    responsable_Entrega=responsable_Entrega,
+                    nombre_solicitante=nombre_solicitante,
+                    idC=inventarioConsumible,
+                    cantidad_prestada=cantidad_solicitada,
+                    observaciones_prestamo=observaciones_prestamo,
+                    firmaDigital=firmaDigital,
+                )
+                entrega_consumible.save()
+                messages.success(request, "Entrega de consumible guardada exitosamente")
+                return redirect("formEntregasConsumibles_view")
+            else:
+                messages.error(request, "Cantidad no disponible.")
+
+        except UsuariosSena.DoesNotExist:
+            messages.error(request, "Usuario no encontrado.")
+        except InventarioConsumible.DoesNotExist:
+            messages.error(request, "Elemento consumible no encontrado.")
+        except Exception as e:
+            messages.error(request, f"Error al procesar la solicitud: {str(e)}")
+        # En caso de cualquier otro error, también debes manejarlo.
+
+    return render(
+        request,
+        "superAdmin/formEntregasConsumibles.html",
+        {
+            "usuarios": usuarios,
+            "elementos": elementos,
+            "usuario_pinned": usuario_pinned,
+            "form_data": request.POST,
+        },
+    )
+
+
+# Rellenar info del elemento consumible seleccionado
+def get_element_consum_info(request):
+    consumible_id = request.GET.get("consumibleId", None)
+    element_id = request.GET.get("id", None)
+
+    if consumible_id:
+        try:
+            consumible_item = ProductosInventarioConsumible.objects.get(
+                id=consumible_id
+            )
+            nombre_elemento = consumible_item.nombreElemento
+            stock_disponible = consumible_item.disponible
+            return JsonResponse(
+                {"nombreElemento": nombre_elemento, "disponible": stock_disponible}
+            )
+        except ProductosInventarioConsumible.DoesNotExist:
+            return JsonResponse({"error": "ID de consumible no encontrado"}, status=404)
+    elif element_id:
+        try:
+            elemento = ProductosInventarioConsumible.objects.get(id=element_id)
+            return JsonResponse(
+                {"nombre": elemento.nombreElemento, "disponible": elemento.disponible}
+            )
+        except ProductosInventarioConsumible.DoesNotExist:
+            return JsonResponse(
+                {"error": "Elemento con el ID proporcionado no encontrado"}, status=404
+            )
+    else:
+        return JsonResponse(
+            {"error": "No se proporcionó ID o nombre de consumible"}, status=400
+        )
 
 
 # @login_required
@@ -605,18 +717,25 @@ def formElementos_view(request):
             cantidad = int(request.POST.get("cantidadElemento"))
             costo_total = cantidad * valor_unidad
 
-            # Crear un nuevo ElementosConsumible
-            ElementosConsumible.objects.create(
+            producto, created = ProductosInventarioConsumible.objects.get_or_create(
                 nombreElemento=nombre,
                 categoriaElemento=categoria,
                 estadoElemento=estado,
                 descripcionElemento=descripcion,
-                observacionElemento=observacion,
-                cantidadElemento=cantidad,
                 costoUnidadElemento=valor_unidad,
+            )
+
+            InventarioConsumible.objects.create(
+                productoConsumible=producto,
+                cantidadElemento=cantidad,
                 costoTotalElemento=costo_total,
+                observacionElemento=observacion,
                 facturaElemento=factura,
             )
+
+            producto.disponible += cantidad
+            producto.save()
+
             messages.success(request, "Elemento Consumible Guardado Exitosamente")
 
         else:
@@ -872,7 +991,7 @@ def editarEntrega_view(request, id):
             consultar_transacciones_url = reverse("consultarTransacciones")
             return redirect(f"{consultar_transacciones_url}?opcion=entregas")
 
-        except ElementosConsumible.DoesNotExist as e:
+        except InventarioConsumible.DoesNotExist as e:
             # Manejar la excepción y mostrar un mensaje de error
             error_message = f"Elemento no encontrado. Por favor, asegúrate de que el serial sea correcto. Detalles: {e}"
             print(error_message)  # Imprimir mensaje de error en la consola
@@ -892,11 +1011,6 @@ def editarEntrega_view(request, id):
         "superAdmin/editarEntrega.html",
         {"entrega": entrega, "elemento": elemento},
     )
-
-
-# views.py
-
-from django.http import HttpResponse
 
 
 # @login_required

@@ -37,7 +37,7 @@ Prestamos
                 <input list="usuariosList" id="nombreEntregaInput" type="text" class="inputform"
                     placeholder="nombreEntrega" name="nombreEntrega" value="{{ form_data.nombreEntrega|default:'' }}"
                     autocomplete="off" required>
-                <label for="" class="labelform">Instructor Entrega</label>
+                <label for="" class="labelform">Responsable de la Entrega</label>
                 <datalist id="usuariosList">
                     {% for usuario in usuarios %}
                     <option value="{{ usuario.nombres }} {{ usuario.apellidos }}">{{ usuario.numeroIdentificacion }}
@@ -49,7 +49,7 @@ Prestamos
                 <input list="usuariosListRecibe" id="nombreRecibeInput" type="text" class="inputform input-bold"
                     placeholder="nombreRecibe" name="nombreRecibe" value="{{ form_data.nombreRecibe|default:'' }}"
                     autocomplete="off" required>
-                <label for="" class="labelform">Instructor Recibe</label>
+                <label for="" class="labelform">Nombre del Solicitante</label>
                 <datalist id="usuariosListRecibe">
                     <option value="{{ usuario_pinned.nombres }} {{ usuario_pinned.apellidos }}">
                         {{ usuario_pinned.numeroIdentificacion }}</option>
@@ -115,13 +115,13 @@ Prestamos
                 <button type="button" class="submitBtn" onclick="confirmCancel()">CANCELAR</button>
 
             </div>
-            
+
         </div>
     </form>
 </div>
 </section>
 {% block extrajs %}
-<script src="{% static 'js/validarSeleccionElemento.js'%}"></script>
+<script src="{% static 'js/validarSeleccionElementoPorSerial.js'%}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{% static 'js/rellenarCampos.js'%}"></script>
 <script src="{% static 'js/calculoTotal.js'%}"></script>
