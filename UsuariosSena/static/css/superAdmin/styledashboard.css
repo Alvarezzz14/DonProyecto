@@ -12,6 +12,17 @@
 .dashboard{
     margin: 20px;
 }
+#fechaHora{
+    background-color: #e37226;
+    padding: 15px;
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 1px 4px 2px #b0afaf;
+    cursor: pointer;
+    transition: 0.5s;
+    margin-top: 60px;
+}
+
 
 .dashboard h1{
     padding: 20px 40px;
