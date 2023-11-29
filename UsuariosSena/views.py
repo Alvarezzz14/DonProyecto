@@ -210,7 +210,7 @@ def registroUsuario_view(request):
 
 # @login_required
 # @verificar_superadmin
-def editarUsuario_view(request, id):
+def editarUsuario_view(request, numeroIdentificacion):
     try:
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
         datos = {"user": user}
@@ -328,7 +328,7 @@ def editarElementosdevo_view(request, serial):
 
 #@login_required
 #@verificar_superadmin
-def actualizarUsuario_view(request, numeroIdentificacion, id):
+def actualizarUsuario_view(request, numeroIdentificacion):
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
         apellidoVar = request.POST.get("Apellidos")
@@ -375,7 +375,7 @@ def actualizarUsuario_view(request, numeroIdentificacion, id):
 
 # @login_required
 # @verificar_superadmin
-def eliminarUsuario_view(request, id):
+def eliminarUsuario_view(request, numeroIdentificacion):
     try:
         # Busca el usuario por ID
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
