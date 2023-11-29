@@ -61,7 +61,7 @@ Formulario Prestamos
                 <datalist id="elementosList">
                     {% for elemento in elementos %}
                     <option value="{{ elemento.id }}">
-                        {{ elemento.nombreElemento }} {% if elemento.disponible == 0 %} --> AGOTADO {% endif %}
+                        {{ elemento.nombreProducto }} {% if elemento.disponible == 0 %} --> AGOTADO {% endif %}
                     </option>
                     {% endfor %}
                 </datalist>
@@ -69,25 +69,25 @@ Formulario Prestamos
         </div>
         <div class="container-1">
             <div class="inputContainerIDelemento">
-                <input type="text" class="inputform" placeholder="nombreElemento" id="nombreElementoInput"
-                    name="nombreElemento" value="{{ form_data.nombreElemento|default:'' }}" autocomplete="off" readonly
+                <input type="text" class="inputform" placeholder="nombreProducto" id="nombreProductoInput"
+                    name="nombreProducto" value="{{ form_data.nombreProducto|default:'' }}" autocomplete="off" readonly
                     required>
                 <label for="" class="labelform">Nombre Elemento</label>
             </div>
             <div class="inputContainervalor">
                 <input type="text" class="inputform" placeholder="Disponibles" id="disponiblesInput" name="disponibles"
                     value="{{ form_data.disponibles|default:'' }}" readonly>
-                <label for="cantidadElemento" class="labelform">Disponible</label>
+                <label for="cantidadOtorgada" class="labelform">Disponible</label>
             </div>
             <div class="selectContainer">
-                <input type="number" class="inputcantidad" name="cantidadElemento" id="cantidadElemento"
-                    value="{{ form_data.cantidadElemento }}" required>
-                <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
+                <input type="number" class="inputcantidad" name="cantidadOtorgada" id="cantidadOtorgada"
+                    value="{{ form_data.cantidadOtorgada }}" required>
+                <label for="cantidadOtorgada" class="labelcantidad">Cantidad</label>
             </div>
             <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="observaciones_prestamo" name="observaciones_prestamo"
-                    id="observaciones_prestamo" value="{{ form_data.observaciones_prestamo }}" required>
-                <label for="observaciones_prestamo" class="labelform">Observaciones</label>
+                <input type="text" class="inputform" placeholder="observacionesEntrega" name="observacionesEntrega"
+                    id="observacionesEntrega" value="{{ form_data.observacionesEntrega }}" required>
+                <label for="observacionesEntrega" class="labelform">Observaciones</label>
             </div>
             <div class="selectorimagen">
                 <label for="soporte" class="labelsubirfoto">Firma Digital</label>
