@@ -1,0 +1,67 @@
+{% extends "../superAdmin/basesuadmin.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    DashInventario
+{% endblock title %}
+
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/superAdmin/reporteprestamo.css' %}">
+{% endblock extrastyle %}
+
+{% block content %}
+
+    <section class="consultar_reporte">
+        <div class="reporte_inventario">
+            <h1>Elementos activos</h1>
+        </div>
+        <div class="tabla_dinamica">
+            <div class="fecha_reporte">
+                <div class="fechas">
+                    <label for="fecha_inicio">Fecha inicio</label>
+                    <input type="date" placeholder="fecha inicio">
+                </div>
+                
+                <div class="fechas">
+                    <label for="fecha_fin">Fecha fin</label>
+                    <input type="date" placeholder="fecha fin">
+                </div>
+                <a href="{% url 'generar_pdf' %}"><button class="boton_reporte">Generar reporte</button></a>
+            </div>
+        
+
+        
+        
+            <div class="tabla_reporte">
+                <table>
+                    <tr>
+
+                        <th>nombre del elemento</th>
+                        <th>Categoria</th>
+                        <th>Estado</th>
+                        <th>Descripcion</th>
+                        <th>Valor unidad</th>
+                        <th>Serial</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>
+
+                    </tr>
+                    {% for elemento in elementos %}
+                    <tr>
+                        <td></td>                 
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            
+        
+
+            
+            
+        </div>
+    </section>
+
+    {% endblock content %}
