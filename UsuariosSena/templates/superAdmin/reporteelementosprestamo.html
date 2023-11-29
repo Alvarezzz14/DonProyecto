@@ -16,7 +16,7 @@
 
     <section class="consultar_reporte">
         <div class="reporte_inventario">
-            <h1>Elementos activos</h1>
+            <h1>Elementos en prestamo</h1>
         </div>
         <div class="tabla_dinamica">
             <div class="fecha_reporte">
@@ -38,20 +38,32 @@
             <div class="tabla_reporte">
                 <table>
                     <tr>
-
                         <th>nombre del elemento</th>
-                        <th>Categoria</th>
                         <th>Estado</th>
-                        <th>Descripcion</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Cantidad</th>
                         <th>Valor unidad</th>
-                        <th>Serial</th>
-                        <th>Observaciones</th>
-                        <th>Acciones</th>
+                        <th>Descripcion</th>
 
                     </tr>
                     {% for elemento in elementos %}
                     <tr>
-                        <td></td>                 
+                        <td>{{ elemento.nombreElemento }}</td>
+                        <td>{% if elemento.estadoElemento == 'D' %}
+                            Disponible
+            
+                            {% elif elemento.estadoElemento == 'G' %}
+                            Garantia
+            
+                            {% elif elemento.estadoElemento == 'B' %}
+                            Baja
+                            {% endif %}</td>
+                        <td>{{ elemento.fechaElemento }}</td>
+                        <td>{{ elemento.nombreElemento }}</td>
+                        <td>{{ elemento.cantidadElemento  }}</td>
+                        <td>${{ elemento.valorUnidadElemento }}</td>
+                        <td>{{ elemento.descripcionElemento  }}</td>                   
                     </tr>
                     {% endfor %}
                 </table>

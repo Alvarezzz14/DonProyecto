@@ -114,6 +114,20 @@ urlpatterns = [
         PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+
+    path(
+        "reporteelementosactivos/", 
+        views.reporteelementosactivos, name="reporteelementosactivos"
+    ),
+
+    path(
+        "reporteelementosprestamos/", 
+        views.reporteelementosactivos, name="reporteelementosprestamos"
+    ),
+    path(
+        "reporteelementosbajas/", 
+        views.reporteelementosbajas, name="reporteelementosbajas"
+    ),
 ]
 
 # Configuración para servir archivos multimedia en entorno de desarrollo

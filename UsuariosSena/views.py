@@ -1008,6 +1008,98 @@ def finalizarPrestamo_view(request, id):
     return render(
         request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
     )
+
+def reporteelementosactivos(request):
+    prestamos = Prestamo.objects.all()
+    for prestamo in prestamos:
+        prestamo.nombre_del_producto = prestamo.serialSenaElemento.producto.nombre
+        # Comprobación de la fecha de devolución PERO VA DE LA MANO CON LA LOGICA CUANDO SE FINALICE EL PRODUCTO
+        if prestamo.fechaDevolucion < timezone.now().date():
+            prestamo.estado = "FINALIZADO"
+        else:
+            prestamo.estado = "ACTIVO"
+
+    entregas = EntregaConsumible.objects.all()
+    usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
+    opcion_seleccionada = request.GET.get("opcion", None)
+    data = {
+        "opcion_seleccionada": opcion_seleccionada,
+        "Prestamos": prestamos,
+        "Entregas": entregas,
+        "usuarios": usuarios,
+    }
+
+    return render(
+         request,  "superAdmin/reporteelementosactivos.html" , data
+    )
+   
+def reporteelementosprestamo(request):
+
+    return render(
+         request,  "superAdmin/reporteelementosprestamos.html"
+    )
+   
+def reporteelementosbajas(request):
+
+    return render(
+         request,  "superAdmin/reporteelementosbajas.html"
+    )
+
     
     
 
+def generar_excel_prestamo(request):
+    buffer = BytesIO()
+    workbook = xlsxwriter.Workbook(buffer, {"in_memory": True})
+    worksheet = workbook.add_worksheet()
+
+    header_format = workbook.add_format(
+        {
+            "bold": True,
+            "align": "center",
+            "valign": "vcenter",
+            "bg_color": "gray",
+            "border": 1,
+        }
+    )
+
+    headers = [
+        "Nombre Producto",
+        "Categoría",
+        "Estado",
+        "Descripción",
+        "Valor Unidad",
+        "Serial",
+        "Observación",
+    ]
+
+    for col_num, header in enumerate(headers):
+        worksheet.write(0, col_num, header, header_format)
+
+    row_num = 1
+    for inventario in InventarioDevolutivo.objects.select_related("producto").all():
+        producto = inventario.producto
+        worksheet.write(row_num, 0, inventario.fecha_Registro.strftime("%Y-%m-%d"))
+        worksheet.write(row_num, 1, producto.nombre)
+        worksheet.write(row_num, 2, producto.categoria)
+        worksheet.write(row_num, 3, producto.estado)
+        worksheet.write(row_num, 4, producto.descripcion)
+        worksheet.write(row_num, 5, producto.valor_unidad)
+        worksheet.write(row_num, 6, inventario.serial)
+        worksheet.write(row_num, 7, inventario.observacion)
+        row_num += 1
+
+    for col_num, header in enumerate(headers):
+        worksheet.set_column(col_num, col_num, max(len(header), 15))
+
+    workbook.close()
+
+    response = HttpResponse(
+        buffer.getvalue(),
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response[
+        "Content-Disposition"
+    ] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.xlsx"'
+    buffer.close()
+    return response
