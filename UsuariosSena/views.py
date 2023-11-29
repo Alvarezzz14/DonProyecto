@@ -310,7 +310,7 @@ def editarElementosdevo_view(request, serial):
             consultar_elementodevo_url = reverse("consultarElementos_view")
             return redirect(f"{consultar_elementodevo_url}?opcion=elemento_devolutivo")
 
-        except ElementosDevolutivo.DoesNotExist as e:
+        except ProductosInventarioDevolutivo.DoesNotExist as e:
             # Manejar la excepción y mostrar un mensaje de error
             error_message = f"Elemento devolutivo no encontrado. Detalles: {e}"
             print(error_message)  # Imprimir mensaje de error en la consola
@@ -1014,15 +1014,29 @@ def finalizarPrestamo_view(request, id):
     )
 
 def reporteelementosactivos(request):
-    inventario = InventarioDevolutivo.objects.select_related("producto").all()
-    elementosconsu = ElementosConsumible.objects.all()
-    elementosdevo = InventarioDevolutivo.objects.select_related("producto").all()
-    opcion_seleccionada = request.GET.get('opcion', None)
-    data = {'opcion_seleccionada': opcion_seleccionada, "ElementosConsumibles": elementosconsu, "ElementosDevolutivos": elementosdevo}
+    fecha_inicio = request.GET.get('fecha_inicio', None)
+    fecha_fin = request.GET.get('fecha_fin', None)
+    
+    if fecha_inicio is None or fecha_fin is None:
+        
+        elementosconsu = ElementosConsumible.objects.all()
+        elementosdevo = InventarioDevolutivo.objects.select_related("producto").all()
+        data = {"ElementosConsumibles": elementosconsu, "ElementosDevolutivos": elementosdevo}
 
-    return render(
-         request,  "superAdmin/reporteelementosactivos.html" , data
-    )
+        return render(
+            request,  "superAdmin/reporteelementosactivos.html" , data
+        )
+        
+    if request.method == 'GET':
+        
+        elementosconsu = ElementosConsumible.objects.filter(fechaAdquisicion__range=[fecha_inicio, fecha_fin])
+        elementosdevo = InventarioDevolutivo.objects.select_related("producto").filter(fecha_Registro__range=[fecha_inicio, fecha_fin])
+        data = {'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin, "ElementosConsumibles": elementosconsu, "ElementosDevolutivos": elementosdevo}    
+        
+        return render(
+        request,  "superAdmin/reporteelementosactivos.html" , data
+        )
+    
    
 def reporteelementosprestamo(request):
 
