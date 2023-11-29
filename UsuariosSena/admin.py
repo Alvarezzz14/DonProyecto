@@ -13,8 +13,10 @@ from .choices import roles, cuentadantes
 class ServicioAdmin(admin.ModelAdmin):
     readonly_fields = ("created", "update")
 
-
-admin.site.register(UsuariosSena)
+@admin.register(UsuariosSena)
+class UsuariosSenaAdmin(admin.ModelAdmin):
+    list_display = ('numeroIdentificacion', 'email', 'password')
+#admin.site.register(UsuariosSena)
 admin.site.register(InventarioDevolutivo)
 admin.site.register(ProductosInventarioDevolutivo)
 admin.site.register(ElementosConsumible)

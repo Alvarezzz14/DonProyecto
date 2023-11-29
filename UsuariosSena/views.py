@@ -16,7 +16,7 @@ from .models import (
     EntregaConsumible,
     InventarioDevolutivo
 )
-from django.http import JsonResponse
+from django.http import JsonResponse 
 from django.views.decorators.http import require_POST
 
 #decoradores para uso de Permisos en las visats de usuario y de inicia de sesion
@@ -202,11 +202,13 @@ def registroUsuario_view(request):
 
 #@login_required
 #@verificar_superadmin
-def editarUsuario_view(request, id):
+def editarUsuario_view(request, numeroIdentificacion):
+    print(numeroIdentificacion)
     try:
-        user = UsuariosSena.objects.get(id=id)
+        user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
         datos = {"user": user}
         # Redirigir a la vista consultarUsuario_view para recargar los datos
+        print(datos)
         return render(request, "superAdmin/editarUsuario.html", datos)
     except UsuariosSena.DoesNotExist:
         messages.warning(request, "No existe registro")
@@ -319,7 +321,7 @@ def editarElementosdevo_view(request, serial):
 
 #@login_required
 #@verificar_superadmin
-def actualizarUsuario_view(request, id):
+def actualizarUsuario_view(request, numeroIdentificacion):
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
         apellidoVar = request.POST.get("Apellidos")
@@ -336,8 +338,11 @@ def actualizarUsuario_view(request, id):
         validacionContraSenaVar = request.POST.get("validacionContraSena")
         fotoUsuarioVar = request.FILES.get("fotoUsuario")
 
-        user = UsuariosSena.objects.get(id=id)
-
+        user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
+        if passwordVar != validacionContraSenaVar:
+            messages.warning(request, "La contraseña no coincide")
+            return redirect("consultarUsuario_view")
+        password_cifrada = make_password(passwordVar)
         user.nombres = nombreVar
         user.apellidos = apellidoVar
         user.tipoIdentificacion = tipoIdentificacionVar
@@ -349,8 +354,7 @@ def actualizarUsuario_view(request, id):
         user.tipoContrato = tipoContratoVar
         user.duracionContrato = duracionContratoVar
         user.is_active = estadoUsuariovar == "A"  # 'A' para activo, 'I' para inactivo
-        user.password = passwordVar
-        user.validacionContraSena = validacionContraSenaVar
+        user.password = password_cifrada
         user.fotoUsuario = fotoUsuarioVar
         user.save()
         messages.success(request, "Usuario actualizado con Exito")  # mensaje de alerta
@@ -363,10 +367,10 @@ def actualizarUsuario_view(request, id):
 
 #@login_required
 #@verificar_superadmin
-def eliminarUsuario_view(request, id):
+def eliminarUsuario_view(request, numeroIdentificacion):
     try:
         # Busca el usuario por ID
-        user = UsuariosSena.objects.get(id=id)
+        user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
 
         # Desactiva el usuario
         user.is_active = False

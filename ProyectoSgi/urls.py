@@ -19,21 +19,17 @@ from django.urls import path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include(("UsuariosSena.urls", "usu"), namespace="usu")),
-    path("", views.login_view, name="login_view"),
+    path("login/", views.login_view, name="login_view"),
     path("dashboard/", views.homedash, name="homedash"),
     path("usuariodash/", views.usuariodash, name="usuariodash"),
     path("inventariodash/", views.inventariodash, name="inventariodash"),
     path("elementosdash/", views.elementosdash, name="elementosdash"),
     path("transacciondash/", views.transacciondash, name="transacciondash"),
     path("regUsuario/", views.registroUsuario_view, name="registroUsuario_view"),
-    path(
-        "editarUsuario/<int:id>/", views.editarUsuario_view, name="editarUsuario_view"
+    path("editarUsuario/<int:numeroIdentificacion>/", views.editarUsuario_view, name="editarUsuario_view"
     ),
     
-    path(
-        "editarElementoconsu/<int:id>/",
-        views.editarElementosconsu_view, 
-        name="editarElementosconsu_view"
+    path("editarElementoconsu/<int:id>/", views.editarElementosconsu_view, name="editarElementosconsu_view"
     ),
     
     path(
@@ -57,7 +53,7 @@ urlpatterns = [
         "editarEntrega/<int:id>/", views.editarEntrega_view, name="editarEntrega_view"
     ),
     path(
-        "actualizarUsuario/<int:id>",
+        "actualizarUsuario/<int:numeroIdentificacion>",
         views.actualizarUsuario_view,
         name="actualizarUsuario_view",
     ),
@@ -72,7 +68,7 @@ urlpatterns = [
         name="formEntregasConsumibles_view",
     ),
     path(
-        "eliminarUsuario/<int:id>/",
+        "eliminarUsuario/<int:numeroIdentificacion>/",
         views.eliminarUsuario_view,
         name="eliminarUsuario_view",
     ),

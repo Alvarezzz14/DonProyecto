@@ -251,7 +251,7 @@ Consultar Usuarios
 
                 {% if request.user.cuentadante == 'superAdmin' %}
                 <button onclick="">
-                  <a href="/editarUsuario/{{usuario.id}}">
+                  <a href="/editarUsuario/{{usuario.numeroIdentificacion}}">
                     <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarUsuario.html"
                       class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

@@ -19,7 +19,7 @@
     <!-- Inicio del Forumlario-->
 
     <div class="signupFrm">
-        <form action="/actualizarUsuario/{{user.id}}" class="form" method="post">
+        <form action="/actualizarUsuario/{{user.numeroIdentificacion}}" class="form" method="post">
             <h1 class="title">Editar Usuarios</h1>
             {% csrf_token %}
 
@@ -186,11 +186,11 @@
 
                 </div>
                 <div class="inputContainer">
-                    <input type="password" class="inputform" placeholder="Contraseña" name="contraSena" value="{{user.password}}" required>
+                    <input type="password" class="inputform" placeholder="Contraseña" name="contraSena"  required>
                     <label for="contraSena" class="labelform">Contraseña</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="password" class="inputform" placeholder="a" value="{{user.validacionContraSena}}" required>
+                    <input type="password" class="inputform" placeholder="a" name="validacionContraSena" required>
                     <label for="validacionContraSena" class="labelform" name="validacionContraSena">Repetir Contraseña</label>
                 </div>
                 <div class="selectorimagen">
