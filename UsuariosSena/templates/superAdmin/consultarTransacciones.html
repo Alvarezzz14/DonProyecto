@@ -17,6 +17,25 @@ Consultar Transaciones
 <div class="bg-white m-4 shadow-xl p-4 rounded-md ">
   <h1 class="text-[1.5rem] m-2 mb-10 font-extrabold">Consultar Prestamos/Entregas</h1>
 
+  <!--Barra de Busqueda-->
+
+  <div class="flex my-10 items-center w-full h-[1rem] max-w-md " x-data="{ search: '' }">
+    <div class="w-full ">
+      <input type="search" class="w-full px-4 py-1 text-gray-800 rounded rounded-lg focus:outline-orange-500" id="filtroEdad"
+        placeholder="Filtrar por: Prestamo... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
+    </div>
+    <div>
+      <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
+        :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
+        :disabled="search.length == 0">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
   <!--Barra de Opcion de Categoria Elemento-->
 
   <form method="GET" action="{% url 'consultarTransacciones' %}">
@@ -43,24 +62,6 @@ Consultar Transaciones
 
   </form>
 
-  <!--Barra de Busqueda-->
-
-  <div class="flex my-10 items-center w-full h-[1rem] max-w-md " x-data="{ search: '' }">
-    <div class="w-full ">
-      <input type="search" class="w-full px-4 py-1 text-gray-800 rounded rounded-lg focus:outline-orange-500" id="filtroEdad"
-        placeholder="Filtrar por: Prestamo... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
-    </div>
-    <div>
-      <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
-        :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
-        :disabled="search.length == 0">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-      </button>
-    </div>
-  </div>
 
   <div class="flex flex-col overflow-x-auto overflow-hidden mt-8">
     <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -138,26 +139,38 @@ Consultar Transaciones
                 </td>
 
                 <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.valorUnidadElemento }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">${{ Prestamos.valorUnidadElemento }}
 
                   </div>
                 </td>
 
-                <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.estado }}
-
-                  </div>
+                <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
+                  {% if Prestamos.estado == 'ACTIVO' %}
+                  <span
+                    class="text-center inline-flex p-2 text-[0.8rem] font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
+                    Activo</span>
+                  {% elif Prestamos.estado == 'VENCIDO' %}
+                  <span
+                    class="text-center inline-flex p-2 text-[0.8rem] font-semibold leading-5 text-red-800 bg-red-100 rounded-full">
+                    Vencido</span>
+                  {% elif Prestamos.estado == 'FINALIZADO' %}
+                  <span
+                    class="text-center inline-flex p-2 text-[0.8rem] font-semibold leading-5 text-slate-800 bg-slate-100 rounded-full">
+                    Finalizado</span>
+                  {% endif %}
                 </td>
                 <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
                   <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.observacionesPrestamo }}
 
                   </div>
                 </td>
+
+
                 <!--Botones de Visualizar Editar y ELiminar-->
+
                 <td
                   class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
-                  <button title="Viualizar Prestamo"
-                    onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega}} , {{Prestamos.nombreRecibe}},  {{Prestamos.nombreElemento}}, {{ Prestamos.serialSenaElemento }}, {{ Prestamos.cantidadElemento }}, {{ Prestamos.valorUnidadElemento }},{{ Prestamos.valorTotalElemento }}, {{Prestamos.estadoPrestamo }},  ')"
+                  <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega}} , {{Prestamos.nombreRecibe}},  {{Prestamos.nombre_del_producto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{Prestamos.observacionesPrestamo }}, {{Prestamos.estado }}  ')"
                     ,>
                     <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64"
                       xmlns="http://www.w3.org/2000/svg">
@@ -170,6 +183,10 @@ Consultar Transaciones
                         fill="#231f20" />
                     </svg>
                   </button>
+
+                  
+                  {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD' %}
+                    
                   <button onclick="" title="Editar Prestamo">
                     <a href="/editarPrestamo/{{Prestamos.id}}">
                       <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarPrestamo.html"
@@ -186,6 +203,7 @@ Consultar Transaciones
                       <img src="{% static 'img/finalizar.png' %}" width="30px" alt="">
                     </button>
                   </form>
+                  {% endif %}
                 </td>
               </tr>
               {% endfor %}
@@ -209,15 +227,14 @@ Consultar Transaciones
       <span class="close" onclick="closeModal()">&times;</span>
     </thead>
     <div id="userData">
-      <h1> Información del prestamo</h1>
-      <table class="tabla">
+      <table>
         <tr>
-          <th>Fecha de Entrega:</th>
-          <td><input type="datetime" id="entregaField" readonly></td>
+          <th>Fecha de entrega:</th>
+          <td><input type="text" id="entregaField" readonly></td>
         </tr>
         <tr>
           <th>Fecha de Devolucion:</th>
-          <td><input type="datetime" id="devolucionField" readonly></td>
+          <td><input type="text" id="devolucionField" readonly></td>
         </tr>
         <tr>
           <th>Emisor:</th>
@@ -228,18 +245,31 @@ Consultar Transaciones
           <td><input type="text" id="adquirienteField" readonly></td>
         </tr>
         <tr>
-          <th>Elemento:</th>
+          <th>Nombre Elemento:</th>
           <td><input type="text" id="elementoField" readonly></td>
         </tr>
         <tr>
-          <th>Estado del prestamo:</th>
+          <th>Serial Elemento:</th>
+          <td><input type="text" id="serialField" readonly></td>
+        </tr>
+        <tr>
+          <th>Valor Elemento:</th>
+          <td><input type="text" id="valorField" readonly></td>
+        </tr>
+        <tr>
+          <th>Observaciones:</th>
+          <td><input type="text" id="observacionesField" readonly></td>
+        </tr>
+        <tr>
+          <th>Estado Prestamo:</th>
           <td><input type="text" id="estadoField" readonly></td>
         </tr>
       </table>
     </div>
   </div>
 </div>
-</section>
+
+
 
 {% elif opcion_seleccionada == 'entregas' %}
 <section class="container  rounded-lg p-4 overflow-hidden m-5 ">
@@ -397,21 +427,52 @@ Consultar Transaciones
 
     const userDataArray = userData.split(', ');
 
-    const entregaField = document.getElementById('entregaField');
-    const emisorField = document.getElementById('emisorField');
-    const adquirienteField = document.getElementById('adquirienteField');
-    const serialField = document.getElementById('serialField');
-    const cantidadField = document.getElementById('cantidadField');
-    const observacionesField = document.getElementById('observacionesField');
+{% if opcion_seleccionada == 'prestamo' %}
 
-    entregaField.value = userDataArray[0];
-    emisorField.value = userDataArray[1];
-    adquirienteField.value = userDataArray[2];
-    serialField.value = userDataArray[3];
-    cantidadField.value = userDataArray[4];
-    observacionesField.value = userDataArray[5];
-    modal.style.display = 'block';
+
+  const entregaField = document.getElementById('entregaField');
+  const devolucionField = document.getElementById('devolucionField');
+  const emisorField = document.getElementById('emisorField');
+  const adquirienteField = document.getElementById('adquirienteField');
+  const elementoField = document.getElementById('elementoField');
+  const serialField = document.getElementById('serialField');
+  const valorField = document.getElementById('valorField');
+  const observacionesField = document.getElementById('observacionesField');
+  const estadoField = document.getElementById('estadoField');
+
+
+  entregaField.value = userDataArray[0];
+  devolucionField.value = userDataArray[1];
+  emisorField.value = userDataArray[2];
+  adquirienteField.value = userDataArray[3];
+  elementoField.value = userDataArray[4];
+  serialField.value = userDataArray[5];
+  valorField.value = userDataArray[6];
+  observacionesField.value = userDataArray[7];
+  estadoField.value = userDataArray[8];
+  modal.style.display = 'block';
   }
+
+{% elif opcion_seleccionada == 'entregas' %}
+  const entregaField = document.getElementById('entregaField');
+  const emisorField = document.getElementById('emisorField');
+  const adquirienteField = document.getElementById('adquirienteField');
+  const elementoField = document.getElementById('elementoField');
+  const cantidadField = document.getElementById('cantidadField');
+  const observacionesField = document.getElementById('observacionesField');
+
+
+  entregaField.value = userDataArray[0];
+  emisorField.value = userDataArray[1];
+  adquirienteField.value = userDataArray[2];
+  elementoField.value = userDataArray[3];
+  cantidadField.value = userDataArray[4];
+  observacionesField.value = userDataArray[5];
+  modal.style.display = 'block';
+
+}
+
+{% endif %}
 
   // Función para cerrar el modal
   function closeModal() {
