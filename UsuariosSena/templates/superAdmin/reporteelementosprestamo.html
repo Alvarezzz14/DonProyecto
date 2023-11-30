@@ -18,20 +18,23 @@
         <div class="reporte_inventario">
             <h1>Elementos en prestamo</h1>
         </div>
-        <div class="tabla_dinamica">
-            <div class="fecha_reporte">
-                <div class="fechas">
-                    <label for="fecha_inicio">Fecha inicio</label>
-                    <input type="date" placeholder="fecha inicio">
+        <form method="GET" action="{% url 'reporteelementosprestamos' %}">
+            <div class="tabla_dinamica">
+                <div class="fecha_reporte">
+                    <div class="fechas">
+                        <label for="fecha_inicio">Fecha inicio</label>
+                        <input type="date" name="fecha_inicio" placeholder="fecha inicio">
+                    </div>
+                    
+                    <div class="fechas">
+                        <label for="fecha_fin">Fecha fin</label>
+                        <input type="date" placeholder="fecha fin" name="fecha_fin">
+                    </div>
+                    <a href="#"><button type="submit" class="boton_reporte">Filtrar Fecha</button></a>
+    
+                    <a href="{% url 'generar_pdf' %}"><button class="boton_reporte">Generar reporte</button></a>
                 </div>
-                
-                <div class="fechas">
-                    <label for="fecha_fin">Fecha fin</label>
-                    <input type="date" placeholder="fecha fin">
-                </div>
-                <a href="{% url 'generar_pdf' %}"><button class="boton_reporte">Generar reporte</button></a>
-            </div>
-        
+            </form> 
 
         
         
@@ -46,20 +49,21 @@
                         <th>Emisor</th>
                         <th>Adquiriente</th>                        
                         <th>Valor unidad</th>
-                        <th>Descripcion</th>
+                        <th>Observacion</th>
 
                     </tr>
                     {% for prestamo in prestamos %}
                     <tr>
                         <td>{{ prestamo.fechaEntrega }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ prestamo.fechaDevolucion }}</td>
+                        <td>{{ prestamo.nombreElemento }}</td>
+                        <td>{{ prestamo.serialSenaElemento }}</td>
+                        <td>{{ prestamo.estadoPrestamo }}</td>
+                        <td>{{ prestamo.nombreEntrega }}</td>
+                        <td>{{ prestamo.nombreRecibe }}</td>
+                        <td>{{ prestamo.valorUnidadElemento }}</td>
+                        <td>{{ prestamo.observacionesPrestamo }}</td>
+                        
 
                     </tr>
                     {% endfor %}

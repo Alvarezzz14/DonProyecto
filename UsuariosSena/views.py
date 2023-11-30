@@ -1161,13 +1161,25 @@ def reporteelementosactivos(request):
     
    
 def reporteelementosprestamo(request):
+    fecha_inicio = request.GET.get('fecha_inicio', None)
+    fecha_fin = request.GET.get('fecha_fin', None)
     
-    prestamos = Prestamo.objects.all()
+    if fecha_inicio is None or fecha_fin is None:
+        
+        prestamos = Prestamo.objects.all()
+        
+        data = {"prestamos": prestamos}
+        return render(
+            request,  "superAdmin/reporteelementosprestamo.html" , data
+        )
     
-    data = {"Prestamos": prestamos}
-    return render(
-         request,  "superAdmin/reporteelementosprestamo.html" , data
-    )
+    if request.method == 'GET':
+        
+        prestamos = Prestamo.objects.filter(fechaEntrega__range =[fecha_inicio, fecha_fin])
+        data = {'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin, "prestamos": prestamos}
+        
+        return render (request, "superAdmin/reporteelementosprestamo.html" , data) 
+        
    
    
 def reporteelementosbajas(request):
