@@ -215,7 +215,6 @@ def editarUsuario_view(request, numeroIdentificacion):
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
         datos = {"user": user}
         # Redirigir a la vista consultarUsuario_view para recargar los datos
-        print(datos)
         return render(request, "superAdmin/editarUsuario.html", datos)
     except UsuariosSena.DoesNotExist:
         messages.warning(request, "No existe registro")
@@ -370,7 +369,6 @@ def eliminarUsuario_view(request, numeroIdentificacion):
     try:
         # Busca el usuario por ID
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
-
         # Desactiva el usuario
         user.is_active = False
         user.save()

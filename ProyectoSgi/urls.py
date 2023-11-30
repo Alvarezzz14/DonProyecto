@@ -19,7 +19,7 @@ from django.urls import path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include(("UsuariosSena.urls", "usu"), namespace="usu")),
-    path("login/", views.login_view, name="login_view"),
+    path("", views.login_view, name="login_view"),
     path("dashboard/", views.homedash, name="homedash"),
     path("usuariodash/", views.usuariodash, name="usuariodash"),
     path("inventariodash/", views.inventariodash, name="inventariodash"),
@@ -67,10 +67,7 @@ urlpatterns = [
         views.formEntregasConsumibles_view,
         name="formEntregasConsumibles_view",
     ),
-    path(
-        "eliminarUsuario/<int:numeroIdentificacion>/",
-        views.eliminarUsuario_view,
-        name="eliminarUsuario_view",
+    path("eliminarUsuario/<int:numeroIdentificacion>/", views.eliminarUsuario_view, name="eliminarUsuario_view",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("calendario/", views.calendario, name="calendario"),
