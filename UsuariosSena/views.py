@@ -618,8 +618,9 @@ def formEntregasConsumibles_view(request):
         responsable_Entrega_nombre = request.POST.get("responsable_Entrega")
         nombre_solicitante_nombre = request.POST.get("nombre_solicitante")
         idC_id = request.POST.get("idC")  # Este es el ID del InventarioConsumible
-        cantidad_prestada = request.POST.get("cantidadElemento")
-        observaciones_prestamo = request.POST.get("observaciones_prestamo")
+        nombreProducto = request.POST.get("nombreProducto")
+        cantidad_prestada = request.POST.get("cantidadOtorgada")
+        observaciones_prestamo = request.POST.get("observacionesEntrega")
         firmaDigital = (
             request.FILES.get("firmaDigital")
             if "firmaDigital" in request.FILES
@@ -677,6 +678,7 @@ def formEntregasConsumibles_view(request):
                     fecha_entrega=timezone.now(),
                     responsable_Entrega=responsable_Entrega,
                     nombre_solicitante=nombre_solicitante,
+                    nombreProducto=nombreProducto,
                     idC=inventarioConsumible,
                     cantidad_prestada=cantidad_solicitada,
                     observaciones_prestamo=observaciones_prestamo,
@@ -1021,23 +1023,23 @@ def editarPrestamo_view(request, id):
         # Obtener datos del formulario
         fecha_entrega = request.POST.get("txt_fechaentrega")
         fecha_devolucion = request.POST.get("txt_fechaDevolucion")
-        nombre_entrega = request.POST.get("txt_nombreEntrega")
-        nombre_recibe = request.POST.get("txt_nombreRecibe")
-        nombre_elemento = request.POST.get("txt_nombreElemento")
-        cantidad_elemento = request.POST.get("txt_cantidadElemento")
+        # nombre_entrega = request.POST.get("txt_nombreEntrega")
+        # nombre_recibe = request.POST.get("txt_nombreRecibe")
+        nombre_elemento = request.POST.get("txt_nombreElemento")        
         valor_unidad = request.POST.get("txt_valorUnidadElemento")
         observaciones_prestamo = request.POST.get("txt_observacionesPrestamo")
+        estado_prestamo = request.POST.get("txt_estado_prestamo")        
 
         try:
             # Actualizar los campos del objeto Prestamo con los datos del formulario
             prestamo.fechaEntrega = fecha_entrega
             prestamo.fechaDevolucion = fecha_devolucion
             prestamo.nombreEntrega = nombre_entrega
-            prestamo.nombreRecibe = nombre_recibe
-            prestamo.nombreElemento = nombre_elemento
-            prestamo.cantidadElemento = cantidad_elemento
+            # prestamo.nombreRecibe = nombre_recibe
+            # prestamo.nombreElemento = nombre_elemento            
             prestamo.valorUnidadElemento = valor_unidad
             prestamo.observacionesPrestamo = observaciones_prestamo
+            prestamo.estadoPrestamo = observaciones_prestamo
             # Resto de la lógica de actualización
 
             prestamo.save()

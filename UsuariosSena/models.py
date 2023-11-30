@@ -83,7 +83,7 @@ class UsuariosSena(AbstractUser):
 
 # ----Informacion General Producto (Repetitiva + Sumatoria Productos)---------------------------------------------------------------------------
 class ProductosInventarioDevolutivo(models.Model):
-    nombre = models.CharField(max_length=75)
+    nombre = models.CharField(max_length=75, unique=True)
     categoria = models.CharField(max_length=25, choices=categoriaElemento, default="C")
     estado = models.CharField(max_length=25, choices=estado, default="D")
     descripcion = models.CharField(max_length=255)
@@ -110,7 +110,7 @@ class InventarioDevolutivo(models.Model):
 
 # -------------------------NORMALIZACION TABLA (ElementosConsumible)------------------------------------------------------
 class ProductosInventarioConsumible(models.Model):
-    nombreElemento = models.CharField(max_length=25)
+    nombreElemento = models.CharField(max_length=25, unique=True)
     categoriaElemento = models.CharField(
         max_length=25, choices=[("Devolutivo", "Devolutivo"), ("Consumible", "Consumible")],
     )
@@ -167,18 +167,23 @@ class Prestamo(models.Model):
         null=True,
         to_field="numeroIdentificacion",
     )
+    nombreProducto = models.ForeignKey(
+        "ProductosInventarioDevolutivo",
+        related_name="prestamos_elemento",
+        on_delete=models.SET_NULL,
+        null=True,
+        to_field="nombre",
+    )
     serialSenaElemento = models.ForeignKey(
         "InventarioDevolutivo", on_delete=models.CASCADE, related_name="prestamos"
-    )
-    # # MAS ADELANTE PROBABLEMENTE LO DEBA QUITAR
-    # cantidadElemento = models.IntegerField()
-    valorUnidadElemento = models.IntegerField()
-    # valorTotalElemento = models.IntegerField(blank=True, null=True)
+    )    
+    estadoPrestamo =models.CharField(max_length=25)    
+    valorUnidadElemento = models.IntegerField()    
     firmaDigital = models.ImageField(upload_to="firmaDigital/", blank=True, null=True)
     observacionesPrestamo = models.TextField()
 
     def __str__(self):
-        return f"Prestamo devolutivo de {self.cantidadElemento} unidades del producto {self.serialSenaElemento.producto.nombre}"
+        return f"Prestamo del producto {self.serialSenaElemento.producto.nombre}"
 
     class Meta:
         verbose_name = "Préstamo"
@@ -201,12 +206,19 @@ class EntregaConsumible(models.Model):
         null=True,
         to_field="numeroIdentificacion",
     )
+    nombreProducto = models.ForeignKey(
+        "ProductosInventarioConsumible",
+        related_name="entregas_elemento",
+        on_delete=models.SET_NULL,
+        null=True,
+        to_field="nombreElemento",
+    )
     idC = models.ForeignKey(
         "InventarioConsumible", on_delete=models.CASCADE, related_name="entregas"
     )
-    cantidad_prestada = models.PositiveIntegerField()
-    observaciones_prestamo = models.TextField()
+    cantidadOtorgada = models.PositiveIntegerField()
+    observacionesEntrega = models.TextField()
     firmaDigital = models.ImageField(upload_to="firmaDigital/", blank=True, null=True)
 
     def __str__(self):
-        return self.nombreElemento
+        return self.nombreProducto

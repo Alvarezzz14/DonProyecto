@@ -44,11 +44,7 @@
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="©" name="txt_nombreElemento" value="{{prestamo.serialSenaElemento}}" required readonly>
                     <label for="nombreElemento" class="labelform">Elemento</label>
-                </div>
-                <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="txt_cantidadElemento" value="1" required>
-                    <label for="cantidadElemento" class="labelform">Cantidad Prestada </label>
-                </div>
+                </div>                
             </div>
 
             <div class="container-1">                                
@@ -59,9 +55,15 @@
                 </div>
             
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="txt_estado_prestamo" value="{{prestamo.estadoPrestamo}}" required readonly>
+                    <select class="inputform" name="txt_estado_prestamo" required readonly>
+                        <option value="ACTIVO" {% if prestamo.estadoPrestamo == 'ACTIVO' %}selected{% endif %}>ACTIVO</option>
+                        <option value="VENCIDO" {% if prestamo.estadoPrestamo == 'VENCIDO' %}selected{% endif %}>VENCIDO</option>
+                        <option value="FINALIZADO" {% if prestamo.estadoPrestamo == 'FINALIZADO' %}selected{% endif %}>FINALIZADO</option>
+
+                    </select>
                     <label for="estado_prestamo" class="labelform">Estado</label>
                 </div>
+                
                 <div class="inputContainer">
                     <input type="text" class="inputform" placeholder="a" name="txt_observacionesPrestamo" value="{{prestamo.observacionesPrestamo}}" required>
                     <label for="observacionesPrestamo" class="labelform">Observaciones</label>
