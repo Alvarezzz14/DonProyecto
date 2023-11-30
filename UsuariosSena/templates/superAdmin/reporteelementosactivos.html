@@ -56,11 +56,11 @@
                     </tr>
                     {% for elemento in ElementosDevolutivos %}
                         
-                        {% if elemento.producto.estado == 'D' %}
+                        {% if elemento.producto.estado == 'D' or elemento.producto.estado == 'Disponible' %}
 
                     <tr>
                         <td>{{ elemento.producto.nombre }}</td>
-                        {% if elemento.producto.categoria == 'D' %}
+                        {% if elemento.producto.categoria == 'D' or elemento.producto.categoria == 'Devolutivo' %}
                         <td> Devolutivo </td>
                         {% endif %}
                         <td>Disponible</td>
@@ -75,11 +75,11 @@
 
                     {% for elemento in ElementosConsumibles %}
                         
-                    {% if elemento.productoConsumible.estadoElemento == 'D' %}
+                    {% if elemento.productoConsumible.estadoElemento == 'D' or elemento.productoConsumible.estadoElemento == 'Disponible' %}
 
                 <tr>
                     <td>{{ elemento.productoConsumible.nombreElemento }}</td>
-                    {% if elemento.productoConsumible.categoriaElemento == 'C' %}
+                    {% if elemento.productoConsumible.categoriaElemento == 'C' or elemento.productoConsumible.categoriaElemento == 'Consumible' %}
                     <td> Consumible </td>
                     {% endif %}
                     <td>Disponible</td>

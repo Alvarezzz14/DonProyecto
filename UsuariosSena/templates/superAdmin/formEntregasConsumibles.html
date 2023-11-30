@@ -10,7 +10,7 @@
 
 
 {% block title %}
-Formulario Prestamos
+Formulario Entregas
 {% endblock title %}
 
 <!-- Inicio del Forumlario-->
@@ -18,7 +18,7 @@ Formulario Prestamos
 
 <div class="signupFrm">
     <form action="/formEntregasConsumibles/" class="form" method="post">
-        <h1 class="title">Crear Consumible</h1>
+        <h1 class="title">Entregas</h1>
 
         {% csrf_token %}
 
@@ -70,7 +70,7 @@ Formulario Prestamos
         <div class="container-1">
             <div class="inputContainerIDelemento">
                 <input type="text" class="inputform" placeholder="nombreProducto" id="nombreProductoInput"
-                    name="nombreProducto" value="{{ form_data.nombreProducto|default:'' }}" autocomplete="off" readonly
+                    name="nombreProducto" value="{{ form_data.nombreElemento|default:'' }}" autocomplete="off" readonly
                     required>
                 <label for="" class="labelform">Nombre Elemento</label>
             </div>

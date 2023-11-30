@@ -107,27 +107,27 @@ Consultar Elementos
                 </div>
               </td>
               <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                {% if elemento.productoConsumible.categoriaElemento == 'C' %}
+                {% if elemento.productoConsumible.categoriaElemento == 'C' or elemento.productoConsumible.categoriaElemento == 'Consumible'  %}
                 <span
                   class="text-center inline-flex px-2 text-[0.6rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
                   Consumible</span>
-                {% elif elemento.productoConsumible.categoriaElemento == 'D' %}
+                {% elif elemento.productoConsumible.categoriaElemento == 'D' or elemento.productoConsumible.categoriaElemento == 'Devolutivo' %}
                 <span
                   class="text-center inline-flex px-2 text-[0.6rem] font-semibold leading-5 text-purple-800 bg-purple-100 rounded-full">
                   Devolutivo</span>
                 {% endif %}
               </td>
               <td class=" px-3 py-2 whitespace-no-wrap  border-b border-gray-200">
-                {% if elemento.productoConsumible.estadoElemento == 'D' %}
+                {% if elemento.productoConsumible.estadoElemento == 'D' or elemento.productoConsumible.estadoElemento == 'Disponible' %}
                 <span
                   class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-green-800 bg-green-100 rounded-full">Disponible</span>
-                {% elif elemento.productoConsumible.estadoElemento == 'G' %}
+                {% elif elemento.productoConsumible.estadoElemento == 'G' or elemento.productoConsumible.estadoElemento == 'Garantia' %}
                 <span
                   class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-yellow-800 bg-yellow-100 rounded-full">Garantia</span>
-                {% elif elemento.productoConsumible.estadoElemento == 'B' %}
+                {% elif elemento.productoConsumible.estadoElemento == 'B' or elemento.productoConsumible.estadoElemento == 'Baja' %}
                 <span
                   class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-orange-800 bg-orange-100 rounded-full">Baja</span>
-                {% elif elemento.productoConsumible.estadoElemento == 'P' %}
+                {% elif elemento.productoConsumible.estadoElemento == 'P' or elemento.productoConsumible.estadoElemento == 'Prestamo' %}
                 <span
                   class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-orange-800 bg-orange-100 rounded-full">Entregado</span>
                 {% endif %}
@@ -190,11 +190,8 @@ Consultar Elementos
                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
                 </button>
-                <button  title="Inhabilitar Elemento" class="" data-id=""> 
-                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
+                <button  title="Inhabilitar Elemento" class="" data-id="">   
+                    <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">                
                 </button>
                 
                 {% endif %}
@@ -254,7 +251,7 @@ Consultar Elementos
 
 {% elif opcion_seleccionada == 'elementosdevo' %} 
 <!--Datatable se crea tabla con scrool maximo del contenedor disponible, con 12 enunciados en la cabecera-->
-      <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
+      <table class="table-auto  overflow-scroll-hidden w-max" id="tablaPersonas"> 
         <thead>
           <tr>
             <th class="px-2 py-1 text-xs font-semibold leading-4 tracking-wider text-center text-black-500 uppercase border-b border-gray-200 bg-orange-50">
@@ -291,27 +288,27 @@ Consultar Elementos
               </div>
             </td>
             <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-              {% if elemento.producto.categoria == 'C' %}
+              {% if elemento.producto.categoria == 'C' or elemento.producto.categoria == 'Consumible'  %}
               <span
                 class="text-center inline-flex px-2 text-[0.6rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
                 Consumible</span>
-              {% elif elemento.producto.categoria == 'D' %}
+              {% elif elemento.producto.categoria == 'D' or  elemento.producto.categoria == 'Devolutivo' %}
               <span
                 class="text-center inline-flex px-2 text-[0.6rem] font-semibold leading-5 text-purple-800 bg-purple-100 rounded-full">
                 Devolutivo</span>
               {% endif %}
             </td>
             <td class=" px-3 py-2 whitespace-no-wrap  border-b border-gray-200">
-              {% if elemento.producto.estado == 'D' %}
+              {% if elemento.producto.estado == 'D' or  elemento.producto.estado == 'Disponible' %}
               <span
                 class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-green-800 bg-green-100 rounded-full">Disponible</span>
-              {% elif elemento.producto.estado == 'G' %}
+              {% elif elemento.producto.estado == 'G' or  elemento.producto.estado == 'Garantia' %}
               <span
                 class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-yellow-800 bg-yellow-100 rounded-full">Garantia</span>
-              {% elif elemento.producto.estado == 'B' %}
+              {% elif elemento.producto.estado == 'B' or  elemento.producto.estado == 'Baja' %}
               <span
                 class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-orange-800 bg-orange-100 rounded-full">Baja</span>
-              {% elif elemento.producto.estado == 'P' %}
+              {% elif elemento.producto.estado == 'P' or  elemento.producto.estado == 'Prestamo' %}
               <span
                 class="inline-flex px-2 text-[0.6rem] font-medium leading-5 text-orange-800 bg-orange-100 rounded-full">Prestamo</span>
               {% endif %}
@@ -382,7 +379,7 @@ Consultar Elementos
           {% endfor %}
           </tbody>
         </table>
-        
+
         <div id="userModal" class="modal">
           <div class="modal-content">
             <thead>
@@ -425,7 +422,6 @@ Consultar Elementos
               </table>
             </div>
           </div>
-        </div>
         
 {% endif %}         
       </div>
@@ -491,7 +487,7 @@ Consultar Elementos
       </table>
     </div>
   </div>
-</div>
+
 
 {% endblock %}
 {% block extrajs %}

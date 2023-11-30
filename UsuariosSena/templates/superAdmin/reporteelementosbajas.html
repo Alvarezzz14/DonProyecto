@@ -18,19 +18,23 @@
         <div class="reporte_inventario">
             <h1>Elementos de bajas</h1>
         </div>
+        <form method="GET" action="{% url 'reporteelementosbajas' %}">
         <div class="tabla_dinamica">
             <div class="fecha_reporte">
                 <div class="fechas">
                     <label for="fecha_inicio">Fecha inicio</label>
-                    <input type="date" placeholder="fecha inicio">
+                    <input type="date" name="fecha_inicio" placeholder="fecha inicio">
                 </div>
                 
                 <div class="fechas">
                     <label for="fecha_fin">Fecha fin</label>
-                    <input type="date" placeholder="fecha fin">
+                    <input type="date" placeholder="fecha fin" name="fecha_fin">
                 </div>
+                <a href="#"><button type="submit" class="boton_reporte">Filtrar Fecha</button></a>
+
                 <a href="{% url 'generar_pdf' %}"><button class="boton_reporte">Generar reporte</button></a>
             </div>
+        </form>
         
 
         
@@ -38,40 +42,59 @@
             <div class="tabla_reporte">
                 <table>
                     <tr>
-                        <th>nombre del elemento</th>
-                        <th>Estado</th>
                         <th>Fecha</th>
-                        <th>Estado</th>
+                        <th>nombre del elemento</th>
+                        <th>Categoria</th>
+                        <th>Estado</th>                        
+                        <th>Serial</th>
                         <th>Cantidad</th>
                         <th>Valor unidad</th>
                         <th>Descripcion</th>
+                        <th>Observacion</th>
 
                     </tr>
-                    {% for elemento in elementos %}
+                {% for elemento in ElementosDevolutivos %}
+                        
+                    {% if elemento.producto.estado == 'B' or elemento.producto.estado == 'Baja' %}
+
                     <tr>
-                        <td>{{ elemento.nombreElemento }}</td>
-                        <td>{% if elemento.estadoElemento == 'D' %}
-                            Disponible
-            
-                            {% elif elemento.estadoElemento == 'G' %}
-                            Garantia
-            
-                            {% elif elemento.estadoElemento == 'B' %}
-                            Baja
-                            {% endif %}</td>
-                        <td>{{ elemento.fechaElemento }}</td>
-                        <td>{{ elemento.nombreElemento }}</td>
-                        <td>{{ elemento.cantidadElemento  }}</td>
-                        <td>${{ elemento.valorUnidadElemento }}</td>
-                        <td>{{ elemento.descripcionElemento  }}</td>                   
+                        <td>{{ elemento.fecha_Registro }}</td>
+                        <td>{{ elemento.producto.nombre }}</td>  
+                        <td>Devolutivo</td>                  
+                        <td> Baja </td>                    
+                        <td>{{ elemento.serial }}</td>
+                        <td>1</td>
+                        <td>{{ elemento.producto.valor_unidad }}</td>
+                        <td>{{ elemento.producto.descripcion }}</td>                    
+                        <td>{{ elemento.observacion }}</td>           
+                                        
                     </tr>
-                    {% endfor %}
+                    {% endif %}
+
+                {% endfor %}
+
+                {% for elemento in ElementosConsumibles %}
+                    
+                    {% if elemento.productoConsumible.estadoElemento == 'B' or  elemento.productoConsumible.estadoElemento == 'Baja' %}
+
+                <tr>
+                    <td>{{ elemento.fechaAdquisicion }}</td> 
+                    <td>{{ elemento.productoConsumible.nombreElemento }}</td>
+                    <td>{{ elemento.productoConsumible.categoriaElemento }}</td>
+                    <td>{{ elemento.productoConsumible.estadoElemento }}</td>                                                                   
+                    <td>--</td>                                                       
+                    <td>{{ elemento.cantidadElemento }}</td>
+                    <td>{{ elemento.productoConsumible.costoUnidadElemento }}</td> 
+                    <td>{{ elemento.productoConsumible.descripcionElemento }}</td> 
+                    <td>{{ elemento.observacionElemento }}</td>                    
+                </tr>
+                        
+                    {% endif %}
+                
+                {% endfor %}
+                        
                 </table>
             </div>
-            
-        
-
-            
             
         </div>
     </section>

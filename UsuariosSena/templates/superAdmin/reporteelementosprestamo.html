@@ -38,32 +38,29 @@
             <div class="tabla_reporte">
                 <table>
                     <tr>
+                        <th>Fecha Entrega</th>
+                        <th>Fecha Devolucion</th>
                         <th>nombre del elemento</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                        <th>Estado</th>
-                        <th>Cantidad</th>
+                        <th>Serial</th>
+                        <th>Estado Prestamo</th>
+                        <th>Emisor</th>
+                        <th>Adquiriente</th>                        
                         <th>Valor unidad</th>
                         <th>Descripcion</th>
 
                     </tr>
-                    {% for elemento in elementos %}
+                    {% for prestamo in prestamos %}
                     <tr>
-                        <td>{{ elemento.nombreElemento }}</td>
-                        <td>{% if elemento.estadoElemento == 'D' %}
-                            Disponible
-            
-                            {% elif elemento.estadoElemento == 'G' %}
-                            Garantia
-            
-                            {% elif elemento.estadoElemento == 'B' %}
-                            Baja
-                            {% endif %}</td>
-                        <td>{{ elemento.fechaElemento }}</td>
-                        <td>{{ elemento.nombreElemento }}</td>
-                        <td>{{ elemento.cantidadElemento  }}</td>
-                        <td>${{ elemento.valorUnidadElemento }}</td>
-                        <td>{{ elemento.descripcionElemento  }}</td>                   
+                        <td>{{ prestamo.fechaEntrega }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
                     </tr>
                     {% endfor %}
                 </table>

@@ -118,7 +118,7 @@ urlpatterns = [
 
     path(
         "reporteelementosprestamos/", 
-        views.reporteelementosactivos, name="reporteelementosprestamos"
+        views.reporteelementosprestamo, name="reporteelementosprestamos"
     ),
     path(
         "reporteelementosbajas/", 

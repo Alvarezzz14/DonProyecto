@@ -421,7 +421,7 @@ def formPrestamosDevolutivos_view(request):
         fechaEntregaVar = date.today()
         nombreEntregavar = request.POST.get("nombreEntrega")
         nombreRecibevar = request.POST.get("nombreRecibe")
-        nombreElementovar = request.POST.get("nombreProducto")
+        nombreElementovar = request.POST.get("nombreElemento")
         serialSenaElementovar = request.POST.get("serialSenaElemento")
         # cantidadElementoVar = int(request.POST.get("cantidadElemento"))
         valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
@@ -1161,16 +1161,39 @@ def reporteelementosactivos(request):
     
    
 def reporteelementosprestamo(request):
-
+    
+    prestamos = Prestamo.objects.all()
+    
+    data = {"Prestamos": prestamos}
     return render(
-         request,  "superAdmin/reporteelementosprestamos.html"
+         request,  "superAdmin/reporteelementosprestamo.html" , data
     )
    
+   
 def reporteelementosbajas(request):
+    
+    fecha_inicio = request.GET.get('fecha_inicio', None)
+    fecha_fin = request.GET.get('fecha_fin', None)
+    
+    if fecha_inicio is None or fecha_fin is None:
+        
+        elementosconsu =  InventarioConsumible.objects.select_related("productoConsumible").all()
+        elementosdevo = InventarioDevolutivo.objects.select_related("producto").all()
+        data = {"ElementosConsumibles": elementosconsu, "ElementosDevolutivos": elementosdevo}
 
-    return render(
-         request,  "superAdmin/reporteelementosbajas.html"
-    )
+        return render(
+            request,  "superAdmin/reporteelementosbajas.html" , data
+        )
+    
+    if request.method == 'GET':
+        
+        elementosconsu = InventarioConsumible.objects.select_related("productoConsumible").filter(fechaAdquisicion__range=[fecha_inicio, fecha_fin])
+        elementosdevo = InventarioDevolutivo.objects.select_related("producto").filter(fecha_Registro__range=[fecha_inicio, fecha_fin])
+        data = {'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin, "ElementosConsumibles": elementosconsu, "ElementosDevolutivos": elementosdevo}    
+    
+        return render(
+            request,  "superAdmin/reporteelementosbajas.html" , data
+        )
 
     
     
