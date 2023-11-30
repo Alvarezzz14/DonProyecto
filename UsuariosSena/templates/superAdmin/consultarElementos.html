@@ -62,7 +62,7 @@ Consultar Elementos
 
   <div class="flex m-auto flex-col max-w-full overflow-x-auto mt-8">
     <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-      <div class="inline-block scroll-auto overflow-hidden align-middle sm:rounded-lg">
+      <div class="inline-block w-max scroll-auto overflow-hidden align-middle sm:rounded-lg">
 {% if opcion_seleccionada == 'elementosconsu' %} 
         <!--Datatable se crea tabla con scrool maximo del contenedor disponible, con 12 enunciados en la cabecera-->
         <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
@@ -109,11 +109,11 @@ Consultar Elementos
               <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
                 {% if elemento.productoConsumible.categoriaElemento == 'C' %}
                 <span
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
+                  class="text-center inline-flex px-2 text-[0.6rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
                   Consumible</span>
                 {% elif elemento.productoConsumible.categoriaElemento == 'D' %}
                 <span
-                  class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-red-800 bg-red-100 rounded-full">
+                  class="text-center inline-flex px-2 text-[0.6rem] font-semibold leading-5 text-purple-800 bg-purple-100 rounded-full">
                   Devolutivo</span>
                 {% endif %}
               </td>
@@ -293,11 +293,11 @@ Consultar Elementos
             <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
               {% if elemento.producto.categoria == 'C' %}
               <span
-                class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
+                class="text-center inline-flex px-2 text-[0.6rem] font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
                 Consumible</span>
               {% elif elemento.producto.categoria == 'D' %}
               <span
-                class="text-center inline-flex px-2 text-[0.7rem] font-semibold leading-5 text-red-800 bg-red-100 rounded-full">
+                class="text-center inline-flex px-2 text-[0.6rem] font-semibold leading-5 text-purple-800 bg-purple-100 rounded-full">
                 Devolutivo</span>
               {% endif %}
             </td>
@@ -372,26 +372,68 @@ Consultar Elementos
                 </a>
               </button>
               <button title="Inhabilitar Elemento" onclick="botonEliminar('{{Entregas.id}}')">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </button>
-              
-              {% endif %}
+  
+                  <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">
                 
+              </button>
+              {% endif %}              
             </td>
           </tr>
-          
+          {% endfor %}
           </tbody>
         </table>
+        
+        <div id="userModal" class="modal">
+          <div class="modal-content">
+            <thead>
+              <span class="close" onclick="closeModal()">&times;</span>
+            </thead>
+            <div id="userData">
+              <table>
+                <tr>
+                  <th>Fecha de Ingreso:</th>
+                  <td><input type="text" id="fechaElementoField" readonly></td>
+                </tr>
+                <tr>
+                  <th>Nombre:</th>
+                  <td><input type="text" id="nombreField" readonly></td>
+                </tr>
+                <tr>
+                  <th>Categoria:</th>
+                  <td><input type="text" id="categoriaField" readonly></td>
+                </tr>
+                <tr>
+                  <th>Estado:</th>
+                  <td><input type="text" id="estadoField" readonly></td>
+                </tr>
+                <tr>
+                  <th>Descripcion:</th>
+                  <td><input type="text" id="descripcionElementoField" readonly></td>
+                </tr>
+                <tr>
+                  <th>Observaciones:</th>
+                  <td><input type="text" id="observacionElementoField" readonly></td>
+                </tr>
+                <tr>
+                  <th>Serial:</th>
+                  <td><input type="text" id="serialField" readonly></td>
+                </tr>
+                <tr>
+                  <th>valor unitario:</th>
+                  <td><input type="text" id="valorUnidadElementoField" readonly></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+{% endif %}         
       </div>
     </div>
   </div>
   
-{% endfor %}
-{% endif %}  
+
+ 
   
         <!-- Botones para generar PDF y Excel -->
         <div class="flex w-20 gap-4 justify-end">

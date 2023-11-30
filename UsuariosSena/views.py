@@ -409,7 +409,7 @@ def formPrestamosDevolutivos_view(request):
         InventarioDevolutivo.objects.annotate(disponible=~Exists(prestamos_activos))
         .select_related("producto")
         .values_list(
-            "producto__nombre", "serial", "producto__descripcion", "disponible"
+            "producto__nombre", "serial", "producto__descripcion", "producto__estado"
         )
     )
     form_data = {}
@@ -421,7 +421,7 @@ def formPrestamosDevolutivos_view(request):
         fechaEntregaVar = date.today()
         nombreEntregavar = request.POST.get("nombreEntrega")
         nombreRecibevar = request.POST.get("nombreRecibe")
-        nombreElementovar = request.POST.get("nombreElemento")
+        nombreElementovar = request.POST.get("nombreProducto")
         serialSenaElementovar = request.POST.get("serialSenaElemento")
         # cantidadElementoVar = int(request.POST.get("cantidadElemento"))
         valorUnidadElementoVar = int(request.POST.get("valorUnidadElemento"))
