@@ -86,22 +86,22 @@
                     <div>
                         <select class="selector" name="rol" id="rol">
 
-                            {% if user.rol == 'SuperAdmin' %}
+                            {% if user.rol == 'superAdmin' %}
                             <option value="SuperAdmin" selected>SuperAdmin</option>
                             {% else %}
                             <option value="SuperAdmin">SuperAdmin</option>
                             {% endif %}
 
                             {% if user.rol == 'Instructor' %}
-                            <option value="Instructor" selected>Instructor</option>
+                            <option value="I" selected>Instructor</option>
                             {% else %}
-                            <option value="Instructor">Instructor</option>
+                            <option value="I">Instructor</option>
                             {% endif %}
 
                             {% if user.rol == 'Monitor' %}
-                            <option value="Monitor" selected>Monitor</option>
+                            <option value="M" selected>Monitor</option>
                             {% else %}
-                            <option value="Monitor">Monitor</option>
+                            <option value="M">Monitor</option>
                             {% endif %}
                         </select>
                     </div>
@@ -136,21 +136,21 @@
                         <select class="selector" name="tipoContrato" id="tipoContrato">
 
                             {% if user.tipoContrato == 'Planta' %}
-                            <option value="Planta" selected>Planta</option>
+                            <option value="P" selected>Planta</option>
                             {% else %}
-                            <option value="Planta">Planta</option>
+                            <option value="P">Planta</option>
                             {% endif %}
 
                             {% if user.tipoContrato == 'Contratista' %}
-                            <option value="Contratista" selected>Contratista</option>
+                            <option value="C" selected>Contratista</option>
                             {% else %}
-                            <option value="Contratista">Contratista</option>
+                            <option value="C">Contratista</option>
                             {% endif %}
 
                             {% if user.tipoContrato == 'Aprendiz' %}
-                            <option value="Aprendiz" selected>Aprendiz</option>
+                            <option value="A" selected>Aprendiz</option>
                             {% else %}
-                            <option value="Aprendiz">Aprendiz</option>
+                            <option value="A">Aprendiz</option>
                             {% endif %}
 
                         </select>
