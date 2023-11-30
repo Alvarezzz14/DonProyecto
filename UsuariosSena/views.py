@@ -1034,12 +1034,12 @@ def editarPrestamo_view(request, id):
             # Actualizar los campos del objeto Prestamo con los datos del formulario
             prestamo.fechaEntrega = fecha_entrega
             prestamo.fechaDevolucion = fecha_devolucion
-            prestamo.nombreEntrega = nombre_entrega
+            # prestamo.nombreEntrega = nombre_entrega
             # prestamo.nombreRecibe = nombre_recibe
             # prestamo.nombreElemento = nombre_elemento            
             prestamo.valorUnidadElemento = valor_unidad
             prestamo.observacionesPrestamo = observaciones_prestamo
-            prestamo.estadoPrestamo = observaciones_prestamo
+            prestamo.estadoPrestamo = estado_prestamo
             # Resto de la lógica de actualización
 
             prestamo.save()
