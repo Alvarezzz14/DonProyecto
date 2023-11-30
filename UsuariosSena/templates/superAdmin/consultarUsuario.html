@@ -276,26 +276,7 @@ Consultar Usuarios
 </section>
 
 {% block extrajs %}
-<script>
-  const botonEliminar = (numeroIdentificacion) => {
-    Swal.fire({
-      "title": "¿Estás seguro de inhabilitar el usuario?",
-      "text": "El usuario perdera todos los permisos",
-      "icon": "question",
-      "showCancelButton": true,
-      "cancelButtonText": "Cancelar",
-      "confirmButtonText": "Eliminar",
-      "reverseButtons": true,
-      "confirmButtonColor": "#fc7323",
-      "iconColor": "#fc7323",
-    })
-      .then(function (result) {
-        if (result.isConfirmed) {
-          window.location.href = "/eliminarUsuario/" + numeroIdentificacion;
-        }
-      })
-  }
-</script>
+
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
 
 <script>

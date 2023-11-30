@@ -147,17 +147,8 @@
                     text: messageText,
                     icon: 'warning',
                     confirmButtonText: confirmButtonText,
-                    showCancelButton: true,
                 })
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire(
-                                'Eliminado!',
-                                'Eliminado Correctamente.',
-                                'success'
-                            )
-                        }
-                    });
+                    ;
 
             } else if (messageType === "error") {
                 Swal.fire({
