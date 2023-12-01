@@ -63,11 +63,10 @@ Consultar Transaciones
   </form>
 
 
-  <div class="flex flex-col overflow-x-auto overflow-hidden mt-8">
+  <div class="flex m-auto flex-col max-w-full overflow-x-auto mt-8">
     <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-      <div class="inline-block min-w-full scroll-auto overflow-hidden align-middle sm:rounded-lg">
+      <div class="inline-block w-max scroll-auto overflow-hidden align-middle sm:rounded-lg">
         {% if opcion_seleccionada == 'prestamo' %}
-        <section class="container  rounded-lg p-4 overflow-hidden m-2 ">
           <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
             <thead>
               <tr>
@@ -217,15 +216,6 @@ Consultar Transaciones
               {% endfor %}
             </tbody>
           </table>
-      </div>
-    </div>
-  </div>
-  <div class="flex w-20 gap-4 justify-end">
-    <a href="{% url 'generar_pdf' %}" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
-    <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
-        alt=""></a>
-  </div>
-</div>
 
 <!-- Modal para mostrar la información del usuario -->
 
@@ -273,14 +263,9 @@ Consultar Transaciones
           <td><input type="text" id="estadoField" readonly></td>
         </tr>
       </table>
-    </div>
-  </div>
-</div>
-
 
 
 {% elif opcion_seleccionada == 'entregas' %}
-<section class="container  rounded-lg p-4 overflow-hidden m-5 ">
   <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
     <thead>
       <tr>
@@ -413,7 +398,6 @@ Consultar Transaciones
       </div>
     </div>
   </div>
-</section>
 
 {% endif %}
 
