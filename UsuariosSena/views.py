@@ -779,12 +779,16 @@ def get_element_consum_info(request):
 
 @login_required
 def calendario(request):
-    prestamos = Prestamo.objects.all()
+    prestamos = Prestamo.objects.select_related('nombreRecibe', 'serialSenaElemento__producto').all()
     eventos = []
 
     for prestamo in prestamos:
+        nombre_usuario = f"{prestamo.nombreRecibe.nombres} {prestamo.nombreRecibe.apellidos}"
+        nombre_producto = prestamo.serialSenaElemento.producto.nombre
+        titulo_evento = f"{nombre_usuario} - {nombre_producto}"
+
         evento = {
-            "title": prestamo.observacionesPrestamo,
+            "title": titulo_evento,
             "start": prestamo.fechaEntrega.isoformat(),
             "end": (prestamo.fechaDevolucion + timedelta(days=1)).isoformat(),
         }
