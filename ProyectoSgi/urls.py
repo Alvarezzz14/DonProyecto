@@ -75,10 +75,7 @@ urlpatterns = [
         "consultarUsuario/", views.consultarUsuario_view, name="consultarUsuario_view"
     ),
     path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
-    path(
-        "consultarTransacciones/",
-        views.consultarTransacciones_view,
-        name="consultarTransacciones",
+    path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),

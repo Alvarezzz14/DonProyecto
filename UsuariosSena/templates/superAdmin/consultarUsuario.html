@@ -13,9 +13,48 @@ Consultar Usuarios
 {% endblock extrastyle %}
 <!--Script Contenido Estilos de Tailwindcss-->
 {% block extrascript %}
+<script>
+  const botonEliminar = (numeroIdentificacion) => {
+    Swal.fire({
+      "title": "¿Estás seguro de inhabilitar el usuario?",
+      "text": "El usuario perdera todos los permisos",
+      "icon": "question",
+      "showCancelButton": true,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Eliminar",
+      "reverseButtons": true,
+      "confirmButtonColor": "#fc7323",
+      "iconColor": "#fc7323",
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/eliminarUsuario/" + numeroIdentificacion;
+        }
+      })
+  }
+</script>
+<script>
+  // Función para abrir el modal y mostrar la información del usuario
+  function openModal(userData) {
+    const modal = document.getElementById('userModal');
+    const userDataContainer = document.getElementById('userData');
+
+    // Llenar el contenido del modal con los datos del usuario
+    userDataContainer.innerHTML = userData;
+
+    modal.style.display = 'block';
+  }
+
+  // Función para cerrar el modal
+  function closeModal() {
+    const modal = document.getElementById('userModal');
+    modal.style.display = 'none';
+  }
 
 {% endblock extrascript %}
+
 {% block content %}
+
 <section class="bg-white  shadow-xl rounded-md p-4 overflow-hidden m-4 ">
 
   <h1 class="text-[1.5rem] m-2 mb-10 font-extrabold ">Consultar Usuarios</h1>
@@ -28,7 +67,7 @@ Consultar Usuarios
     </div>
     <div>
       <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
-        :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
+      :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
         :disabled="search.length == 0">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

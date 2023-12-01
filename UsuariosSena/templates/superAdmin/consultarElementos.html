@@ -184,11 +184,14 @@ Consultar Elementos
 
                 {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
 
-                <button title="Editar Elemento" onclick="editarFila(this)"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
+                <button onclick="">
+                  <a href="/editarElementoconsu/{{elemento.productoConsumible.id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarElementoconsu.html"
+                      class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </a>
                 </button>
                 <button  title="Inhabilitar Elemento" class="" data-id="">   
                     <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">                
@@ -514,13 +517,13 @@ Consultar Elementos
     const valorUnidadElementoField = document.getElementById('valorUnidadElementoField');
 
     fechaElementoField.value = userDataArray[0] + " del " + userDataArray[1];
-    nombreField.value = userDataArray[1];
-    categoriaField.value = userDataArray[2];
-    estadoField.value = userDataArray[3];
-    descripcionElementoField.value = userDataArray[4];
-    observacionElementoField.value = userDataArray[5];
-    cantidadField.value = userDataArray[6];
-    valorUnidadElementoField.value = userDataArray[7];
+    nombreField.value = userDataArray[2];
+    categoriaField.value = userDataArray[3];
+    estadoField.value = userDataArray[4];
+    descripcionElementoField.value = userDataArray[5];
+    observacionElementoField.value = userDataArray[6];
+    cantidadField.value = userDataArray[7];
+    valorUnidadElementoField.value = userDataArray[8];
     modal.style.display = 'block';
   }
     

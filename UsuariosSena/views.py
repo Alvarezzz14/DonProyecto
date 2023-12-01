@@ -226,34 +226,39 @@ def editarElementosconsu_view(request, id):
     elemento = get_object_or_404(InventarioConsumible, id=id)
 
     if request.method == "POST":
-        # Obtener datos del formulario
-        fecha_adquisicion = request.POST.get('txt_fechaadquisicion')
-        nombre_elemento = request.POST.get('txt_nombreElemento')
-        categoria_elemento = request.POST.get('txt_categoriaElemento')
-        estado_elemento = request.POST.get('txt_estadoElemento')
-        descripcion_elemento = request.POST.get('txt_descripcionElemento')
-        observacion_elemento = request.POST.get('txt_observacionElemento')
-        cantidad_elemento = request.POST.get('txt_cantidadElemento')
-        costo_unidad_elemento = request.POST.get('txt_costoUnidadElemento')
-        costo_total_elemento = request.POST.get('txt_costoTotalElemento')
-        factura_elemento = request.FILES.get('txt_facturaElemento')
-
         try:
+            # Obtener datos del formulario
+            fecha_adquisicion = request.POST.get('txt_fechaadquisicion')
+            nombre_elemento = request.POST.get('txt_nombreElemento')
+            categoria_elemento = request.POST.get('txt_categoriaElemento')
+            estado_elemento = request.POST.get('txt_estadoElemento')
+            descripcion_elemento = request.POST.get('txt_descripcionElemento')
+            observacion_elemento = request.POST.get('txt_observacionElemento')
+            cantidad_elemento = request.POST.get('txt_cantidadElemento')
+            costo_unidad_elemento = request.POST.get('txt_costoUnidadElemento')
+            costo_total_elemento = request.POST.get('txt_costoTotalElemento')
+            factura_elemento = request.FILES.get('txt_facturaElemento')
+
             # Actualizar los campos del objeto ElementosConsumible con los datos del formulario
             elemento.fechaAdquisicion = fecha_adquisicion
-            elemento.nombreElemento = nombre_elemento
+            elemento.productoConsumible.nombreElemento = nombre_elemento
             elemento.categoriaElemento = categoria_elemento
             elemento.estadoElemento = estado_elemento
-            elemento.descripcionElemento = descripcion_elemento
+            elemento.productoConsumible.descripcionElemento = descripcion_elemento
             elemento.observacionElemento = observacion_elemento
             elemento.cantidadElemento = cantidad_elemento
-            elemento.costoUnidadElemento = costo_unidad_elemento
+            elemento.productoConsumible.costoUnidadElemento = costo_unidad_elemento
             elemento.costoTotalElemento = costo_total_elemento
             elemento.facturaElemento = factura_elemento
 
+            # Guardar el modelo ProductosInventarioConsumible
+            elemento.productoConsumible.save()
+
+            # Guardar el modelo InventarioConsumible
             elemento.save()
 
-            consultar_elementosconsu_url = reverse("consultarelementosconsu")
+            messages.success(request, "Elemento consumible actualizado con éxito")
+            consultar_elementosconsu_url = reverse("consultarElementos")
             return redirect(f"{consultar_elementosconsu_url}?opcion=elemento_consumible")
 
         except InventarioConsumible.DoesNotExist as e:
@@ -386,6 +391,18 @@ def eliminarUsuario_view(request, numeroIdentificacion):
         # Maneja el caso en el que el usuario no existe
         messages.error(request, "Usuario no encontrado.")
         return redirect("index")
+        
+# @login_required
+# @verificar_superadmin
+def eliminarConsumible_view(request, id):
+    consumible = get_object_or_404(ProductosInventarioConsumible, id)
+
+    # Cambiar el estado a "Baja"
+    consumible.estadoElemento = 'Baja'
+    consumible.save()
+
+    return JsonResponse({'status': 'success'})
+
 
 
 # @login_required
