@@ -30,7 +30,7 @@ Editar Elemento
             <div class="selectContainer">
                 <label for="categoriaElemento" class="labelformselect">Categoria</label>
                 <div>
-                    <select class="selector" disabled name="txt_categoriaElemento" id="categoriaElemento">
+                    <select class="selector" name="txt_categoriaElemento" id="categoriaElemento">
                         <option value="D">Devolutivo</option>
                         <option value="C">Consumible</option>
 
@@ -85,7 +85,7 @@ Editar Elemento
         <div class="container-1">
             <div class="container-botones">
                 <button type="" class="submitBtn">GUARDAR</button>
-                <a href="{% url 'consultarElementos' %}"><button type="" class="submitBtn">CANCELAR</button></a>
+                <button type="button" class="submitBtn" id="cancelBtn"><span>CANCELAR</span>
 
             </div>
         </div>
@@ -93,6 +93,11 @@ Editar Elemento
 </div>
 </section>
 {% block extrajs %}
+<script>
+    document.getElementById("cancelBtn").onclick = function() {
+      window.location.href = "/consultarElementos/";
+    };
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{% static 'js/calculoTotal.js'%}"></script>
 {% endblock extrajs %}

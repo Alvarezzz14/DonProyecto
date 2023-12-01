@@ -305,6 +305,7 @@ def actualizarElementoDevolutivo(request, serial):
                 observacion_elemento = request.POST.get('txt_observacionElemento')
                 cantidad_elemento = request.POST.get('txt_cantidadElemento')
                 factura_elemento = request.FILES.get('txt_facturaElemento')
+                valor_nidad = request.POST.get('txt_valorUnidadElemento')
 
 
                 # Actualizar campos del modelo ProductosInventarioDevolutivo
@@ -312,14 +313,17 @@ def actualizarElementoDevolutivo(request, serial):
                 inventario_elemento.producto.categoria = categoria_elemento
                 inventario_elemento.producto.estado = estado_elemento
                 inventario_elemento.producto.descripcion = descripcion_elemento
-                inventario_elemento.producto.valor_unidad = cantidad_elemento            
-                messages.success(request, "Elemento Consumible Editado con Éxito")
-
+                inventario_elemento.producto.valor_unidad = valor_nidad            
                 # Actualizar campos del modelo InventarioDevolutivo
                 inventario_elemento.fecha_Registro = fecha_Registro
                 inventario_elemento.observacion = observacion_elemento
                 inventario_elemento.factura = factura_elemento
-                inventario_elemento.save()            
+                print("actualizarElementoDevolutivo ", categoria_elemento,observacion_elemento)   
+                inventario_elemento.producto.save()  
+
+                inventario_elemento.save()  
+                messages.success(request, "Elemento Consumible Editado con Éxito")
+
                 consultar_elementodevo_url = reverse("consultarElementos")
                 return redirect(f"{consultar_elementodevo_url}?opcion=elemento_devolutivo")
             
@@ -406,15 +410,14 @@ def eliminarUsuario_view(request, numeroIdentificacion):
         
 # @login_required
 # @verificar_superadmin
-def eliminarConsumible_view(request, id):
-    consumible = get_object_or_404(ProductosInventarioConsumible, id)
-
+def inhabilitar_elemento_consumible(request, id):
+    consumible = get_object_or_404(ProductosInventarioConsumible, id=id)
     # Cambiar el estado a "Baja"
     consumible.estadoElemento = 'Baja'
     consumible.save()
-
-    return JsonResponse({'status': 'success'})
-
+    messages.success(request, "Elemento inhabilitado Correctamente")
+    # Puedes agregar más lógica o mensajes según sea necesario
+    return redirect("consultarElementos")
 
 
 # @login_required
