@@ -534,6 +534,13 @@ def formPrestamosDevolutivos_view(request):
                 observacionesPrestamo=observacionesPrestamovar,
             )
             prestamo.save()
+            
+            prestamo_id = prestamo.id
+            
+            #Enviar Correo De Notificacion a la hora de Realizar el prestamo
+            
+            enviar_correo_notificacion(prestamo_id)
+            
             # Disminuir la cantidad de elementos disponibles
             if inventario.producto.categoria == "D":
                 inventario.producto.disponibles = max(
@@ -1208,60 +1215,48 @@ def reporteelementosbajas(request):
         )
 
     
+
+from django.core.mail import send_mail
+
+def enviar_correo_notificacion(id):
+    # Obtener el objeto de la base de datos usando el ID
+    prestamo = get_object_or_404(Prestamo, id=id)
     
+    nombre_recibe = prestamo.nombreRecibe
+    fecha_entrega = prestamo.fechaEntrega
+    fecha_devolucion = prestamo.fechaDevolucion
+    nombre_producto = prestamo.nombreProducto
+    serial_sena = prestamo.serialSenaElemento
 
-# def generar_excel_prestamo(request):
-#     buffer = BytesIO()
-#     workbook = xlsxwriter.Workbook(buffer, {"in_memory": True})
-#     worksheet = workbook.add_worksheet()
+    # Lógica para determinar el asunto y el cuerpo del correo usando datos del objeto
+    asunto = f'Notificacion Prestamo Elemento Sena CDITI Area de Software'
+    cuerpo = (
+        f'Hola {nombre_recibe},\n\n'
+        f'Notificacion del Prestamo Adquirido:\n'
+        f'Fecha de entrega: {fecha_entrega}\n'
+        f'Fecha de devolución: {fecha_devolucion}\n'
+        f'Nombre del producto: {nombre_producto}\n'
+        f'Serial Sena: {serial_sena}'
+    )
 
-#     header_format = workbook.add_format(
-#         {
-#             "bold": True,
-#             "align": "center",
-#             "valign": "vcenter",
-#             "bg_color": "gray",
-#             "border": 1,
-#         }
-#     )
+    # Utilizar el campo 'mail' del objeto como destinatario
+    destinatario = [prestamo.nombreRecibe.email]
 
-#     headers = [
-#         "Nombre Producto",
-#         "Categoría",
-#         "Estado",
-#         "Descripción",
-#         "Valor Unidad",
-#         "Serial",
-#         "Observación",
-#     ]
+    # Puedes personalizar estos valores según tus necesidades
+    remitente = 'alertasinventariosena@gmail.com'
 
-#     for col_num, header in enumerate(headers):
-#         worksheet.write(0, col_num, header, header_format)
+    # Enviar el correo
+    send_mail(asunto, cuerpo, remitente, destinatario, fail_silently=False)
 
-#     row_num = 1
-#     for inventario in InventarioDevolutivo.objects.select_related("producto").all():
-#         producto = inventario.producto
-#         worksheet.write(row_num, 0, inventario.fecha_Registro.strftime("%Y-%m-%d"))
-#         worksheet.write(row_num, 1, producto.nombre)
-#         worksheet.write(row_num, 2, producto.categoria)
-#         worksheet.write(row_num, 3, producto.estado)
-#         worksheet.write(row_num, 4, producto.descripcion)
-#         worksheet.write(row_num, 5, producto.valor_unidad)
-#         worksheet.write(row_num, 6, inventario.serial)
-#         worksheet.write(row_num, 7, inventario.observacion)
-#         row_num += 1
+    # Mostrar alerta SweetAlert después de enviar el correo directamente en la misma vista
+    return redirect({'correo_enviado_exitosamente': True})
 
-#     for col_num, header in enumerate(headers):
-#         worksheet.set_column(col_num, col_num, max(len(header), 15))
 
-#     workbook.close()
 
-#     response = HttpResponse(
-#         buffer.getvalue(),
-#         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-#     )
-#     response[
-#         "Content-Disposition"
-#     ] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.xlsx"'
-#     buffer.close()
-#     return response
+def enviar_correo_desde_boton(request, id):
+    # Llamar a la función para enviar el correo
+    
+    enviar_correo_notificacion(id)
+
+    # Redirigir a la página principal o a donde desees
+    return render(request, 'SuperAdmin/dashboard.html', {'correo_enviado_exitosamente': True})

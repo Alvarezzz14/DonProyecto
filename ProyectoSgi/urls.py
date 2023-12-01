@@ -124,7 +124,15 @@ urlpatterns = [
         "reporteelementosbajas/", 
         views.reporteelementosbajas, name="reporteelementosbajas"
     ),
+    
+    path(
+        "enviar-correo/<int:id>/",
+        views.enviar_correo_desde_boton, name="enviar_correo_desde_boton" 
+        
+    ),
 ]
+
+    
 
 # Configuración para servir archivos multimedia en entorno de desarrollo
 if settings.DEBUG:

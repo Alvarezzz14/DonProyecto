@@ -19,7 +19,7 @@ Home SUAdmin
     document.getElementById('confirmarBtn').addEventListener('click', function() {
         Swal.fire({
             "title": "¿Estás seguro de FInalizar el Préstamo?",
-            "text": "El Elemento Devolutivo Retornara al Inventario",
+            "text": "El Elemento Devolutivo Retornara al Inventario como Disponible",
             "icon": "question",
             "showCancelButton": true,
             "cancelButtonText": "Cancelar",
@@ -114,14 +114,21 @@ Home SUAdmin
                                                 <img src="{% static 'img/finalizar.png' %}" title="Finalizar Préstamo" alt="" class="">
                                             </button>
                                         </form>
-                                        {% endif %}
+                                        
                                     </div>
+
+                                    <form method="post" action="{% url 'enviar_correo_desde_boton' id=Prestamos.id %}">
+                                      {% csrf_token %}
+                                      <button type="submit">Enviar Correo</button>
+                                    </form>
+                                    {% endif %}
                                     <div class="caja-texto-notificaciones">
                                         <div>
-                                            <h2>{{ Prestamos.nombreRecibe }}: <br>
-                                                {{ Prestamos.fechaDevolucion }} </h2>
-                                                <p>{{ Prestamos.serial }}</p>
-                                                <p>{{ Prestamos.observacionesPrestamo }}</p>
+                                            <h2>{{ Prestamos.fechaDevolucion }} <br>
+                                              {{ Prestamos.nombreRecibe.nombres }} {{ Prestamos.nombreRecibe.apellidos }}: <br>
+                                            </h2>                                                
+                                                <p>{{ Prestamos.nombreProducto }}</p>
+                                                <p>{{ Prestamos.serialSenaElemento }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -230,5 +237,20 @@ Home SUAdmin
   }
 </script>
 
-   {% endblock extrajs %}
+{% if correo_enviado_exitosamente %}
+
+<script>
+      Swal.fire({
+        title: 'Correo enviado exitosamente',
+        text: '¡La Notificación se ha enviado correctamente!',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: "#fc7323",
+        iconColor: "#fc7323",
+      });
+</script>
+  
+{% endif %}
+  
+{% endblock extrajs %}
     
