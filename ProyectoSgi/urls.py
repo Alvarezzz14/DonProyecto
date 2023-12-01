@@ -48,7 +48,7 @@ urlpatterns = [
     path(
         "finalizarPrestamo/<int:id>/",
         views.finalizarPrestamo_view,
-        name="finalizarPrestamo_view",
+        name="finalizarPrestamo_view"
     ),
     path(
         "editarPrestamo/<int:id>/",

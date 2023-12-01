@@ -60,7 +60,7 @@ Editar Elemento
         </div>
         <div class="container-1">
             <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="id" name="txt_serial" value="{{ elemento.id }}" required>
+                <input type="text" class="inputform" placeholder="id" name="txt_serial" value="{{ elemento.id }}" required hidden>
                 <label for="serialSenaElemento" class="labelform">ID</label>
             </div>
             <div class="inputContainer">
@@ -79,13 +79,18 @@ Editar Elemento
         <div class="container-1">
             <div class="container-botones">
                 <button type="submit" class="submitBtn">GUARDAR</button>
-                <button type="" class="submitBtn">CANCELAR</button>
-            </div>
+                <button type="button" class="submitBtn" id="cancelBtn"><span>CANCELAR</span>
+                </div>
         </div>
     </form>
 </div>
 </section>
 {% block extrajs %}
+<script>
+    document.getElementById("cancelBtn").onclick = function() {
+      window.location.href = "/consultarElementos/";
+    };
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="{% static 'js/calculoTotal.js'%}"></script>
 {% endblock extrajs %}
