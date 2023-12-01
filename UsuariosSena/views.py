@@ -1081,6 +1081,8 @@ def editarPrestamo_view(request, id):
             # Resto de la lógica de actualización
 
             prestamo.save()
+            
+            messages.success(request, "El prestamo se ha editado exitosamente")
 
             consultar_transacciones_url = reverse("consultarTransacciones")
             return redirect(f"{consultar_transacciones_url}?opcion=prestamo")
@@ -1126,6 +1128,8 @@ def editarEntrega_view(request, id):
             # Resto de la lógica de actualización
 
             entrega.save()
+            
+            messages.success(request, "La Entrega se ha editado exitosamente")
 
             consultar_transacciones_url = reverse("consultarTransacciones")
             return redirect(f"{consultar_transacciones_url}?opcion=entregas")

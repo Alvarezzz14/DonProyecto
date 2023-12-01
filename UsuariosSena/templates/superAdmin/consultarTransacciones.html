@@ -383,7 +383,7 @@ Consultar Transaciones
             <td><input type="text" id="adquirienteField" readonly></td>
           </tr>
           <tr>
-            <th>Serial Elemento:</th>
+            <th>Elemento:</th>
             <td><input type="text" id="serialField" readonly></td>
           </tr>
           <tr>
@@ -454,12 +454,12 @@ Consultar Transaciones
     const cantidadField = document.getElementById('cantidadField');
     const observacionesField = document.getElementById('observacionesField');
   
-    entregaField.value = userDataArray[0] +" del "+ userDataArray [1];
-    emisorField.value = userDataArray[2];
-    adquirienteField.value = userDataArray[3];
-    serialField.value = userDataArray[4];  // Corregido aquí
-    cantidadField.value = userDataArray[6];
-    observacionesField.value = userDataArray[7];  // Corregido aquí
+    entregaField.value = userDataArray[0];
+    emisorField.value = userDataArray[1];
+    adquirienteField.value = userDataArray[2];
+    serialField.value = userDataArray[3];  // Corregido aquí
+    cantidadField.value = userDataArray[5];
+    observacionesField.value = userDataArray[6];  // Corregido aquí
     modal.style.display = 'block';
     console.log(userDataArray);
   }
