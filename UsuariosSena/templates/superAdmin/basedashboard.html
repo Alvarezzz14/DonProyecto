@@ -97,7 +97,7 @@ Home SUAdmin
                                     </div>
                                       
                                     <div class="acciones">
-                                        <a href="#" ><img src="{% static 'img/vision.png' %}" title="Visualizar Prestamo" alt="" class=""></a>
+                                      
 
                                         {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
 
@@ -115,11 +115,12 @@ Home SUAdmin
                                             </button>
                                         </form>
                                         {% endif %}
-                                    </div>
+                                    </div>                                                                       
+                                      
                                     <div class="caja-texto-notificaciones">
-                                        <div>
-                                            <h2>{{ Prestamos.nombreRecibe }}: <br>
-                                                {{ Prestamos.fechaDevolucion }} </h2>
+                                        <div> 
+                                            <h2>{{ Prestamos.fechaDevolucion }} <br>
+                                              {{ Prestamos.nombreRecibe.nombres }} {{ Prestamos.nombreRecibe.apellidos }}:  </h2>                                             
                                                 <p>{{ Prestamos.serial }}</p>
                                                 <p>{{ Prestamos.observacionesPrestamo }}</p>
                                         </div>
@@ -145,41 +146,41 @@ Home SUAdmin
                     </div>
                 </div>
                 <div id="userModal" class="modal">
-                    <div class="modal-content">
-                      <thead>
-                        <span class="close" onclick="closeModal()">&times;</span>
-                      </thead>
-                      <div id="userData">
-                        <h1> Información del prestamo</h1>
-                        <table class="tabla">
-                          <tr>
-                            <th>Fecha de Entrega:</th>
-                            <td><input type="datetime" id="entregaField" readonly></td>
-                          </tr>
-                          <tr>
-                            <th>Fecha de Devolucion:</th>
-                            <td><input type="datetime" id="devolucionField" readonly></td>
-                          </tr>
-                          <tr>
-                            <th>Emisor:</th>
-                            <td><input type="text" id="emisorField" readonly></td>
-                          </tr>
-                          <tr>
-                            <th>Adquiriente:</th>
-                            <td><input type="text" id="adquirienteField" readonly></td>
-                          </tr>
-                          <tr>
-                            <th>Elemento:</th>
-                            <td><input type="text" id="elementoField" readonly></td>
-                          </tr>
-                          <tr>
-                            <th>Estado del prestamo:</th>
-                            <td><input type="text" id="estadoField" readonly></td>
-                          </tr>
-                        </table>
-                      </div>
+                  <div class="modal-content">
+                    <thead>
+                      <span class="close" onclick="closeModal()">&times;</span>
+                    </thead>
+                    <div id="userData">
+                      <table>
+                        <tr>
+                          <th>Fecha de entrega:</th>
+                          <td><input type="text" id="entregaField" readonly></td>
+                        </tr>
+                        <tr>
+                          <th>Emisor:</th>
+                          <td><input type="text" id="emisorField" readonly></td>
+                        </tr>
+                        <tr>
+                          <th>Adquiriente:</th>
+                          <td><input type="text" id="adquirienteField" readonly></td>
+                        </tr>
+                        <tr>
+                          <th>Serial Elemento:</th>
+                          <td><input type="text" id="serialField" readonly></td>
+                        </tr>
+                        <tr>
+                          <th>Cantidad:</th>
+                          <td><input type="text" id="cantidadField" readonly></td>
+                        </tr>
+                        <tr>
+                          <th>Observaciones:</th>
+                          <td><input type="text" id="observacionesField" readonly></td>
+                        </tr>
+                      </table>
                     </div>
                   </div>
+                </div>
+
             </section>
             
         <!-- fin Cotenido principal -->
@@ -194,25 +195,34 @@ Home SUAdmin
 
 <script>
   // Función para abrir el modal y mostrar la información del usuario
-  function openModal(userData) {
+   function openModal(userData) {
     const modal = document.getElementById('userModal');
 
-    const userDataArray = userData.split(', ');
+    const userDataArray = userData.split(',');
 
-    const entregaField = document.getElementById('entregaField');
-    const emisorField = document.getElementById('emisorField');
-    const adquirienteField = document.getElementById('adquirienteField');
-    const serialField = document.getElementById('serialField');
-    const cantidadField = document.getElementById('cantidadField');
-    const observacionesField = document.getElementById('observacionesField');
 
-    entregaField.value = userDataArray[0];
-    emisorField.value = userDataArray[1];
-    adquirienteField.value = userDataArray[2];
-    serialField.value = userDataArray[3];
-    cantidadField.value = userDataArray[4];
-    observacionesField.value = userDataArray[5];
-    modal.style.display = 'block';
+
+  const entregaField = document.getElementById('entregaField');
+  const devolucionField = document.getElementById('devolucionField');
+  const emisorField = document.getElementById('emisorField');
+  const adquirienteField = document.getElementById('adquirienteField');
+  const elementoField = document.getElementById('elementoField');
+  const serialField = document.getElementById('serialField');
+  const valorField = document.getElementById('valorField');
+  const observacionesField = document.getElementById('observacionesField');
+  const estadoField = document.getElementById('estadoField');
+
+
+  entregaField.value = userDataArray[0];
+  devolucionField.value = userDataArray[1];
+  emisorField.value = userDataArray[2];
+  adquirienteField.value = userDataArray[3];
+  elementoField.value = userDataArray[4];
+  serialField.value = userDataArray[5];
+  valorField.value = userDataArray[6];
+  observacionesField.value = userDataArray[7];
+  estadoField.value = userDataArray[8];
+  modal.style.display = 'block';
   }
 
   // Función para cerrar el modal
