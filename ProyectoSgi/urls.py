@@ -33,10 +33,16 @@ urlpatterns = [
     ),
     
     path(
-        "editarElementodevo/<int:serial>/",
+        "editarElementodevo/<str:serial>/",
         views.editarElementosdevo_view, 
         name="editarElementosdevo_view"
         
+    ),
+    
+    path(
+        "actualizarElementoDevolutivo/<str:serial>",
+        views.actualizarElementoDevolutivo,
+        name="actualizarElementoDevolutivo",
     ),
     
     path(

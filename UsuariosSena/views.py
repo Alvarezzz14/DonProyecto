@@ -202,7 +202,7 @@ def registroUsuario_view(request):
                     fotoUsuario=fotoUsuarioVar,
                 )
                 user.save()
-                cache.clear()  # limpiar toda la cache
+                
                 messages.success(request, "Usuario Registrado con Éxito")
 
     return render(request, "superAdmin/registroUsuario.html")
@@ -271,59 +271,70 @@ def editarElementosconsu_view(request, id):
     return render(request, "superAdmin/editarElementoconsu.html", {"elemento": elemento})
 
 
-
+#@login_required
 def editarElementosdevo_view(request, serial):
     # Obtener el objeto InventarioDevolutivo por su serial
-    inventario_elemento = get_object_or_404(InventarioDevolutivo, serial=serial)
-    elemento = inventario_elemento.serial  # Obtener el elemento asociado
+    try:
+        inventario_elemento = InventarioDevolutivo.objects.select_related("producto").get(serial=serial)
+        
+        datos = {"inventario_elemento": inventario_elemento}
+        # Redirigir a la vista consultarUsuario_view para recargar los datos
+        return render(request, "superAdmin/editarElementodevo.html", datos)
+    
+    except InventarioDevolutivo.DoesNotExist as e:
+        messages.warning(request, "No existe registro")                
+        return redirect("consultarElementos")
 
-    if request.method == "POST":
-        # Obtener datos del formulario
-        serial_elemento = request.POST.get('txt_serial')
-        fechaAdquisicion = request.POST.get('txt_fechaAdquisicion')
-        nombre_elemento = request.POST.get('txt_nombreElemento')
-        categoria_elemento = request.POST.get('txt_categoriaElemento')
-        estado_elemento = request.POST.get('txt_estadoElemento')
-        descripcion_elemento = request.POST.get('txt_descripcionElemento')
-        observacion_elemento = request.POST.get('txt_observacionElemento')
-        cantidad_elemento = float(request.POST.get('txt_cantidadElemento'))
-        valor_unidad_elemento = float(request.POST.get('txt_valorUnidadElemento'))
-        factura_elemento = request.FILES.get('txt_facturaElemento')
 
-        try:
-            # Actualizar los campos del objeto ElementosDevolutivo con los datos del formulario
-            elemento.serial = serial_elemento
-            elemento.fechaAdquisicion = fechaAdquisicion
-            elemento.nombreElemento = nombre_elemento
-            elemento.categoriaElemento = categoria_elemento
-            elemento.estadoElemento = estado_elemento
-            elemento.descripcionElemento = descripcion_elemento
-            elemento.observacionElemento = observacion_elemento
-            elemento.save()
+#@login_required
+#@verificar_superadmin
+def actualizarElementoDevolutivo(request, serial):
+    
+    try: 
+        inventario_elemento = InventarioDevolutivo.objects.select_related("producto").get(serial=serial)
+        
+        if request.method == "POST":
+            
+                # Obtener datos del formulario
+                serial_elemento = request.POST.get('txt_serial')
+                fecha_Registro = request.POST.get('txt_fechaAdquisicion')
+                nombre_elemento = request.POST.get('txt_nombreElemento')
+                categoria_elemento = request.POST.get('txt_categoriaElemento')
+                estado_elemento = request.POST.get('txt_estadoElemento')
+                descripcion_elemento = request.POST.get('txt_descripcionElemento')
+                observacion_elemento = request.POST.get('txt_observacionElemento')
+                cantidad_elemento = request.POST.get('txt_cantidadElemento')
+                factura_elemento = request.FILES.get('txt_facturaElemento')
 
-            # Actualizar los campos del objeto InventarioDevolutivo
-            inventario_elemento.serial = serial_elemento
-            inventario_elemento.fecha_Registro = fechaAdquisicion
-            inventario_elemento.observacion = observacion_elemento
-            inventario_elemento.factura = factura_elemento
-            inventario_elemento.disponibles = cantidad_elemento
-            inventario_elemento.save()
 
-            consultar_elementodevo_url = reverse("consultarElementos_view")
-            return redirect(f"{consultar_elementodevo_url}?opcion=elemento_devolutivo")
+                # Actualizar campos del modelo ProductosInventarioDevolutivo
+                inventario_elemento.producto.nombre = nombre_elemento
+                inventario_elemento.producto.categoria = categoria_elemento
+                inventario_elemento.producto.estado = estado_elemento
+                inventario_elemento.producto.descripcion = descripcion_elemento
+                inventario_elemento.producto.valor_unidad = cantidad_elemento            
+                messages.success(request, "Elemento Consumible Editado con Éxito")
 
-        except ProductosInventarioDevolutivo.DoesNotExist as e:
-            # Manejar la excepción y mostrar un mensaje de error
-            error_message = f"Elemento devolutivo no encontrado. Detalles: {e}"
-            print(error_message)  # Imprimir mensaje de error en la consola
-            return render(request, "superAdmin/editarElementodevo.html", {"elemento": elemento, "error_message": error_message, "valor_total_actual": inventario_elemento.valorTotalElemento})
+                # Actualizar campos del modelo InventarioDevolutivo
+                inventario_elemento.fecha_Registro = fecha_Registro
+                inventario_elemento.observacion = observacion_elemento
+                inventario_elemento.factura = factura_elemento
+                inventario_elemento.save()            
+                consultar_elementodevo_url = reverse("consultarElementos")
+                return redirect(f"{consultar_elementodevo_url}?opcion=elemento_devolutivo")
+            
+    except InventarioDevolutivo.DoesNotExist as e:
+        messages.warning(request, "No existe registro")
+        return redirect("consultarElementos")
 
-    # Si la solicitud no es POST, enviar el objeto ElementosDevolutivo a la plantilla
-    return render(request, "superAdmin/editarElementodevo.html", {"elemento": elemento, "valor_total_actual": inventario_elemento.valorTotalElemento})
+    return render(request, "superAdmin/editarElementodevo.html", {"inventario_elemento": inventario_elemento})
+
 
 #@login_required
 #@verificar_superadmin
 def actualizarUsuario_view(request, numeroIdentificacion):
+    
+    
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
         apellidoVar = request.POST.get("Apellidos")
@@ -391,6 +402,7 @@ def eliminarUsuario_view(request, numeroIdentificacion):
         # Maneja el caso en el que el usuario no existe
         messages.error(request, "Usuario no encontrado.")
         return redirect("index")
+        
         
 # @login_required
 # @verificar_superadmin
@@ -1225,59 +1237,3 @@ def reporteelementosbajas(request):
 
     
     
-
-# def generar_excel_prestamo(request):
-#     buffer = BytesIO()
-#     workbook = xlsxwriter.Workbook(buffer, {"in_memory": True})
-#     worksheet = workbook.add_worksheet()
-
-#     header_format = workbook.add_format(
-#         {
-#             "bold": True,
-#             "align": "center",
-#             "valign": "vcenter",
-#             "bg_color": "gray",
-#             "border": 1,
-#         }
-#     )
-
-#     headers = [
-#         "Nombre Producto",
-#         "Categoría",
-#         "Estado",
-#         "Descripción",
-#         "Valor Unidad",
-#         "Serial",
-#         "Observación",
-#     ]
-
-#     for col_num, header in enumerate(headers):
-#         worksheet.write(0, col_num, header, header_format)
-
-#     row_num = 1
-#     for inventario in InventarioDevolutivo.objects.select_related("producto").all():
-#         producto = inventario.producto
-#         worksheet.write(row_num, 0, inventario.fecha_Registro.strftime("%Y-%m-%d"))
-#         worksheet.write(row_num, 1, producto.nombre)
-#         worksheet.write(row_num, 2, producto.categoria)
-#         worksheet.write(row_num, 3, producto.estado)
-#         worksheet.write(row_num, 4, producto.descripcion)
-#         worksheet.write(row_num, 5, producto.valor_unidad)
-#         worksheet.write(row_num, 6, inventario.serial)
-#         worksheet.write(row_num, 7, inventario.observacion)
-#         row_num += 1
-
-#     for col_num, header in enumerate(headers):
-#         worksheet.set_column(col_num, col_num, max(len(header), 15))
-
-#     workbook.close()
-
-#     response = HttpResponse(
-#         buffer.getvalue(),
-#         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-#     )
-#     response[
-#         "Content-Disposition"
-#     ] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.xlsx"'
-#     buffer.close()
-#     return response
