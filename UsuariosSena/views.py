@@ -1018,7 +1018,7 @@ def user_logout(request):
 
 # @login_required
 def consultarTransacciones_view(request):
-    prestamos = Prestamo.objects.all()
+    prestamos = Prestamo.objects.select_related("nombreRecibe", "nombreEntrega").all()
     for prestamo in prestamos:
         prestamo.nombre_del_producto = prestamo.serialSenaElemento.producto.nombre
         # Comprobación de la fecha de devolución PERO VA DE LA MANO CON LA LOGICA CUANDO SE FINALICE EL PRODUCTO
@@ -1062,8 +1062,8 @@ def editarPrestamo_view(request, id):
             # Actualizar los campos del objeto Prestamo con los datos del formulario
             prestamo.fechaEntrega = fecha_entrega
             prestamo.fechaDevolucion = fecha_devolucion
-            prestamo.nombreEntrega = nombre_entrega
-            prestamo.nombreRecibe = nombre_recibe
+            prestamo.nombreEntrega.numeroIdentificacion = nombre_entrega
+            prestamo.nombreRecibe.numeroIdentificacion = nombre_recibe
             prestamo.nombreElemento = nombre_elemento            
             prestamo.valorUnidadElemento = valor_unidad
             prestamo.observacionesPrestamo = observaciones_prestamo

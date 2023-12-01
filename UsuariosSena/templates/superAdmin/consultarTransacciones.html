@@ -116,12 +116,12 @@ Consultar Transaciones
                   </div>
                 </td>
                 <td class=" truncate px-3 text-center py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreEntrega }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreEntrega.nombres }} {{ Prestamos.nombreEntrega.apellidos }}
 
                   </div>
                 </td>
                 <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreRecibe }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreRecibe.nombres }} {{ Prestamos.nombreRecibe.apellidos }}
 
                   </div>
                 </td>
@@ -168,7 +168,7 @@ Consultar Transaciones
 
                 <td
                   class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
-                  <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega}} , {{Prestamos.nombreRecibe}},  {{Prestamos.nombre_del_producto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{ Prestamos.observacionesPrestamo }},{{ Prestamos.estadoPrestamo }}  ')"
+                  <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega.nombres}} {{Prestamos.nombreEntrega.apellidos}} , {{Prestamos.nombreRecibe.nombres}} {{Prestamos.nombreRecibe.apellidos}},  {{Prestamos.nombre_del_producto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{ Prestamos.observacionesPrestamo }},{{ Prestamos.estadoPrestamo }}  ')"
                     ,>
                     <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64"
                       xmlns="http://www.w3.org/2000/svg">
@@ -195,14 +195,21 @@ Consultar Transaciones
                     </a>
                   </button>
                   
+                  
+                  {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'VENCIDO'  %}
+                  
                   <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
 
                     <button type="submit" title="Finalizar Prestamo">
-                      <img src="{% static 'img/finalizar.png' %}" width="80px" alt="">
+                      <img src="{% static 'img/finalizar.png' %}" width="40px" alt="">
                     </button>
                   </form>
+
+                  {% endif %}
+                    
+                  
 
                 </td>
                 {% endif %}
