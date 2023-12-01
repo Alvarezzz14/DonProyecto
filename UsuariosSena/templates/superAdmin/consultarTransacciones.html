@@ -126,7 +126,7 @@ Consultar Transaciones
                   </div>
                 </td>
                 <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreProducto }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombre_del_producto }}
 
                   </div>
                 </td>
@@ -168,7 +168,7 @@ Consultar Transaciones
 
                 <td
                   class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
-                  <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega}} , {{Prestamos.nombreRecibe}},  {{Prestamos.nombreProducto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{Prestamos.observacionesPrestamo }},{{Prestamos.estadoPrestamo }}  ')"
+                  <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega}} , {{Prestamos.nombreRecibe}},  {{Prestamos.nombre_del_producto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{ Prestamos.observacionesPrestamo }},{{ Prestamos.estadoPrestamo }}  ')"
                     ,>
                     <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64"
                       xmlns="http://www.w3.org/2000/svg">
@@ -322,7 +322,7 @@ Consultar Transaciones
           </div>
         </td>
         <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.nombreProducto }}
+          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.nombreElemento }}
 
           </div>
         </td>
@@ -332,19 +332,19 @@ Consultar Transaciones
           </div>
         </td>
         <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.cantidadOtorgada }}
+          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.cantidad_prestada }}
 
           </div>
         </td>
         <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.observacionesEntrega }}
+          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.observaciones_prestamo }}
 
           </div>
         </td>
         <!--Botones de Visualizar Editar y ELiminar-->
         <td class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
           <button
-            onclick="openModal('{{Entregas.fecha_entrega}}, {{Entregas.responsable_Entrega}}, {{Entregas.nombre_solicitante}},  {{Entregas.nombreProducto}}, {{Entregas.idC }}, {{ Entregas.cantidadOtorgada }}, {{ Entregas.observacionesEntrega }}')"
+            onclick="openModal('{{Entregas.fecha_entrega}}, {{Entregas.responsable_Entrega}}, {{Entregas.nombre_solicitante}},  {{Entregas.nombreElemento}}, {{Entregas.idC }}, {{ Entregas.cantidad_prestada }}, {{ Entregas.observaciones_prestamo }}')"
             ,>
             <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
               <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
