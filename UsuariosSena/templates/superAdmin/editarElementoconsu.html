@@ -23,7 +23,7 @@ Editar Elemento
                 <label for="fechaAdquisicion" class="labelform">Fecha</label>
             </div>
             <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="nombre_elemento" value="{{ elemento.nombreElemento }}" name="txt_nombreElemento" required>
+                <input type="text" class="inputform" placeholder="nombre_elemento" value="{{ elemento.productoConsumible.nombreElemento }}" name="txt_nombreElemento" required>
                 <label for="nombreElemento" class="labelform">Nombre</label>
             </div>
             <div class="selectContainer">
@@ -49,7 +49,7 @@ Editar Elemento
                 <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
             </div>
             <div class="inputContainervalor">
-                <input type="text" class="inputformvalor" placeholder="a" name="txt_costoUnidadElemento" value="{{ elemento.costoUnidadElemento }}" id="valorUnidad">
+                <input type="text" class="inputformvalor" placeholder="a" name="txt_costoUnidadElemento" value="{{ elemento.productoConsumible.costoUnidadElemento }}" id="valorUnidad">
                 <label for="costoUnidadElemento" class="labelformvalor">Costo Unidad</label>
             </div>
 
@@ -64,7 +64,7 @@ Editar Elemento
                 <label for="serialSenaElemento" class="labelform">ID</label>
             </div>
             <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="a" name="txt_descripcionElemento" value="{{ elemento.descripcionElemento }}" required>
+                <input type="text" class="inputform" placeholder="a" name="txt_descripcionElemento" value="{{ elemento.productoConsumible.descripcionElemento }}" required>
                 <label for="descripcionElemento" class="labelform">Descripción</label>
             </div>
             <div class="inputContainer">

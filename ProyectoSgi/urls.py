@@ -19,7 +19,7 @@ from django.urls import path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include(("UsuariosSena.urls", "usu"), namespace="usu")),
-    path("login/", views.login_view, name="login_view"),
+    path("", views.login_view, name="login_view"),
     path("dashboard/", views.homedash, name="homedash"),
     path("usuariodash/", views.usuariodash, name="usuariodash"),
     path("inventariodash/", views.inventariodash, name="inventariodash"),
@@ -78,10 +78,7 @@ urlpatterns = [
         "consultarUsuario/", views.consultarUsuario_view, name="consultarUsuario_view"
     ),
     path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
-    path(
-        "consultarTransacciones/",
-        views.consultarTransacciones_view,
-        name="consultarTransacciones",
+    path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),

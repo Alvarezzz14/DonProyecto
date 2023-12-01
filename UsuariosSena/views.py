@@ -215,7 +215,6 @@ def editarUsuario_view(request, numeroIdentificacion):
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
         datos = {"user": user}
         # Redirigir a la vista consultarUsuario_view para recargar los datos
-        print(datos)
         return render(request, "superAdmin/editarUsuario.html", datos)
     except UsuariosSena.DoesNotExist:
         messages.warning(request, "No existe registro")
@@ -227,34 +226,39 @@ def editarElementosconsu_view(request, id):
     elemento = get_object_or_404(InventarioConsumible, id=id)
 
     if request.method == "POST":
-        # Obtener datos del formulario
-        fecha_adquisicion = request.POST.get('txt_fechaadquisicion')
-        nombre_elemento = request.POST.get('txt_nombreElemento')
-        categoria_elemento = request.POST.get('txt_categoriaElemento')
-        estado_elemento = request.POST.get('txt_estadoElemento')
-        descripcion_elemento = request.POST.get('txt_descripcionElemento')
-        observacion_elemento = request.POST.get('txt_observacionElemento')
-        cantidad_elemento = request.POST.get('txt_cantidadElemento')
-        costo_unidad_elemento = request.POST.get('txt_costoUnidadElemento')
-        costo_total_elemento = request.POST.get('txt_costoTotalElemento')
-        factura_elemento = request.FILES.get('txt_facturaElemento')
-
         try:
+            # Obtener datos del formulario
+            fecha_adquisicion = request.POST.get('txt_fechaadquisicion')
+            nombre_elemento = request.POST.get('txt_nombreElemento')
+            categoria_elemento = request.POST.get('txt_categoriaElemento')
+            estado_elemento = request.POST.get('txt_estadoElemento')
+            descripcion_elemento = request.POST.get('txt_descripcionElemento')
+            observacion_elemento = request.POST.get('txt_observacionElemento')
+            cantidad_elemento = request.POST.get('txt_cantidadElemento')
+            costo_unidad_elemento = request.POST.get('txt_costoUnidadElemento')
+            costo_total_elemento = request.POST.get('txt_costoTotalElemento')
+            factura_elemento = request.FILES.get('txt_facturaElemento')
+
             # Actualizar los campos del objeto ElementosConsumible con los datos del formulario
             elemento.fechaAdquisicion = fecha_adquisicion
-            elemento.nombreElemento = nombre_elemento
+            elemento.productoConsumible.nombreElemento = nombre_elemento
             elemento.categoriaElemento = categoria_elemento
             elemento.estadoElemento = estado_elemento
-            elemento.descripcionElemento = descripcion_elemento
+            elemento.productoConsumible.descripcionElemento = descripcion_elemento
             elemento.observacionElemento = observacion_elemento
             elemento.cantidadElemento = cantidad_elemento
-            elemento.costoUnidadElemento = costo_unidad_elemento
+            elemento.productoConsumible.costoUnidadElemento = costo_unidad_elemento
             elemento.costoTotalElemento = costo_total_elemento
             elemento.facturaElemento = factura_elemento
 
+            # Guardar el modelo ProductosInventarioConsumible
+            elemento.productoConsumible.save()
+
+            # Guardar el modelo InventarioConsumible
             elemento.save()
 
-            consultar_elementosconsu_url = reverse("consultarelementosconsu")
+            messages.success(request, "Elemento consumible actualizado con éxito")
+            consultar_elementosconsu_url = reverse("consultarElementos")
             return redirect(f"{consultar_elementosconsu_url}?opcion=elemento_consumible")
 
         except InventarioConsumible.DoesNotExist as e:
@@ -370,7 +374,6 @@ def eliminarUsuario_view(request, numeroIdentificacion):
     try:
         # Busca el usuario por ID
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
-
         # Desactiva el usuario
         user.is_active = False
         user.save()
@@ -388,6 +391,18 @@ def eliminarUsuario_view(request, numeroIdentificacion):
         # Maneja el caso en el que el usuario no existe
         messages.error(request, "Usuario no encontrado.")
         return redirect("index")
+        
+# @login_required
+# @verificar_superadmin
+def eliminarConsumible_view(request, id):
+    consumible = get_object_or_404(ProductosInventarioConsumible, id)
+
+    # Cambiar el estado a "Baja"
+    consumible.estadoElemento = 'Baja'
+    consumible.save()
+
+    return JsonResponse({'status': 'success'})
+
 
 
 # @login_required
@@ -620,8 +635,9 @@ def formEntregasConsumibles_view(request):
         responsable_Entrega_nombre = request.POST.get("responsable_Entrega")
         nombre_solicitante_nombre = request.POST.get("nombre_solicitante")
         idC_id = request.POST.get("idC")  # Este es el ID del InventarioConsumible
-        cantidad_prestada = request.POST.get("cantidadElemento")
-        observaciones_prestamo = request.POST.get("observaciones_prestamo")
+        nombreProducto = request.POST.get("nombreProducto")
+        cantidad_prestada = request.POST.get("cantidadOtorgada")
+        observaciones_prestamo = request.POST.get("observacionesEntrega")
         firmaDigital = (
             request.FILES.get("firmaDigital")
             if "firmaDigital" in request.FILES
@@ -679,6 +695,7 @@ def formEntregasConsumibles_view(request):
                     fecha_entrega=timezone.now(),
                     responsable_Entrega=responsable_Entrega,
                     nombre_solicitante=nombre_solicitante,
+                    nombreProducto=nombreProducto,
                     idC=inventarioConsumible,
                     cantidad_prestada=cantidad_solicitada,
                     observaciones_prestamo=observaciones_prestamo,
@@ -1023,23 +1040,23 @@ def editarPrestamo_view(request, id):
         # Obtener datos del formulario
         fecha_entrega = request.POST.get("txt_fechaentrega")
         fecha_devolucion = request.POST.get("txt_fechaDevolucion")
-        nombre_entrega = request.POST.get("txt_nombreEntrega")
-        nombre_recibe = request.POST.get("txt_nombreRecibe")
-        nombre_elemento = request.POST.get("txt_nombreElemento")
-        cantidad_elemento = request.POST.get("txt_cantidadElemento")
+        # nombre_entrega = request.POST.get("txt_nombreEntrega")
+        # nombre_recibe = request.POST.get("txt_nombreRecibe")
+        nombre_elemento = request.POST.get("txt_nombreElemento")        
         valor_unidad = request.POST.get("txt_valorUnidadElemento")
         observaciones_prestamo = request.POST.get("txt_observacionesPrestamo")
+        estado_prestamo = request.POST.get("txt_estado_prestamo")        
 
         try:
             # Actualizar los campos del objeto Prestamo con los datos del formulario
             prestamo.fechaEntrega = fecha_entrega
             prestamo.fechaDevolucion = fecha_devolucion
             prestamo.nombreEntrega = nombre_entrega
-            prestamo.nombreRecibe = nombre_recibe
-            prestamo.nombreElemento = nombre_elemento
-            prestamo.cantidadElemento = cantidad_elemento
+            # prestamo.nombreRecibe = nombre_recibe
+            # prestamo.nombreElemento = nombre_elemento            
             prestamo.valorUnidadElemento = valor_unidad
             prestamo.observacionesPrestamo = observaciones_prestamo
+            prestamo.estadoPrestamo = observaciones_prestamo
             # Resto de la lógica de actualización
 
             prestamo.save()
