@@ -36,6 +36,40 @@ Home SUAdmin
         });
     });
   </script>
+  <script>
+    // Función para abrir el modal y mostrar la información del usuario
+    function openModal(userData) {
+        const modal = document.getElementById('userModal');
+        const userDataArray = userData.split(',');
+        const adquirienteField = document.getElementById('adquirienteField');
+        const devolucionField = document.getElementById('devolucionField');
+        const serialField = document.getElementById('serialField');
+        const observacionesField = document.getElementById('observacionesField');
+
+        adquirienteField.value = userDataArray[0];
+        devolucionField.value = userDataArray[1];
+        serialField.value = userDataArray[3];
+        observacionesField.value = userDataArray[4];
+        console.log(userDataArray)
+
+        modal.style.display = 'block';
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+        const modal = document.getElementById('userModal');
+        modal.style.display = 'none';
+    }
+
+    // Cierra el modal si se hace clic fuera de él
+    window.onclick = function (event) {
+        const modal = document.getElementById('userModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
     
 {% endblock extrascript %}
     
@@ -86,9 +120,7 @@ Home SUAdmin
                                 
                                 
                             {% for Prestamos  in Prestamos %}
-                            <div class="area-notificaciones">
-                                
-                               
+                            <div class="area-notificaciones">                                                                                           
                                 <div class="contenido-notificaciones">
                                     <div class="logo-notificaciones">
                                         <img src="{% static 'img/notificaciones.png' %}" alt="" class="logo-notificaciones">
@@ -97,19 +129,17 @@ Home SUAdmin
                                     </div>
                                       
                                     <div class="acciones">
-                                      <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega.nombres}} {{Prestamos.nombreEntrega.apellidos}} , {{Prestamos.nombreRecibe.nombres}} {{Prestamos.nombreRecibe.apellidos}},  {{Prestamos.nombre_del_producto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{ Prestamos.observacionesPrestamo }},{{ Prestamos.estadoPrestamo }}  ')"
-                                      ,>
-                                      <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
-                                        <path d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z"
-                                          fill="#fff" />
-                                        <path d="m45.4 32c0 7.5-6 13.5-13.5 13.5s-13.5-6-13.5-13.5 6-13.5 13.5-13.5 13.5 6 13.5 13.5"
-                                          fill="#42ade2" />
-                                        <path d="m39.4 32c0 4.1-3.4 7.5-7.5 7.5s-7.5-3.4-7.5-7.5 3.4-7.5 7.5-7.5 7.5 3.4 7.5 7.5"
-                                          fill="#231f20" />
-                                      </svg>
-                                    </button>
+                                      <button
+                                      title="Visualizar Prestamo" onclick="openModal('{{Prestamos.nombreRecibe.nombres}} {{Prestamos.nombreRecibe.apellidos}} ,{{Prestamos.fechaDevolucion}}, {{Prestamos.serialSenaElemento}}, {{Prestamos.observacionesPrestamo}}  ')",>          
+                                        <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
+                                          <path d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z" fill="#fff" />
+                                          <path d="m45.4 32c0 7.5-6 13.5-13.5 13.5s-13.5-6-13.5-13.5 6-13.5 13.5-13.5 13.5 6 13.5 13.5"
+                                            fill="#42ade2" />
+                                          <path d="m39.4 32c0 4.1-3.4 7.5-7.5 7.5s-7.5-3.4-7.5-7.5 3.4-7.5 7.5-7.5 7.5 3.4 7.5 7.5"
+                                            fill="#231f20" />
+                                        </svg>
+                                      </button>
 
                                         {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
 
@@ -133,7 +163,7 @@ Home SUAdmin
                                         <div> 
                                             <h2>{{ Prestamos.fechaDevolucion }} <br>
                                               {{ Prestamos.nombreRecibe.nombres }} {{ Prestamos.nombreRecibe.apellidos }}:  </h2>                                             
-                                                <p>{{ Prestamos.serial }}</p>
+                                                <p>{{ Prestamos.serialSenaElemento }}</p>
                                                 <p>{{ Prestamos.observacionesPrestamo }}</p>
                                         </div>
                                     </div>
@@ -157,39 +187,36 @@ Home SUAdmin
                         </div>
                     </div>
                 </div>
-                
+
+
+
+
                 <div id="userModal" class="modal">
-                  <div class="modal-content">
-                    <thead>
-                      <span class="close" onclick="closeModal()">&times;</span>
-                    </thead>
-                    <div id="userData">
-                      <table>
-                        <tr>
-                          <th>Fecha de entrega:</th>
-                          <td><input type="text" id="entregaField" readonly></td>
-                        </tr>
-                        <tr>
-                          <th>Emisor:</th>
-                          <td><input type="text" id="emisorField" readonly></td>
-                        </tr>
-                        <tr>
-                          <th>Adquiriente:</th>
-                          <td><input type="text" id="adquirienteField" readonly></td>
-                        </tr>
-                        <tr>
-                          <th>Serial Elemento:</th>
-                          <td><input type="text" id="serialField" readonly></td>
-                        </tr>
-                        <tr>
-                          <th>Cantidad:</th>
-                          <td><input type="text" id="cantidadField" readonly></td>
-                        </tr>
-                        <tr>
-                          <th>Observaciones:</th>
-                          <td><input type="text" id="observacionesField" readonly></td>
-                        </tr>
-                      </table>
+                    <div class="modal-content">
+                      <thead>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                      </thead>
+                      <div id="userData">
+                        <h1> Información del prestamo</h1>
+                        <table class="tabla">                          
+                          <tr>
+                            <th>Fecha de Devolucion:</th>
+                            <td><input type="datetime" id="devolucionField" readonly></td>
+                          </tr>                          
+                          <tr>
+                            <th>Adquiriente:</th>
+                            <td><input type="text" id="adquirienteField" readonly></td>
+                          </tr>
+                          <tr>
+                            <th>Elemento:</th>
+                            <td><input type="text" id="serialField" readonly></td>
+                          </tr>
+                          <tr>
+                            <th>Observaciones:</th>
+                            <td><input type="text" id="observacionesField" readonly></td>
+                          </tr>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -201,7 +228,6 @@ Home SUAdmin
         {% endblock content %}
 
    
-   {% block extrajs %}
    <script src="{% static 'js/dashboard.js' %}"></script>  
    <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
    
