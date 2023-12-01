@@ -156,7 +156,7 @@ Consultar Elementos
                 class=" text-ellipsis w-3/2 overflow-hidden ... px-3 py-2 whitespace-no-wrap border-b border-gray-200">
                 
                 {% if elemento.facturaElemento %}
-                <div class="text-[0.3rem] leading-5 text-gray-500"><a href="{{ elemento.facturaElemento.url }}" target="_blank"><img src="{{ elemento.facturaElemento.url }}" alt="Factura"></a>
+                <div class="text-[0.3rem] leading-5 text-gray-500"><a href="{{ elemento.factura.url }}" target="_blank"><img class="w-min scale(.75)" src="{{ elemento.factura.url }}" alt="Factura"></a>
                 </div>
                 {% else %}
                 <div class="text-[0.7rem] leading-5 text-gray-500"><a href="#" >NoFactura</a>
@@ -167,7 +167,7 @@ Consultar Elementos
               <!--Botones de Visualizar Editar y ELiminar-->
               <td
                 class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-l border-gray-200 gap-2">
-                <button title="Visualizar Elemento" onclick="openModal('{{ elemento.fechaAdquisicion }}, {{ elemento.productoConsumible.nombreElemento }}, {{elemento.productoConsumible.categoriaElemento}},  {{elemento.productoConsumible.estadoElemento}}, {{ elemento.productoConsumible.descripcionElemento }}, {{ elemento.observacionElemento }}, {{elemento.cantidadElemento }}, {{ elemento.productoConsumible.costoUnidadElemento }} ')",>
+                <button title="Visualizar Elemento" onclick="openModal('{{ elemento.fechaAdquisicion }}, {{ elemento.productoConsumible.nombreElemento }}, {% if elemento.productoConsumible.categoriaElemento == 'C' %} Consumible {% endif %} , {% if elemento.productoConsumible.estadoElemento == 'D' %} Disponible {% elif elemento.productoConsumible.estadoElemento == 'P' %} Prestamo {% elif elemento.productoConsumible.estadoElemento == 'G' %} Garantia {% elif elemento.productoConsumible.estadoElemento == 'B' %} Baja {% endif %},  {{ elemento.productoConsumible.descripcionElemento }}, {{ elemento.observacionElemento }}, {{elemento.cantidadElemento }}, {{ elemento.productoConsumible.costoUnidadElemento }} ')",>
                   <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                     <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
                     <path
@@ -335,7 +335,7 @@ Consultar Elementos
             </td>
             <td>
             {% if elemento.factura %}
-                <div class="text-[0.3rem] leading-5 text-gray-500"><a href="{{ elemento.factura.url }}" target="_blank"><img src="{{ elemento.factura.url }}" alt="Factura"></a>
+                <div class="text-[0.3rem] leading-5 text-gray-500"><a href="{{ elemento.factura.url }}" target="_blank"><img class="w-min scale(.75)" src="{{ elemento.factura.url }}" alt="Factura"></a>
                 </div>
                 {% else %}
                 <div class="text-[0.7rem]
@@ -516,14 +516,14 @@ Consultar Elementos
     const cantidadField = document.getElementById('cantidadField');
     const valorUnidadElementoField = document.getElementById('valorUnidadElementoField');
 
-    fechaElementoField.value = userDataArray[0] +" del "+ userDataArray[1];
-    nombreField.value = userDataArray[2];
-    categoriaField.value = userDataArray[3];
-    estadoField.value = userDataArray[4];
-    descripcionElementoField.value = userDataArray[5];
-    observacionElementoField.value = userDataArray[6];
-    cantidadField.value = userDataArray[7];
-    valorUnidadElementoField.value = userDataArray[8];
+    fechaElementoField.value = userDataArray[0];
+    nombreField.value = userDataArray[1];
+    categoriaField.value = userDataArray[2];
+    estadoField.value = userDataArray[3];
+    descripcionElementoField.value = userDataArray[4];
+    observacionElementoField.value = userDataArray[5];
+    cantidadField.value = userDataArray[6];
+    valorUnidadElementoField.value = userDataArray[7];
     modal.style.display = 'block';
   }
     

@@ -29,8 +29,8 @@ Editar Elemento
             <div class="selectContainer">
                 <label for="categoriaElemento" class="labelformselect">Categoria</label>
                 <div>
-                    <select class="selector" name="txt_categoriaElemento" id="categoriaElemento">
-                        <option value="D" {% if elemento.categoriaElemento == 'D' %} selected {% endif %}>Devolutivo</option>
+                    <select readonly class="selector" name="txt_categoriaElemento" id="categoriaElemento">
+                       
                         <option value="C" {% if elemento.categoriaElemento == 'C' %} selected {% endif %}>Consumible</option>
                     </select>
                 </div>
@@ -73,7 +73,7 @@ Editar Elemento
                 <label for="observacionElemento" class="labelform">Observaciones</label>
             </div>
             <div class="selectorimagen">
-                <input type="file" accept="image/*" class="inputsubirfoto" name="txt_facturaElemento" value="{{ elemento.facturaElemento }}" required>
+                <input type="file" accept="image/*" class="inputsubirfoto" name="txt_facturaElemento" value="{{ elemento.facturaElemento }}" >
                 <label for="facturaElemento" class="labelsubirfoto">Adjuntar Soporte</label>
             </div>
         </div>

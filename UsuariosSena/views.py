@@ -243,7 +243,7 @@ def editarElementosconsu_view(request, id):
             elemento.fechaAdquisicion = fecha_adquisicion
             elemento.productoConsumible.nombreElemento = nombre_elemento
             elemento.categoriaElemento = categoria_elemento
-            elemento.estadoElemento = estado_elemento
+            elemento.productoConsumible.estadoElemento = estado_elemento
             elemento.productoConsumible.descripcionElemento = descripcion_elemento
             elemento.observacionElemento = observacion_elemento
             elemento.cantidadElemento = cantidad_elemento
