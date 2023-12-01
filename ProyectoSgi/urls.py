@@ -32,17 +32,14 @@ urlpatterns = [
     path("editarElementoconsu/<int:id>/", views.editarElementosconsu_view, name="editarElementosconsu_view"
     ),
     
-    path(
-        "editarElementodevo/<int:serial>/",
-        views.editarElementosdevo_view, 
-        name="editarElementosdevo_view"
+    path("editarElementodevo/<int:serial>", views.editarElementosdevo_view, name="editarElementosdevo_view"
         
     ),
     
     path(
         "finalizarPrestamo/<int:id>/",
         views.finalizarPrestamo_view,
-        name="finalizarPrestamo_view",
+        name="finalizarPrestamo_view"
     ),
     path(
         "editarPrestamo/<int:id>/",

@@ -16,7 +16,7 @@ Editar Elemento
 
 <h1 class="title">Editar Elemento Devolutivos</h1>
 <div class="signupFrm">
-    <form action="."  method="POST" class="form">
+    <form action="/editarElementodevo/{{elemento.InventarioDevolutivo.serial}}" class="form" method="post">
         {%  csrf_token %}
         <div class="container-1">
             <div class="fechaContainer">
