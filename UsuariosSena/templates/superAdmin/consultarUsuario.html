@@ -14,21 +14,21 @@ Consultar Usuarios
 <!--Script Contenido Estilos de Tailwindcss-->
 {% block extrascript %}
 <script>
-  const botonEliminar = (id) => {
+  const botonEliminar = (numeroIdentificacion) => {
     Swal.fire({
       "title": "¿Estás seguro de inhabilitar el usuario?",
       "text": "El usuario perdera todos los permisos",
       "icon": "question",
       "showCancelButton": true,
       "cancelButtonText": "Cancelar",
-      "confirmButtonText": "Eliminar",
+      "confirmButtonText": "Inhabilitar",
       "reverseButtons": true,
       "confirmButtonColor": "#fc7323",
       "iconColor": "#fc7323",
     })
       .then(function (result) {
         if (result.isConfirmed) {
-          window.location.href = "/eliminarUsuario/" + id;
+          window.location.href = "/eliminarUsuario/" + numeroIdentificacion;
         }
       })
   }
@@ -51,16 +51,19 @@ Consultar Usuarios
     modal.style.display = 'none';
   }
 
-  // Cierra el modal si se hace clic fuera de él
-  window.onclick = function (event) {
+   // Cierra el modal si se hace clic fuera de él
+   window.onclick = function (event) {
     const modal = document.getElementById('userModal');
     if (event.target == modal) {
       modal.style.display = 'none';
     }
   }
 </script>
+
 {% endblock extrascript %}
+
 {% block content %}
+
 <section class="bg-white  shadow-xl rounded-md p-4 overflow-hidden m-4 ">
 
   <h1 class="text-[1.5rem] m-2 mb-10 font-extrabold ">Consultar Usuarios</h1>
@@ -73,7 +76,7 @@ Consultar Usuarios
     </div>
     <div>
       <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
-        :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
+      :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
         :disabled="search.length == 0">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -238,7 +241,7 @@ Consultar Usuarios
               <!--Botones de Visualizar Editar y ELiminar-->
               <td
                 class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
-                <button onclick="openModal('{{usuario.nombres}}, {{usuario.apellidos}}, {{usuario.tipoIdentificacion}}, {{usuario.celular}},  {{usuario.rol}}, {{usuario.numeroIdentificacion }}, {{ usuario.email }}  ')",>
+                <button title= "Visualizar Usuario" onclick="openModal('{{usuario.nombres}}, {{usuario.apellidos}}, {{usuario.tipoIdentificacion}}, {{usuario.celular}},  {{usuario.rol}}, {{usuario.numeroIdentificacion }}, {{ usuario.email }}')">
                   <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                     <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
                     <path d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z" fill="#fff" />
@@ -250,8 +253,8 @@ Consultar Usuarios
                 </button>
 
                 {% if request.user.cuentadante == 'superAdmin' %}
-                <button onclick="">
-                  <a href="/editarUsuario/{{usuario.id}}">
+                <button title= "Editar Usuario" onclick="">
+                  <a href="/editarUsuario/{{usuario.numeroIdentificacion}}">
                     <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarUsuario.html"
                       class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -259,7 +262,7 @@ Consultar Usuarios
                     </svg>
                   </a>
                 </button>
-                <button onclick="botonEliminar('{{usuario.id}}')">
+                <button title= "Inhabilitar Eliminado" onclick="botonEliminar('{{usuario.numeroIdentificacion}}')">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -321,6 +324,7 @@ Consultar Usuarios
 </section>
 
 {% block extrajs %}
+
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
 
 <script>
@@ -338,7 +342,7 @@ Consultar Usuarios
     const numeroIdentificacionField = document.getElementById('numeroIdentificacionField');
     const correoSenaField = document.getElementById('correoSenaField');
 
-    nombreField.value = userDataArray[0];
+    nombreField.value = userDataArray[0] ;
     apellidoField.value = userDataArray[1];
     tipoIdentificacionField.value = userDataArray[2];
     celularField.value = userDataArray[3];

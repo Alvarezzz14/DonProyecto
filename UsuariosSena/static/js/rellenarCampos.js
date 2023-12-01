@@ -30,12 +30,44 @@ $(document).ready(function () {
             }
         });
     });
+    //Actualizar campos crear consumible conseleccion ID elemento
+    $('#idElementoInput').on('input', function () {
+        var elementId = $(this).val();
+
+        if (!elementId) {
+            // Limpiar los campos si el input está vacío
+            $('#nombreElementoInput').val('');
+            $('#disponiblesInput').val('');
+            $('#cantidad_prestada').val('');
+            $('#observaciones_prestamo').val('');
+        } else {
+            // Realizar solicitud AJAX si hay un valor
+            $.ajax({
+                url: '/get_element_consum_info/',
+                type: 'GET',
+                data: { 'id': elementId },
+                success: function (response) {
+                    // Actualizar los campos con la respuesta
+                    $('#nombreElementoInput').val(response.nombre);
+                    $('#disponiblesInput').val(response.disponible);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: ", error);
+                    // Limpiar los campos si hay un error
+                    $('#nombreElementoInput').val('');
+                    $('#disponiblesInput').val('');
+                    $('#cantidad_prestada').val('');
+                    $('#observaciones_prestamo').val('');
+                }
+            });
+        }
+    });
 });
 
 //AVISO CANCELAR
 function confirmCancel() {
     Swal.fire({
-        title: '¿Estás seguro de que quieres cancelar?',
+        title: '¿Estás seguro que quieres cancelar?',
         text: "Esta acción no se puede deshacer.",
         icon: 'warning',
         showCancelButton: true,
@@ -45,7 +77,8 @@ function confirmCancel() {
         cancelButtonText: 'No, volver'
     }).then((result) => {
         if (result.isConfirmed) {
-            document.querySelector('.form').reset();
+            // Redireccionar al usuario a la página de inicio
+            window.location.href = "/elementosdash/";
         }
     });
 }

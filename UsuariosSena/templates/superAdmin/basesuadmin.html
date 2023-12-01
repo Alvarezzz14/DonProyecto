@@ -71,16 +71,14 @@
 
 
                 </a>
-                <div class="redes-sociales">
-                    <a href="https://www.facebook.com/senacditidosquebradas/?locale=es_LA" target="_blank"><i
-                            class="fab fa-facebook-square" style="color: blue;"></i></a>
-                    <a href="https://www.instagram.com/bienestaralaprendizcditi/?hl=es" target="_blank"><i
-                            class="fab fa-instagram-square" style="color: #e697fa;"></i></a>
-                    <a href="https://twitter.com/senacditi/status/913841534172368897?lang=es" target="_blank"><i
-                            class="fab fa-twitter-square" style="color: aqua;"></i></a>
+                
+            </div>
+            <div class="redes-sociales">
+                <a href="https://www.facebook.com/senacditidosquebradas/?locale=es_LA" target="_blank"><img src="{% static 'img/facebook.png' %}" alt=""></a>
 
-                </div>
+                <a href="https://www.instagram.com/bienestaralaprendizcditi/?hl=es" target="_blank"><img src="{% static 'img/instagram.png' %}" alt=""></a>
 
+                <a href="https://twitter.com/senacditi/status/913841534172368897?lang=es" target="_blank"><img src="{% static 'img/gorjeo.png' %}" alt=""></a>
             </div>
 
 
@@ -149,17 +147,8 @@
                     text: messageText,
                     icon: 'warning',
                     confirmButtonText: confirmButtonText,
-                    showCancelButton: true,
                 })
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire(
-                                'Eliminado!',
-                                'Eliminado Correctamente.',
-                                'success'
-                            )
-                        }
-                    });
+                    ;
 
             } else if (messageType === "error") {
                 Swal.fire({

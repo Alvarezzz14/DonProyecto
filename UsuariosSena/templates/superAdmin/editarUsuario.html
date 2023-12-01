@@ -19,7 +19,7 @@
     <!-- Inicio del Forumlario-->
 
     <div class="signupFrm">
-        <form action="/actualizarUsuario/{{user.id}}" class="form" method="post">
+        <form action="/actualizarUsuario/{{user.numeroIdentificacion}}" class="form" method="post">
             <h1 class="title">Editar Usuarios</h1>
             {% csrf_token %}
 
@@ -85,23 +85,18 @@
                     <label for="rol" class="labelformselect">Rol</label>
                     <div>
                         <select class="selector" name="rol" id="rol">
-
-                            {% if user.rol == 'SuperAdmin' %}
-                            <option value="SuperAdmin" selected>SuperAdmin</option>
-                            {% else %}
-                            <option value="SuperAdmin">SuperAdmin</option>
-                            {% endif %}
+                            
 
                             {% if user.rol == 'Instructor' %}
-                            <option value="Instructor" selected>Instructor</option>
+                            <option value="I" selected>Instructor</option>
                             {% else %}
-                            <option value="Instructor">Instructor</option>
+                            <option value="I">Instructor</option>
                             {% endif %}
 
                             {% if user.rol == 'Monitor' %}
-                            <option value="Monitor" selected>Monitor</option>
+                            <option value="M" selected>Monitor</option>
                             {% else %}
-                            <option value="Monitor">Monitor</option>
+                            <option value="M">Monitor</option>
                             {% endif %}
                         </select>
                     </div>
@@ -136,21 +131,21 @@
                         <select class="selector" name="tipoContrato" id="tipoContrato">
 
                             {% if user.tipoContrato == 'Planta' %}
-                            <option value="Planta" selected>Planta</option>
+                            <option value="P" selected>Planta</option>
                             {% else %}
-                            <option value="Planta">Planta</option>
+                            <option value="P">Planta</option>
                             {% endif %}
 
                             {% if user.tipoContrato == 'Contratista' %}
-                            <option value="Contratista" selected>Contratista</option>
+                            <option value="C" selected>Contratista</option>
                             {% else %}
-                            <option value="Contratista">Contratista</option>
+                            <option value="C">Contratista</option>
                             {% endif %}
 
                             {% if user.tipoContrato == 'Aprendiz' %}
-                            <option value="Aprendiz" selected>Aprendiz</option>
+                            <option value="A" selected>Aprendiz</option>
                             {% else %}
-                            <option value="Aprendiz">Aprendiz</option>
+                            <option value="A">Aprendiz</option>
                             {% endif %}
 
                         </select>
@@ -180,17 +175,17 @@
             </div>
             <div class="container-1">
                 <div class="cantidadContainer">
-                    <input type="number" class="inputcantidad" name="duracionContrato" value="{{user.duracionContrato}}"
+                    <input type="text" class="inputcantidad" name="duracionContrato" value="{{user.duracionContrato}}"
                         id="duracionContrato">
                     <label for="duracionContrato" class="labelcantidad">Duracion</label>
 
                 </div>
                 <div class="inputContainer">
-                    <input type="password" class="inputform" placeholder="Contraseña" name="contraSena" value="{{user.password}}" required>
+                    <input type="password" class="inputform" placeholder="Contraseña" name="contraSena"  required>
                     <label for="contraSena" class="labelform">Contraseña</label>
                 </div>
                 <div class="inputContainer">
-                    <input type="password" class="inputform" placeholder="a" value="{{user.validacionContraSena}}" required>
+                    <input type="password" class="inputform" placeholder="a" name="validacionContraSena" required>
                     <label for="validacionContraSena" class="labelform" name="validacionContraSena">Repetir Contraseña</label>
                 </div>
                 <div class="selectorimagen">
@@ -200,16 +195,12 @@
             </DIV>
             <div class="container-botones">
 
-                <button type="submit" class="submitBtn"><span id="span">GUARDAR</span></button>
-                <button type="button" class="submitBtn" id="cancelBtn"><span>CANCELAR</span></button>
-
-
+                <button type="submit" class="submitBtn"><span id="span">GUARDAR</span>
+                </button>
+                
+                <button type="button" class="submitBtn" id="cancelBtn"><span>CANCELAR</span>
+                </button>
             </div>
-            <script>
-                document.getElementById("cancelBtn").onclick = function() {
-                  window.location.href = "/usuariodash/";
-                };
-              </script>
         </form>
 
     </div>

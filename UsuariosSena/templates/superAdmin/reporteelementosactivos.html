@@ -19,18 +19,24 @@
             <h1>Elementos activos</h1>
         </div>
         <div class="tabla_dinamica">
+            
+        <form method="GET" action="{% url 'reporteelementosactivos' %}">
             <div class="fecha_reporte">
                 <div class="fechas">
                     <label for="fecha_inicio">Fecha inicio</label>
-                    <input type="date" placeholder="fecha inicio">
+                    <input type="date" name="fecha_inicio" placeholder="fecha inicio">
                 </div>
                 
                 <div class="fechas">
                     <label for="fecha_fin">Fecha fin</label>
-                    <input type="date" placeholder="fecha fin">
+                    <input type="date" placeholder="fecha fin" name="fecha_fin">
                 </div>
-                <a href="{% url 'generar_pdf' %}"><button class="boton_reporte">Generar reporte</button></a>
+                <a href="#"><button type="submit" class="boton_reporte">Filtrar Fecha</button></a>
+                <a href="{% url 'reporteelementosactivos' %}"><button class="boton_reporte">Generar reporte</button></a>
+                
             </div>
+        </form>
+            
         
 
         
@@ -43,17 +49,48 @@
                         <th>Categoria</th>
                         <th>Estado</th>
                         <th>Descripcion</th>
-                        <th>Valor unidad</th>
                         <th>Serial</th>
                         <th>Observaciones</th>
-                        <th>Acciones</th>
+                        
 
                     </tr>
-                    {% for elemento in elementos %}
+                    {% for elemento in ElementosDevolutivos %}
+                        
+                        {% if elemento.producto.estado == 'D' or elemento.producto.estado == 'Disponible' %}
+
                     <tr>
-                        <td></td>                 
+                        <td>{{ elemento.producto.nombre }}</td>
+                        {% if elemento.producto.categoria == 'D' or elemento.producto.categoria == 'Devolutivo' %}
+                        <td> Devolutivo </td>
+                        {% endif %}
+                        <td>Disponible</td>
+                        <td>{{ elemento.producto.descripcion }}</td>
+                        <td>{{ elemento.serial }}</td>
+                        <td>{{ elemento.observacion }}</td>           
+                                         
                     </tr>
+                        {% endif %}
+
                     {% endfor %}
+
+                    {% for elemento in ElementosConsumibles %}
+                        
+                    {% if elemento.productoConsumible.estadoElemento == 'D' or elemento.productoConsumible.estadoElemento == 'Disponible' %}
+
+                <tr>
+                    <td>{{ elemento.productoConsumible.nombreElemento }}</td>
+                    {% if elemento.productoConsumible.categoriaElemento == 'C' or elemento.productoConsumible.categoriaElemento == 'Consumible' %}
+                    <td> Consumible </td>
+                    {% endif %}
+                    <td>Disponible</td>
+                    <td>{{ elemento.productoConsumible.descripcionElemento }}</td>
+                    <td>{{ elemento.cantidadElemento }}</td>
+                    <td>{{ elemento.observacionElemento }}</td>           
+                                     
+                </tr>
+                {% endif %}
+
+                {% endfor %}
                 </table>
             </div>
             

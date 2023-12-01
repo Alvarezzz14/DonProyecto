@@ -26,27 +26,29 @@ urlpatterns = [
     path("elementosdash/", views.elementosdash, name="elementosdash"),
     path("transacciondash/", views.transacciondash, name="transacciondash"),
     path("regUsuario/", views.registroUsuario_view, name="registroUsuario_view"),
-    path(
-        "editarUsuario/<int:id>/", views.editarUsuario_view, name="editarUsuario_view"
+    path("editarUsuario/<int:numeroIdentificacion>/", views.editarUsuario_view, name="editarUsuario_view"
+    ),
+    
+    path("editarElementoconsu/<int:id>/", views.editarElementosconsu_view, name="editarElementosconsu_view"
     ),
     
     path(
-        "editarElementoconsu/<int:id>/",
-        views.editarElementosconsu_view, 
-        name="editarElementosconsu_view"
-    ),
-    
-    path(
-        "editarElementodevo/<int:serial>/",
+        "editarElementodevo/<str:serial>/",
         views.editarElementosdevo_view, 
         name="editarElementosdevo_view"
         
     ),
     
     path(
+        "actualizarElementoDevolutivo/<str:serial>",
+        views.actualizarElementoDevolutivo,
+        name="actualizarElementoDevolutivo",
+    ),
+    
+    path(
         "finalizarPrestamo/<int:id>/",
         views.finalizarPrestamo_view,
-        name="finalizarPrestamo_view",
+        name="finalizarPrestamo_view"
     ),
     path(
         "editarPrestamo/<int:id>/",
@@ -57,7 +59,7 @@ urlpatterns = [
         "editarEntrega/<int:id>/", views.editarEntrega_view, name="editarEntrega_view"
     ),
     path(
-        "actualizarUsuario/<int:id>",
+        "actualizarUsuario/<int:numeroIdentificacion>",
         views.actualizarUsuario_view,
         name="actualizarUsuario_view",
     ),
@@ -71,10 +73,7 @@ urlpatterns = [
         views.formEntregasConsumibles_view,
         name="formEntregasConsumibles_view",
     ),
-    path(
-        "eliminarUsuario/<int:id>/",
-        views.eliminarUsuario_view,
-        name="eliminarUsuario_view",
+    path("eliminarUsuario/<int:numeroIdentificacion>/", views.eliminarUsuario_view, name="eliminarUsuario_view",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("calendario/", views.calendario, name="calendario"),
@@ -82,14 +81,9 @@ urlpatterns = [
         "consultarUsuario/", views.consultarUsuario_view, name="consultarUsuario_view"
     ),
     path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
-   
-    path(
-        "consultarTransacciones/",
-        views.consultarTransacciones_view,
-        name="consultarTransacciones",
+    path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
-    
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
     path("generar_excel/", views.generar_excel, name="generar_excel"),
     path("logout/", views.user_logout, name="logout"),
@@ -97,6 +91,11 @@ urlpatterns = [
         "get-element-name-by-serial",
         views.get_element_name_by_serial,
         name="get-element-name-by-serial",
+    ),
+    path(
+        "get_element_consum_info/",
+        views.get_element_consum_info,
+        name="get_element_consum_info",
     ),
     path("reset_password/", PasswordResetView.as_view(), name="password_reset"),
     path(
@@ -122,13 +121,21 @@ urlpatterns = [
 
     path(
         "reporteelementosprestamos/", 
-        views.reporteelementosactivos, name="reporteelementosprestamos"
+        views.reporteelementosprestamo, name="reporteelementosprestamos"
     ),
     path(
         "reporteelementosbajas/", 
         views.reporteelementosbajas, name="reporteelementosbajas"
     ),
+
+
+    
+path('hinhabilitar_elemento_consumible/<int:id>/', views.inhabilitar_elemento_consumible, name='hinhabilitar_elemento_consumible'),
+
+
 ]
+
+    
 
 # Configuración para servir archivos multimedia en entorno de desarrollo
 if settings.DEBUG:

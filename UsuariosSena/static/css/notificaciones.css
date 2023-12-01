@@ -38,7 +38,7 @@
     margin-bottom:2rem;
     border: 0.15rem #fc7323;
     border-style:solid ;
-    border-radius: 100px;
+    border-radius: 20px;
     overflow-y: auto;
 }
 .area-notificaciones::before{
@@ -69,6 +69,7 @@
     animation: pulse 2s infinite; /* Cambia la duración según tu preferencia */
 
 }
+
 
 .caja-texto-notificaciones {
     display: flex;
@@ -105,3 +106,4 @@
         transform: scale(1);
     }
 }
+
