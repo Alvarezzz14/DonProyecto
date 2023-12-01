@@ -97,7 +97,19 @@ Home SUAdmin
                                     </div>
                                       
                                     <div class="acciones">
-                                      
+                                      <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega.nombres}} {{Prestamos.nombreEntrega.apellidos}} , {{Prestamos.nombreRecibe.nombres}} {{Prestamos.nombreRecibe.apellidos}},  {{Prestamos.nombre_del_producto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{ Prestamos.observacionesPrestamo }},{{ Prestamos.estadoPrestamo }}  ')"
+                                      ,>
+                                      <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
+                                        <path d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z"
+                                          fill="#fff" />
+                                        <path d="m45.4 32c0 7.5-6 13.5-13.5 13.5s-13.5-6-13.5-13.5 6-13.5 13.5-13.5 13.5 6 13.5 13.5"
+                                          fill="#42ade2" />
+                                        <path d="m39.4 32c0 4.1-3.4 7.5-7.5 7.5s-7.5-3.4-7.5-7.5 3.4-7.5 7.5-7.5 7.5 3.4 7.5 7.5"
+                                          fill="#231f20" />
+                                      </svg>
+                                    </button>
 
                                         {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
 
@@ -145,6 +157,7 @@ Home SUAdmin
                         </div>
                     </div>
                 </div>
+                
                 <div id="userModal" class="modal">
                   <div class="modal-content">
                     <thead>
