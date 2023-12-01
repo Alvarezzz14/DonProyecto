@@ -94,7 +94,7 @@ def login_view(request):
     return render(request, "indexLogin.html", {"form": loginForm})
 
 
-# @login_required
+@login_required
 def homedash(request):
     prestamos = Prestamo.objects.all().order_by("fechaDevolucion")
     entregas = EntregaConsumible.objects.all()
@@ -110,22 +110,22 @@ def homedash(request):
     return render(request, "superAdmin/basedashboard.html", data)
 
 
-# @login_required
+@login_required
 def elementosdash(request):
     return render(request, "superAdmin/elementosdash.html")
 
 
-# @login_required
+@login_required
 def usuariodash(request):
     return render(request, "superAdmin/usuariodash.html")
 
 
-# @login_required
+@login_required
 def inventariodash(request):
     return render(request, "superAdmin/inventariodash.html")
 
 
-# @login_required
+@login_required
 def transacciondash(request):
     return render(request, "superAdmin/transaccionesdash.html")
 
@@ -134,14 +134,14 @@ def logout(request):
     return render(request, "indexLogin.html")
 
 
-# @login_required
+@login_required
 def consultarUsuario_view(request):
     usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
     return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
 
 
-# @login_required
-# @verificar_superadmin
+@login_required
+@verificar_superadmin
 def registroUsuario_view(request):
     if request.method == "POST":
         nombresVar = request.POST.get("nombres")
@@ -208,8 +208,8 @@ def registroUsuario_view(request):
     return render(request, "superAdmin/registroUsuario.html")
 
 
-# @login_required
-# @verificar_superadmin
+@login_required
+@verificar_superadmin
 def editarUsuario_view(request, numeroIdentificacion):
     try:
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
@@ -220,7 +220,8 @@ def editarUsuario_view(request, numeroIdentificacion):
         messages.warning(request, "No existe registro")
         return redirect("consultarUsuario_view")
 
-
+@login_required
+@verificar_superadmin
 def editarElementosconsu_view(request, id):
     # Obtener el objeto ElementosConsumible por su ID
     elemento = get_object_or_404(InventarioConsumible, id=id)
@@ -271,7 +272,8 @@ def editarElementosconsu_view(request, id):
     return render(request, "superAdmin/editarElementoconsu.html", {"elemento": elemento})
 
 
-#@login_required
+@login_required
+@verificar_superadmin
 def editarElementosdevo_view(request, serial):
     # Obtener el objeto InventarioDevolutivo por su serial
     try:
@@ -286,8 +288,8 @@ def editarElementosdevo_view(request, serial):
         return redirect("consultarElementos")
 
 
-#@login_required
-#@verificar_superadmin
+@login_required
+@verificar_superadmin
 def actualizarElementoDevolutivo(request, serial):
     
     try: 
@@ -334,8 +336,8 @@ def actualizarElementoDevolutivo(request, serial):
     return render(request, "superAdmin/editarElementodevo.html", {"inventario_elemento": inventario_elemento})
 
 
-#@login_required
-#@verificar_superadmin
+@login_required
+@verificar_superadmin
 def actualizarUsuario_view(request, numeroIdentificacion):
     
     
@@ -383,8 +385,8 @@ def actualizarUsuario_view(request, numeroIdentificacion):
         return redirect("consultarUsuario_view")
 
 
-# @login_required
-# @verificar_superadmin
+@login_required
+@verificar_superadmin
 def eliminarUsuario_view(request, numeroIdentificacion):
     try:
         # Busca el usuario por ID
@@ -408,8 +410,8 @@ def eliminarUsuario_view(request, numeroIdentificacion):
         return redirect("index")
         
         
-# @login_required
-# @verificar_superadmin
+@login_required
+@verificar_superadmin
 def inhabilitar_elemento_consumible(request, id):
     consumible = get_object_or_404(ProductosInventarioConsumible, id=id)
     # Cambiar el estado a "Baja"
@@ -420,8 +422,8 @@ def inhabilitar_elemento_consumible(request, id):
     return redirect("consultarElementos")
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def formPrestamosDevolutivos_view(request):
     # Obtiene todos los usuarios excepto el que esta fijado de primero
     usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
@@ -602,7 +604,7 @@ def formPrestamosDevolutivos_view(request):
     )
 
 
-# Rellenar Elemento
+@login_required
 def get_element_name_by_serial(request):
     serial_number = request.GET.get("serialNumber", None)
     if serial_number:
@@ -632,8 +634,8 @@ def get_element_name_by_serial(request):
         return JsonResponse({"error": "No serial number provided"}, status=400)
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def formEntregasConsumibles_view(request):
     # Obtiene todos los usuarios excepto el que esta fijado de primero
     usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
@@ -742,6 +744,7 @@ def formEntregasConsumibles_view(request):
 
 
 # Rellenar info del elemento consumible seleccionado
+@login_required
 def get_element_consum_info(request):
     consumible_id = request.GET.get("consumibleId", None)
     element_id = request.GET.get("id", None)
@@ -774,7 +777,7 @@ def get_element_consum_info(request):
         )
 
 
-# @login_required
+@login_required
 def calendario(request):
     prestamos = Prestamo.objects.all()
     eventos = []
@@ -790,8 +793,8 @@ def calendario(request):
     return render(request, "superAdmin/calendario.html", {"eventos": eventos})
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def formElementos_view(request):
     form_data = {}
     if request.method == "POST":
@@ -875,7 +878,7 @@ def formElementos_view(request):
     return render(request, "superAdmin/formElementos.html")
 
 
-# @login_required
+@login_required
 def consultarElementos(request):
     inventario = InventarioDevolutivo.objects.select_related("producto").all()
     elementosconsu = InventarioConsumible.objects.select_related("productoConsumible").all()
@@ -1019,7 +1022,7 @@ def user_logout(request):
     return redirect("login_view")
 
 
-# @login_required
+@login_required
 def consultarTransacciones_view(request):
     prestamos = Prestamo.objects.select_related("nombreRecibe", "nombreEntrega").all()
     for prestamo in prestamos:
@@ -1043,8 +1046,8 @@ def consultarTransacciones_view(request):
     return render(request, "superAdmin/consultarTransacciones.html", data)
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def editarPrestamo_view(request, id):
     # Obtener el objeto Prestamo por su ID
     prestamo = get_object_or_404(Prestamo, id=id)
@@ -1100,8 +1103,8 @@ def editarPrestamo_view(request, id):
     )
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def editarEntrega_view(request, id):
     # Obtener el objeto Prestamo por su ID
     entrega = get_object_or_404(EntregaConsumible, id=id)
@@ -1145,8 +1148,8 @@ def editarEntrega_view(request, id):
     )
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def finalizarPrestamo_view(request, id):
     prestamo = get_object_or_404(Prestamo, id=id)
 
@@ -1166,6 +1169,7 @@ def finalizarPrestamo_view(request, id):
         request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
     )
 
+@login_required
 def reporteelementosactivos(request):
     fecha_inicio = request.GET.get('fecha_inicio', None)
     fecha_fin = request.GET.get('fecha_fin', None)
@@ -1190,7 +1194,7 @@ def reporteelementosactivos(request):
         request,  "superAdmin/reporteelementosactivos.html" , data
         )
     
-   
+@login_required 
 def reporteelementosprestamo(request):
     fecha_inicio = request.GET.get('fecha_inicio', None)
     fecha_fin = request.GET.get('fecha_fin', None)
@@ -1212,7 +1216,7 @@ def reporteelementosprestamo(request):
         return render (request, "superAdmin/reporteelementosprestamo.html" , data) 
         
    
-   
+@login_required
 def reporteelementosbajas(request):
     
     fecha_inicio = request.GET.get('fecha_inicio', None)
