@@ -192,9 +192,12 @@ Consultar Elementos
                     </svg>
                   </a>
                 </button>
-                <button  title="Inhabilitar Elemento" class="" data-id="">   
+                <form action="{% url 'hinhabilitar_elemento_consumible' id=elemento.id %}" method="post">
+                  {% csrf_token %}
+                  <button title="Inhabilitar Elemento" class="" data-id="">   
                     <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">                
-                </button>
+                  </button>
+                </form>
                 
                 {% endif %}
                 
@@ -513,14 +516,14 @@ Consultar Elementos
     const cantidadField = document.getElementById('cantidadField');
     const valorUnidadElementoField = document.getElementById('valorUnidadElementoField');
 
-    fechaElementoField.value = userDataArray[0] ;
-    nombreField.value = userDataArray[1];
-    categoriaField.value = userDataArray[2];
-    estadoField.value = userDataArray[3];
-    descripcionElementoField.value = userDataArray[4];
-    observacionElementoField.value = userDataArray[5];
-    cantidadField.value = userDataArray[6];
-    valorUnidadElementoField.value = userDataArray[7];
+    fechaElementoField.value = userDataArray[0] +" del "+ userDataArray[1];
+    nombreField.value = userDataArray[2];
+    categoriaField.value = userDataArray[3];
+    estadoField.value = userDataArray[4];
+    descripcionElementoField.value = userDataArray[5];
+    observacionElementoField.value = userDataArray[6];
+    cantidadField.value = userDataArray[7];
+    valorUnidadElementoField.value = userDataArray[8];
     modal.style.display = 'block';
   }
     
@@ -536,14 +539,14 @@ Consultar Elementos
     const serialField = document.getElementById('serialField');
     const valorUnidadElementoField = document.getElementById('valorUnidadElementoField');
 
-    fechaElementoField.value = userDataArray[0];
-    nombreField.value = userDataArray[1];
-    categoriaField.value = userDataArray[2];
-    estadoField.value = userDataArray[3];
-    descripcionElementoField.value = userDataArray[6];
-    observacionElementoField.value = userDataArray[7];
-    serialField.value = userDataArray[5];
-    valorUnidadElementoField.value = userDataArray[4];
+    fechaElementoField.value = userDataArray[0] +" del "+ userDataArray[1];;
+    nombreField.value = userDataArray[2];
+    categoriaField.value = userDataArray[3];
+    estadoField.value = userDataArray[4];
+    descripcionElementoField.value = userDataArray[7];
+    observacionElementoField.value = userDataArray[8];
+    serialField.value = userDataArray[6];
+    valorUnidadElementoField.value = userDataArray[5];
     modal.style.display = 'block';
   }
 

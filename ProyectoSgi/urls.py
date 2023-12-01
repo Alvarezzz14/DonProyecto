@@ -127,7 +127,15 @@ urlpatterns = [
         "reporteelementosbajas/", 
         views.reporteelementosbajas, name="reporteelementosbajas"
     ),
+
+
+    
+path('hinhabilitar_elemento_consumible/<int:id>/', views.inhabilitar_elemento_consumible, name='hinhabilitar_elemento_consumible'),
+
+
 ]
+
+    
 
 # Configuración para servir archivos multimedia en entorno de desarrollo
 if settings.DEBUG:
