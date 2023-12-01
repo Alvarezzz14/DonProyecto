@@ -48,8 +48,8 @@ Home SUAdmin
 
         adquirienteField.value = userDataArray[0];
         devolucionField.value = userDataArray[1];
-        serialField.value = userDataArray[3];
-        observacionesField.value = userDataArray[4];
+        serialField.value = userDataArray[2];
+        observacionesField.value = userDataArray[3];
         console.log(userDataArray)
 
         modal.style.display = 'block';
@@ -130,7 +130,7 @@ Home SUAdmin
                                       
                                     <div class="acciones">
                                       <button
-                                      title="Visualizar Prestamo" onclick="openModal('{{Prestamos.nombreRecibe.nombres}} {{Prestamos.nombreRecibe.apellidos}} ,{{Prestamos.fechaDevolucion}}, {{Prestamos.serialSenaElemento}}, {{Prestamos.observacionesPrestamo}}  ')",>          
+                                      title="Visualizar Prestamo" onclick="openModal('{{Prestamos.nombreRecibe.nombres}} {{Prestamos.nombreRecibe.apellidos}} ,{{Prestamos.fechaDevolucion}}, {{ Prestamos.serialSenaElemento.producto.nombre }}, {{Prestamos.observacionesPrestamo}}  ')",>          
                                         <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                                           <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
                                           <path d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z" fill="#fff" />
@@ -163,7 +163,7 @@ Home SUAdmin
                                         <div> 
                                             <h2>{{ Prestamos.fechaDevolucion }} <br>
                                               {{ Prestamos.nombreRecibe.nombres }} {{ Prestamos.nombreRecibe.apellidos }}:  </h2>                                             
-                                                <p>{{ Prestamos.serialSenaElemento }}</p>
+                                                <p>{{ Prestamos.serialSenaElemento.producto.nombre }}</p>
                                                 <p>{{ Prestamos.observacionesPrestamo }}</p>
                                         </div>
                                     </div>
@@ -230,54 +230,3 @@ Home SUAdmin
    
    <script src="{% static 'js/dashboard.js' %}"></script>  
    <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
-   
-
-<script>
-  // Función para abrir el modal y mostrar la información del usuario
-   function openModal(userData) {
-    const modal = document.getElementById('userModal');
-
-    const userDataArray = userData.split(',');
-
-
-
-  const entregaField = document.getElementById('entregaField');
-  const devolucionField = document.getElementById('devolucionField');
-  const emisorField = document.getElementById('emisorField');
-  const adquirienteField = document.getElementById('adquirienteField');
-  const elementoField = document.getElementById('elementoField');
-  const serialField = document.getElementById('serialField');
-  const valorField = document.getElementById('valorField');
-  const observacionesField = document.getElementById('observacionesField');
-  const estadoField = document.getElementById('estadoField');
-
-
-  entregaField.value = userDataArray[0];
-  devolucionField.value = userDataArray[1];
-  emisorField.value = userDataArray[2];
-  adquirienteField.value = userDataArray[3];
-  elementoField.value = userDataArray[4];
-  serialField.value = userDataArray[5];
-  valorField.value = userDataArray[6];
-  observacionesField.value = userDataArray[7];
-  estadoField.value = userDataArray[8];
-  modal.style.display = 'block';
-  }
-
-  // Función para cerrar el modal
-  function closeModal() {
-    const modal = document.getElementById('userModal');
-    modal.style.display = 'none';
-  }
-
-  // Cierra el modal si se hace clic fuera de él
-  window.onclick = function (event) {
-    const modal = document.getElementById('userModal');
-    if (event.target == modal) {
-      modal.style.display = 'none';
-    }
-  }
-</script>
-
-   {% endblock extrajs %}
-    
