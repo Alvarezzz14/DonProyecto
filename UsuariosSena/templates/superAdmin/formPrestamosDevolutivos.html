@@ -25,7 +25,7 @@ Prestamos
         {% csrf_token %}
 
         <div class="container-1">
-            <input type="text" name="estadoPrestamo" value="ACTIVO" required hidden readonly value="{{ form_data.estadoPrestamo|default:'' }}">
+            
             <div class="fechaContainer">
                 <input type="date" class="inputform" placeholder="fechaDevolucion" name="fechaDevolucion"
                     value="{{ form_data.fechaDevolucion|default:'' }}" required>

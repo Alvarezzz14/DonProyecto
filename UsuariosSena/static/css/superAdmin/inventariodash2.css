@@ -41,6 +41,11 @@
     cursor: pointer;
     animation: changeColor 3s;
   }
+@media (max-width:750px){
+    .box_dash{
+        flex-direction: column;
+    }
+}
   
   @keyframes changeColor {
     0% {

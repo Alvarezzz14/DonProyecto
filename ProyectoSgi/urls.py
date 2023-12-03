@@ -33,16 +33,22 @@ urlpatterns = [
     ),
     
     path(
-        "editarElementodevo/<int:serial>/",
+        "editarElementodevo/<str:serial>/",
         views.editarElementosdevo_view, 
         name="editarElementosdevo_view"
         
     ),
     
     path(
+        "actualizarElementoDevolutivo/<str:serial>",
+        views.actualizarElementoDevolutivo,
+        name="actualizarElementoDevolutivo",
+    ),
+    
+    path(
         "finalizarPrestamo/<int:id>/",
         views.finalizarPrestamo_view,
-        name="finalizarPrestamo_view",
+        name="finalizarPrestamo_view"
     ),
     path(
         "editarPrestamo/<int:id>/",
@@ -75,10 +81,7 @@ urlpatterns = [
         "consultarUsuario/", views.consultarUsuario_view, name="consultarUsuario_view"
     ),
     path("consultarElementos/", views.consultarElementos, name="consultarElementos"),
-    path(
-        "consultarTransacciones/",
-        views.consultarTransacciones_view,
-        name="consultarTransacciones",
+    path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
     path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
@@ -130,6 +133,12 @@ urlpatterns = [
         views.enviar_correo_desde_boton, name="enviar_correo_desde_boton" 
         
     ),
+
+
+    
+path('hinhabilitar_elemento_consumible/<int:id>/', views.inhabilitar_elemento_consumible, name='hinhabilitar_elemento_consumible'),
+
+
 ]
 
     

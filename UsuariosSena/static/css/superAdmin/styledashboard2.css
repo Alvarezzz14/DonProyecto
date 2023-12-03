@@ -34,6 +34,7 @@
     padding: 30px 20px 0;
     align-items: center;
     text-align: center;
+    margin: 10px;
 }
 
 .box_dash{
@@ -47,7 +48,10 @@
     transition: 0.5s;
     cursor: pointer;
     animation: changeColor 3s;
+    margin: 10px;
   }
+
+
   
 @keyframes changeColor {
 0% {
@@ -89,6 +93,19 @@
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+@media (max-width:760px){
+    .caja_dash{
+        display: block;
+        
+    }
+    .fechas{
+        display: none;
+    }
+    .vista_usuario{
+        width: 100%  !important;
+    }
 }
 
 .dashboard2 table{

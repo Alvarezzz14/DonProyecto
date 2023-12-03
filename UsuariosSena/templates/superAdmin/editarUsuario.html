@@ -85,7 +85,6 @@
                     <label for="rol" class="labelformselect">Rol</label>
                     <div>
                         <select class="selector" name="rol" id="rol">
-
                             
 
                             {% if user.rol == 'Instructor' %}
@@ -176,7 +175,7 @@
             </div>
             <div class="container-1">
                 <div class="cantidadContainer">
-                    <input type="number" class="inputcantidad" name="duracionContrato" value="{{user.duracionContrato}}"
+                    <input type="text" class="inputcantidad" name="duracionContrato" value="{{user.duracionContrato}}"
                         id="duracionContrato">
                     <label for="duracionContrato" class="labelcantidad">Duracion</label>
 

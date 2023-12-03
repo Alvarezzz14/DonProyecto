@@ -13,7 +13,6 @@ def verificar_cuentadante(func):
             # Si no tiene los permisos, redirigir a alguna página o mostrar un mensaje
             return JsonResponse({'mensaje': 'No tiene permisos para acceder a esta vista.'}, status=403)
 
-
     return wrapper
 
 
@@ -27,6 +26,5 @@ def verificar_superadmin(func):
         else:
             # Si no tiene los permisos, redirigir a alguna página o mostrar un mensaje
             return JsonResponse({'mensaje': 'No tiene permisos para acceder a esta vista.'}, status=403)
-
-
+        
     return wrapper

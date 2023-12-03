@@ -63,11 +63,10 @@ Consultar Transaciones
   </form>
 
 
-  <div class="flex flex-col overflow-x-auto overflow-hidden mt-8">
+  <div class="flex m-auto flex-col max-w-full overflow-x-auto mt-8">
     <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-      <div class="inline-block min-w-full scroll-auto overflow-hidden align-middle sm:rounded-lg">
+      <div class="inline-block w-max scroll-auto overflow-hidden align-middle sm:rounded-lg">
         {% if opcion_seleccionada == 'prestamo' %}
-        <section class="container  rounded-lg p-4 overflow-hidden m-2 ">
           <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
             <thead>
               <tr>
@@ -116,17 +115,17 @@ Consultar Transaciones
                   </div>
                 </td>
                 <td class=" truncate px-3 text-center py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreEntrega }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreEntrega.nombres }} {{ Prestamos.nombreEntrega.apellidos }}
 
                   </div>
                 </td>
                 <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreRecibe }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreRecibe.nombres }} {{ Prestamos.nombreRecibe.apellidos }}
 
                   </div>
                 </td>
                 <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombreProducto }}
+                  <div class="text-[0.7rem] leading-5 text-gray-500">{{ Prestamos.nombre_del_producto }}
 
                   </div>
                 </td>
@@ -168,7 +167,7 @@ Consultar Transaciones
 
                 <td
                   class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
-                  <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega}} , {{Prestamos.nombreRecibe}},  {{Prestamos.nombreProducto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{Prestamos.observacionesPrestamo }},{{Prestamos.estadoPrestamo }}  ')"
+                  <button title="Visualizar Prestamo" onclick="openModal('{{Prestamos.fechaEntrega}}, {{Prestamos.fechaDevolucion}}, {{Prestamos.nombreEntrega.nombres}} {{Prestamos.nombreEntrega.apellidos}} , {{Prestamos.nombreRecibe.nombres}} {{Prestamos.nombreRecibe.apellidos}},  {{Prestamos.nombre_del_producto}}, {{ Prestamos.serialSenaElemento }},  {{ Prestamos.valorUnidadElemento }},{{ Prestamos.observacionesPrestamo }},{{ Prestamos.estadoPrestamo }}  ')"
                     ,>
                     <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64"
                       xmlns="http://www.w3.org/2000/svg">
@@ -195,14 +194,21 @@ Consultar Transaciones
                     </a>
                   </button>
                   
+                  
+                  {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'VENCIDO'  %}
+                  
                   <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
 
                     <button type="submit" title="Finalizar Prestamo">
-                      <img src="{% static 'img/finalizar.png' %}" width="80px" alt="">
+                      <img src="{% static 'img/finalizar.png' %}" width="40px" alt="">
                     </button>
                   </form>
+
+                  {% endif %}
+                    
+                  
 
                 </td>
                 {% endif %}
@@ -210,15 +216,6 @@ Consultar Transaciones
               {% endfor %}
             </tbody>
           </table>
-      </div>
-    </div>
-  </div>
-  <div class="flex w-20 gap-4 justify-end">
-    <a href="{% url 'generar_pdf' %}" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
-    <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
-        alt=""></a>
-  </div>
-</div>
 
 <!-- Modal para mostrar la información del usuario -->
 
@@ -266,14 +263,9 @@ Consultar Transaciones
           <td><input type="text" id="estadoField" readonly></td>
         </tr>
       </table>
-    </div>
-  </div>
-</div>
-
 
 
 {% elif opcion_seleccionada == 'entregas' %}
-<section class="container  rounded-lg p-4 overflow-hidden m-5 ">
   <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
     <thead>
       <tr>
@@ -291,9 +283,6 @@ Consultar Transaciones
           Elemento</th>
         <th
           class="px-4 py-2 text-xs font-semibold leading-4 tracking-wider text-center text-black-500 uppercase border-b border-gray-200 bg-orange-50">
-          Serial</th>
-        <th
-          class="px-4 py-2 text-xs font-semibold leading-4 tracking-wider text-center text-black-500 uppercase border-b border-gray-200 bg-orange-50">
           Cantidad Otorgada</th>
         <th
           class="px-4 py-2 text-xs font-semibold leading-4 tracking-wider text-center text-black-500 uppercase border-b border-gray-200 bg-orange-50">
@@ -308,21 +297,15 @@ Consultar Transaciones
       <tr>
         <td class=" truncate px-3 text-center py-2 whitespace-no-wrap border-b border-gray-200">
           <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.fecha_entrega }}
-
           </div>
         </td>
         <td class=" truncate px-3 text-center py-2 whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.responsable_Entrega }}
+          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.responsable_Entrega.nombres }} {{ Entregas.responsable_Entrega.apellidos }}
 
           </div>
         </td>
         <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.nombre_solicitante }}
-
-          </div>
-        </td>
-        <td class=" truncate px-3 py-2 whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.nombreProducto }}
+          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.nombre_solicitante.nombres }} {{ Entregas.nombre_solicitante.apellidos }}
 
           </div>
         </td>
@@ -332,20 +315,19 @@ Consultar Transaciones
           </div>
         </td>
         <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.cantidadOtorgada }}
+          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.cantidad_prestada }}
 
           </div>
         </td>
         <td class=" truncate px-3 py-2 text-center whitespace-no-wrap border-b border-gray-200">
-          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.observacionesEntrega }}
+          <div class="text-[0.7rem] leading-5 text-gray-500">{{ Entregas.observaciones_prestamo }}
 
           </div>
         </td>
         <!--Botones de Visualizar Editar y ELiminar-->
         <td class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200 gap-2">
           <button
-            onclick="openModal('{{Entregas.fecha_entrega}}, {{Entregas.responsable_Entrega}}, {{Entregas.nombre_solicitante}},  {{Entregas.nombreProducto}}, {{Entregas.idC }}, {{ Entregas.cantidadOtorgada }}, {{ Entregas.observacionesEntrega }}')"
-            ,>
+          title="Visualizar Entrega" onclick="openModal('{{Entregas.fecha_entrega}},{{Entregas.responsable_Entrega.nombres}} {{Entregas.responsable_Entrega.apellidos}}, {{Entregas.nombre_solicitante.nombres}} {{Entregas.nombre_solicitante.apellidos}}, {{Entregas.idC }}, {{ Entregas.cantidad_prestada }}, {{ Entregas.observaciones_prestamo }} ')",>          
             <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
               <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
               <path d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z" fill="#fff" />
@@ -390,7 +372,7 @@ Consultar Transaciones
         <table>
           <tr>
             <th>Fecha de entrega:</th>
-            <td><input type="text" id="entregaField" readonly></td>
+            <td><input type="datetime" id="entregaField" readonly></td>
           </tr>
           <tr>
             <th>Emisor:</th>
@@ -401,7 +383,7 @@ Consultar Transaciones
             <td><input type="text" id="adquirienteField" readonly></td>
           </tr>
           <tr>
-            <th>Serial Elemento:</th>
+            <th>Elemento:</th>
             <td><input type="text" id="serialField" readonly></td>
           </tr>
           <tr>
@@ -416,7 +398,6 @@ Consultar Transaciones
       </div>
     </div>
   </div>
-</section>
 
 {% endif %}
 
@@ -455,32 +436,35 @@ Consultar Transaciones
   observacionesField.value = userDataArray[7];
   estadoField.value = userDataArray[8];
   modal.style.display = 'block';
+
+  console.log(userDataArray)
   }
 
-{% elif opcion_seleccionada == 'entregas' %}
-function openModal(userData) {
-  const modal = document.getElementById('userModal');
-
-  const userDataArray = userData.split(', ');
-  const entregaField = document.getElementById('entregaField');
-  const emisorField = document.getElementById('emisorField');
-  const adquirienteField = document.getElementById('adquirienteField');
-  const elementoField = document.getElementById('elementoField');
-  const cantidadField = document.getElementById('cantidadField');
-  const observacionesField = document.getElementById('observacionesField');
-
-
-  entregaField.value = userDataArray[0];
-  emisorField.value = userDataArray[1];
-  adquirienteField.value = userDataArray[2];
-  elementoField.value = userDataArray[3];
-  cantidadField.value = userDataArray[4];
-  observacionesField.value = userDataArray[5];
-  modal.style.display = 'block';
-
-}
-
-{% endif %}
+  {% elif opcion_seleccionada == 'entregas' %}
+  function openModal(userData) {
+    console.log('userData: ',userData);
+    const modal = document.getElementById('userModal');
+    console.log(modal)
+  
+    const userDataArray = userData.split(',');
+    const entregaField = document.getElementById('entregaField');
+    const emisorField = document.getElementById('emisorField');
+    const adquirienteField = document.getElementById('adquirienteField');
+    const serialField = document.getElementById('serialField');  // Corregido aquí
+    const cantidadField = document.getElementById('cantidadField');
+    const observacionesField = document.getElementById('observacionesField');
+  
+    entregaField.value = userDataArray[0];
+    emisorField.value = userDataArray[1];
+    adquirienteField.value = userDataArray[2];
+    serialField.value = userDataArray[3];  // Corregido aquí
+    cantidadField.value = userDataArray[5];
+    observacionesField.value = userDataArray[6];  // Corregido aquí
+    modal.style.display = 'block';
+    console.log(userDataArray);
+  }
+  {% endif %}
+  
 
   // Función para cerrar el modal
   function closeModal() {

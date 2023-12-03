@@ -156,19 +156,18 @@ Consultar Elementos
                 class=" text-ellipsis w-3/2 overflow-hidden ... px-3 py-2 whitespace-no-wrap border-b border-gray-200">
                 
                 {% if elemento.facturaElemento %}
-                <div class="text-[0.3rem] leading-5 text-gray-500"><a href="{{ elemento.facturaElemento.url }}" target="_blank"><img src="{{ elemento.facturaElemento.url }}" alt="Factura"></a>
+                <div class="text-[0.3rem] leading-5 text-gray-500"><a href="{{ elemento.factura.url }}" target="_blank"><img class="w-min scale(.75)" src="{{ elemento.factura.url }}" alt="Factura"></a>
                 </div>
                 {% else %}
                 <div class="text-[0.7rem] leading-5 text-gray-500"><a href="#" >NoFactura</a>
                 </div>  
                 {% endif %}
-                  
-        
+
               </td>
               <!--Botones de Visualizar Editar y ELiminar-->
               <td
                 class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-l border-gray-200 gap-2">
-                <button title="Visualizar Elemento" onclick="openModal('{{ elemento.fechaAdquisicion }}, {{ elemento.productoConsumible.nombreElemento }}, {{elemento.productoConsumible.categoriaElemento}},  {{elemento.productoConsumible.estadoElemento}}, {{ elemento.productoConsumible.descripcionElemento }}, {{ elemento.observacionElemento }}, {{elemento.cantidadElemento }}, {{ elemento.productoConsumible.costoUnidadElemento }} ')",>
+                <button title="Visualizar Elemento" onclick="openModal('{{ elemento.fechaAdquisicion }}, {{ elemento.productoConsumible.nombreElemento }}, {% if elemento.productoConsumible.categoriaElemento == 'C' %} Consumible {% endif %} , {% if elemento.productoConsumible.estadoElemento == 'D' %} Disponible {% elif elemento.productoConsumible.estadoElemento == 'P' %} Prestamo {% elif elemento.productoConsumible.estadoElemento == 'G' %} Garantia {% elif elemento.productoConsumible.estadoElemento == 'B' %} Baja {% endif %},  {{ elemento.productoConsumible.descripcionElemento }}, {{ elemento.observacionElemento }}, {{elemento.cantidadElemento }}, {{ elemento.productoConsumible.costoUnidadElemento }} ')",>
                   <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                     <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
                     <path
@@ -184,20 +183,27 @@ Consultar Elementos
 
                 {% if request.user.cuentadante == 'superAdmin' or request.user.cuentadante == 'adminD'  %}
 
-                <button title="Editar Elemento" onclick="editarFila(this)"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
+                <button onclick="">
+                  <a href="/editarElementoconsu/{{elemento.productoConsumible.id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" href="/DonProyecto/editarElementoconsu.html"
+                      class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </a>
                 </button>
-                <button  title="Inhabilitar Elemento" class="" data-id="">   
+                <form action="{% url 'hinhabilitar_elemento_consumible' id=elemento.id %}" method="post">
+                  {% csrf_token %}
+                  <button title="Inhabilitar Elemento" class="" data-id="">   
                     <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">                
-                </button>
+                  </button>
+                </form>
                 
                 {% endif %}
-
+                
               </td>
             </tr>
+            {% endfor %} 
         </table>
 
 
@@ -243,15 +249,12 @@ Consultar Elementos
                   </table>
                 </div>
               </div>
-            </div>
-        
-
-            {% endfor %}
+            </div>                    
 
 
 {% elif opcion_seleccionada == 'elementosdevo' %} 
 <!--Datatable se crea tabla con scrool maximo del contenedor disponible, con 12 enunciados en la cabecera-->
-      <table class="table-auto  overflow-scroll-hidden w-max" id="tablaPersonas"> 
+      <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas"> 
         <thead>
           <tr>
             <th class="px-2 py-1 text-xs font-semibold leading-4 tracking-wider text-center text-black-500 uppercase border-b border-gray-200 bg-orange-50">
@@ -332,7 +335,7 @@ Consultar Elementos
             </td>
             <td>
             {% if elemento.factura %}
-                <div class="text-[0.3rem] leading-5 text-gray-500"><a href="{{ elemento.factura.url }}" target="_blank"><img src="{{ elemento.factura.url }}" alt="Factura"></a>
+                <div class="text-[0.3rem] leading-5 text-gray-500"><a href="{{ elemento.factura.url }}" target="_blank"><img class="w-min scale(.75)" src="{{ elemento.factura.url }}" alt="Factura"></a>
                 </div>
                 {% else %}
                 <div class="text-[0.7rem]
@@ -343,9 +346,9 @@ Consultar Elementos
             {% endif %}
             <td
               class="flex  px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-l border-gray-200 gap-2">
-              <button title="Visualizar Elemento" onclick="openModal('{{ elemento.fecha_Registro }}, {{ elemento.producto.nombre }}, {{ elemento.producto.categoria }},  {{ elemento.producto.estado }}, {{ elemento.producto.valor_unidad }}, {{ elemento.serial }}, {{ elemento.producto.descripcion }}, {{ elemento.observacion }}  ')">
+              <button title="Visualizar Elemento" onclick="openModal('{{ elemento.fecha_Registro }}, {{ elemento.producto.nombre }}, {% if elemento.producto.categoria == 'D' %} Devolutivo {% endif %} , {% if elemento.producto.estado == 'D' %} Disponible {% elif elemento.producto.estado == 'P' %} Prestamo {% elif elemento.producto.estado == 'G' %} Garantia {% elif elemento.producto.estado == 'B' %} Baja {% endif %} ,  {{ elemento.producto.valor_unidad }}, {{ elemento.serial }}, {{ elemento.producto.descripcion }}, {{ elemento.observacion }}  ')">
                 <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" />
+                  <path d="m62 32s-10.1 20-30 20-30-20-30-20 10.1-20 30-20 30 20 30 20" fill="#231f20" /> if
                   <path
                     d="m57 32s-8.4 16.7-25 16.7-25-16.7-25-16.7 8.4-16.7 25-16.7 25 16.7 25 16.7z" fill="#fff" />
                   <path
@@ -368,7 +371,7 @@ Consultar Elementos
                   </svg>
                 </a>
               </button>
-              <button title="Inhabilitar Elemento" onclick="botonEliminar('{{Entregas.id}}')">
+              <button hidden title="Inhabilitar Elemento" onclick="botonEliminar('{{Entregas.id}}')">
   
                   <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">
                 
@@ -513,7 +516,7 @@ Consultar Elementos
     const cantidadField = document.getElementById('cantidadField');
     const valorUnidadElementoField = document.getElementById('valorUnidadElementoField');
 
-    fechaElementoField.value = userDataArray[0] + " del " + userDataArray[1];
+    fechaElementoField.value = userDataArray[0];
     nombreField.value = userDataArray[1];
     categoriaField.value = userDataArray[2];
     estadoField.value = userDataArray[3];
@@ -536,14 +539,14 @@ Consultar Elementos
     const serialField = document.getElementById('serialField');
     const valorUnidadElementoField = document.getElementById('valorUnidadElementoField');
 
-    fechaElementoField.value = userDataArray[0] + " del " + userDataArray[1];
-    nombreField.value = userDataArray[1];
-    categoriaField.value = userDataArray[2];
-    estadoField.value = userDataArray[3];
-    descripcionElementoField.value = userDataArray[6];
-    observacionElementoField.value = userDataArray[7];
-    serialField.value = userDataArray[5];
-    valorUnidadElementoField.value = userDataArray[4];
+    fechaElementoField.value = userDataArray[0] +" del "+ userDataArray[1];;
+    nombreField.value = userDataArray[2];
+    categoriaField.value = userDataArray[3];
+    estadoField.value = userDataArray[4];
+    descripcionElementoField.value = userDataArray[7];
+    observacionElementoField.value = userDataArray[8];
+    serialField.value = userDataArray[6];
+    valorUnidadElementoField.value = userDataArray[5];
     modal.style.display = 'block';
   }
 

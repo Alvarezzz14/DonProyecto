@@ -94,7 +94,7 @@ def login_view(request):
     return render(request, "indexLogin.html", {"form": loginForm})
 
 
-# @login_required
+@login_required
 def homedash(request):
     prestamos = Prestamo.objects.all().order_by("fechaDevolucion")
     entregas = EntregaConsumible.objects.all()
@@ -110,22 +110,22 @@ def homedash(request):
     return render(request, "superAdmin/basedashboard.html", data)
 
 
-# @login_required
+@login_required
 def elementosdash(request):
     return render(request, "superAdmin/elementosdash.html")
 
 
-# @login_required
+@login_required
 def usuariodash(request):
     return render(request, "superAdmin/usuariodash.html")
 
 
-# @login_required
+@login_required
 def inventariodash(request):
     return render(request, "superAdmin/inventariodash.html")
 
 
-# @login_required
+@login_required
 def transacciondash(request):
     return render(request, "superAdmin/transaccionesdash.html")
 
@@ -134,14 +134,14 @@ def logout(request):
     return render(request, "indexLogin.html")
 
 
-# @login_required
+@login_required
 def consultarUsuario_view(request):
     usuarios = UsuariosSena.objects.all()  # Consulta todos los usuarios
     return render(request, "superAdmin/consultarUsuario.html", {"usuarios": usuarios})
 
 
-# @login_required
-# @verificar_superadmin
+@login_required
+@verificar_superadmin
 def registroUsuario_view(request):
     if request.method == "POST":
         nombresVar = request.POST.get("nombres")
@@ -202,14 +202,14 @@ def registroUsuario_view(request):
                     fotoUsuario=fotoUsuarioVar,
                 )
                 user.save()
-                cache.clear()  # limpiar toda la cache
+                
                 messages.success(request, "Usuario Registrado con Éxito")
 
     return render(request, "superAdmin/registroUsuario.html")
 
 
-# @login_required
-# @verificar_superadmin
+@login_required
+@verificar_superadmin
 def editarUsuario_view(request, numeroIdentificacion):
     try:
         user = UsuariosSena.objects.get(numeroIdentificacion=numeroIdentificacion)
@@ -220,40 +220,46 @@ def editarUsuario_view(request, numeroIdentificacion):
         messages.warning(request, "No existe registro")
         return redirect("consultarUsuario_view")
 
-
+@login_required
+@verificar_superadmin
 def editarElementosconsu_view(request, id):
     # Obtener el objeto ElementosConsumible por su ID
     elemento = get_object_or_404(InventarioConsumible, id=id)
 
     if request.method == "POST":
-        # Obtener datos del formulario
-        fecha_adquisicion = request.POST.get('txt_fechaadquisicion')
-        nombre_elemento = request.POST.get('txt_nombreElemento')
-        categoria_elemento = request.POST.get('txt_categoriaElemento')
-        estado_elemento = request.POST.get('txt_estadoElemento')
-        descripcion_elemento = request.POST.get('txt_descripcionElemento')
-        observacion_elemento = request.POST.get('txt_observacionElemento')
-        cantidad_elemento = request.POST.get('txt_cantidadElemento')
-        costo_unidad_elemento = request.POST.get('txt_costoUnidadElemento')
-        costo_total_elemento = request.POST.get('txt_costoTotalElemento')
-        factura_elemento = request.FILES.get('txt_facturaElemento')
-
         try:
+            # Obtener datos del formulario
+            fecha_adquisicion = request.POST.get('txt_fechaadquisicion')
+            nombre_elemento = request.POST.get('txt_nombreElemento')
+            categoria_elemento = request.POST.get('txt_categoriaElemento')
+            estado_elemento = request.POST.get('txt_estadoElemento')
+            descripcion_elemento = request.POST.get('txt_descripcionElemento')
+            observacion_elemento = request.POST.get('txt_observacionElemento')
+            cantidad_elemento = request.POST.get('txt_cantidadElemento')
+            costo_unidad_elemento = request.POST.get('txt_costoUnidadElemento')
+            costo_total_elemento = request.POST.get('txt_costoTotalElemento')
+            factura_elemento = request.FILES.get('txt_facturaElemento')
+
             # Actualizar los campos del objeto ElementosConsumible con los datos del formulario
             elemento.fechaAdquisicion = fecha_adquisicion
-            elemento.nombreElemento = nombre_elemento
+            elemento.productoConsumible.nombreElemento = nombre_elemento
             elemento.categoriaElemento = categoria_elemento
-            elemento.estadoElemento = estado_elemento
-            elemento.descripcionElemento = descripcion_elemento
+            elemento.productoConsumible.estadoElemento = estado_elemento
+            elemento.productoConsumible.descripcionElemento = descripcion_elemento
             elemento.observacionElemento = observacion_elemento
             elemento.cantidadElemento = cantidad_elemento
-            elemento.costoUnidadElemento = costo_unidad_elemento
+            elemento.productoConsumible.costoUnidadElemento = costo_unidad_elemento
             elemento.costoTotalElemento = costo_total_elemento
             elemento.facturaElemento = factura_elemento
 
+            # Guardar el modelo ProductosInventarioConsumible
+            elemento.productoConsumible.save()
+
+            # Guardar el modelo InventarioConsumible
             elemento.save()
 
-            consultar_elementosconsu_url = reverse("consultarelementosconsu")
+            messages.success(request, "Elemento consumible actualizado con éxito")
+            consultar_elementosconsu_url = reverse("consultarElementos")
             return redirect(f"{consultar_elementosconsu_url}?opcion=elemento_consumible")
 
         except InventarioConsumible.DoesNotExist as e:
@@ -266,59 +272,75 @@ def editarElementosconsu_view(request, id):
     return render(request, "superAdmin/editarElementoconsu.html", {"elemento": elemento})
 
 
-
+@login_required
+@verificar_superadmin
 def editarElementosdevo_view(request, serial):
     # Obtener el objeto InventarioDevolutivo por su serial
-    inventario_elemento = get_object_or_404(InventarioDevolutivo, serial=serial)
-    elemento = inventario_elemento.serial  # Obtener el elemento asociado
+    try:
+        inventario_elemento = InventarioDevolutivo.objects.select_related("producto").get(serial=serial)
+        
+        datos = {"inventario_elemento": inventario_elemento}
+        # Redirigir a la vista consultarUsuario_view para recargar los datos
+        return render(request, "superAdmin/editarElementodevo.html", datos)
+    
+    except InventarioDevolutivo.DoesNotExist as e:
+        messages.warning(request, "No existe registro")                
+        return redirect("consultarElementos")
 
-    if request.method == "POST":
-        # Obtener datos del formulario
-        serial_elemento = request.POST.get('txt_serial')
-        fechaAdquisicion = request.POST.get('txt_fechaAdquisicion')
-        nombre_elemento = request.POST.get('txt_nombreElemento')
-        categoria_elemento = request.POST.get('txt_categoriaElemento')
-        estado_elemento = request.POST.get('txt_estadoElemento')
-        descripcion_elemento = request.POST.get('txt_descripcionElemento')
-        observacion_elemento = request.POST.get('txt_observacionElemento')
-        cantidad_elemento = float(request.POST.get('txt_cantidadElemento'))
-        valor_unidad_elemento = float(request.POST.get('txt_valorUnidadElemento'))
-        factura_elemento = request.FILES.get('txt_facturaElemento')
 
-        try:
-            # Actualizar los campos del objeto ElementosDevolutivo con los datos del formulario
-            elemento.serial = serial_elemento
-            elemento.fechaAdquisicion = fechaAdquisicion
-            elemento.nombreElemento = nombre_elemento
-            elemento.categoriaElemento = categoria_elemento
-            elemento.estadoElemento = estado_elemento
-            elemento.descripcionElemento = descripcion_elemento
-            elemento.observacionElemento = observacion_elemento
-            elemento.save()
+@login_required
+@verificar_superadmin
+def actualizarElementoDevolutivo(request, serial):
+    
+    try: 
+        inventario_elemento = InventarioDevolutivo.objects.select_related("producto").get(serial=serial)
+        
+        if request.method == "POST":
+            
+                # Obtener datos del formulario
+                serial_elemento = request.POST.get('txt_serial')
+                fecha_Registro = request.POST.get('txt_fechaAdquisicion')
+                nombre_elemento = request.POST.get('txt_nombreElemento')
+                categoria_elemento = request.POST.get('txt_categoriaElemento')
+                estado_elemento = request.POST.get('txt_estadoElemento')
+                descripcion_elemento = request.POST.get('txt_descripcionElemento')
+                observacion_elemento = request.POST.get('txt_observacionElemento')
+                cantidad_elemento = request.POST.get('txt_cantidadElemento')
+                factura_elemento = request.FILES.get('txt_facturaElemento')
+                valor_nidad = request.POST.get('txt_valorUnidadElemento')
 
-            # Actualizar los campos del objeto InventarioDevolutivo
-            inventario_elemento.serial = serial_elemento
-            inventario_elemento.fecha_Registro = fechaAdquisicion
-            inventario_elemento.observacion = observacion_elemento
-            inventario_elemento.factura = factura_elemento
-            inventario_elemento.disponibles = cantidad_elemento
-            inventario_elemento.save()
 
-            consultar_elementodevo_url = reverse("consultarElementos_view")
-            return redirect(f"{consultar_elementodevo_url}?opcion=elemento_devolutivo")
+                # Actualizar campos del modelo ProductosInventarioDevolutivo
+                inventario_elemento.producto.nombre = nombre_elemento
+                inventario_elemento.producto.categoria = categoria_elemento
+                inventario_elemento.producto.estado = estado_elemento
+                inventario_elemento.producto.descripcion = descripcion_elemento
+                inventario_elemento.producto.valor_unidad = valor_nidad            
+                # Actualizar campos del modelo InventarioDevolutivo
+                inventario_elemento.fecha_Registro = fecha_Registro
+                inventario_elemento.observacion = observacion_elemento
+                inventario_elemento.factura = factura_elemento
+                print("actualizarElementoDevolutivo ", categoria_elemento,observacion_elemento)   
+                inventario_elemento.producto.save()  
 
-        except ProductosInventarioDevolutivo.DoesNotExist as e:
-            # Manejar la excepción y mostrar un mensaje de error
-            error_message = f"Elemento devolutivo no encontrado. Detalles: {e}"
-            print(error_message)  # Imprimir mensaje de error en la consola
-            return render(request, "superAdmin/editarElementodevo.html", {"elemento": elemento, "error_message": error_message, "valor_total_actual": inventario_elemento.valorTotalElemento})
+                inventario_elemento.save()  
+                messages.success(request, "Elemento Consumible Editado con Éxito")
 
-    # Si la solicitud no es POST, enviar el objeto ElementosDevolutivo a la plantilla
-    return render(request, "superAdmin/editarElementodevo.html", {"elemento": elemento, "valor_total_actual": inventario_elemento.valorTotalElemento})
+                consultar_elementodevo_url = reverse("consultarElementos")
+                return redirect(f"{consultar_elementodevo_url}?opcion=elemento_devolutivo")
+            
+    except InventarioDevolutivo.DoesNotExist as e:
+        messages.warning(request, "No existe registro")
+        return redirect("consultarElementos")
 
-#@login_required
-#@verificar_superadmin
+    return render(request, "superAdmin/editarElementodevo.html", {"inventario_elemento": inventario_elemento})
+
+
+@login_required
+@verificar_superadmin
 def actualizarUsuario_view(request, numeroIdentificacion):
+    
+    
     if request.method == "POST":
         nombreVar = request.POST.get("nombre")
         apellidoVar = request.POST.get("Apellidos")
@@ -363,8 +385,8 @@ def actualizarUsuario_view(request, numeroIdentificacion):
         return redirect("consultarUsuario_view")
 
 
-# @login_required
-# @verificar_superadmin
+@login_required
+@verificar_superadmin
 def eliminarUsuario_view(request, numeroIdentificacion):
     try:
         # Busca el usuario por ID
@@ -386,10 +408,22 @@ def eliminarUsuario_view(request, numeroIdentificacion):
         # Maneja el caso en el que el usuario no existe
         messages.error(request, "Usuario no encontrado.")
         return redirect("index")
+        
+        
+@login_required
+@verificar_superadmin
+def inhabilitar_elemento_consumible(request, id):
+    consumible = get_object_or_404(ProductosInventarioConsumible, id=id)
+    # Cambiar el estado a "Baja"
+    consumible.estadoElemento = 'Baja'
+    consumible.save()
+    messages.success(request, "Elemento inhabilitado Correctamente")
+    # Puedes agregar más lógica o mensajes según sea necesario
+    return redirect("consultarElementos")
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def formPrestamosDevolutivos_view(request):
     # Obtiene todos los usuarios excepto el que esta fijado de primero
     usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
@@ -409,7 +443,7 @@ def formPrestamosDevolutivos_view(request):
         InventarioDevolutivo.objects.annotate(disponible=~Exists(prestamos_activos))
         .select_related("producto")
         .values_list(
-            "producto__nombre", "serial", "producto__descripcion", "producto__estado"
+            "producto__nombre", "serial", "producto__descripcion", "disponible"
         )
     )
     form_data = {}
@@ -577,7 +611,7 @@ def formPrestamosDevolutivos_view(request):
     )
 
 
-# Rellenar Elemento
+@login_required
 def get_element_name_by_serial(request):
     serial_number = request.GET.get("serialNumber", None)
     if serial_number:
@@ -607,8 +641,8 @@ def get_element_name_by_serial(request):
         return JsonResponse({"error": "No serial number provided"}, status=400)
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def formEntregasConsumibles_view(request):
     # Obtiene todos los usuarios excepto el que esta fijado de primero
     usuarios = UsuariosSena.objects.exclude(numeroIdentificacion="12345")
@@ -625,9 +659,9 @@ def formEntregasConsumibles_view(request):
         responsable_Entrega_nombre = request.POST.get("responsable_Entrega")
         nombre_solicitante_nombre = request.POST.get("nombre_solicitante")
         idC_id = request.POST.get("idC")  # Este es el ID del InventarioConsumible
-        nombreProducto = request.POST.get("nombreProducto")
-        cantidad_prestada = request.POST.get("cantidadOtorgada")
-        observaciones_prestamo = request.POST.get("observacionesEntrega")
+        
+        cantidad_prestada = request.POST.get("cantidadElemento")
+        observaciones_prestamo = request.POST.get("observaciones_prestamo")
         firmaDigital = (
             request.FILES.get("firmaDigital")
             if "firmaDigital" in request.FILES
@@ -684,8 +718,7 @@ def formEntregasConsumibles_view(request):
                 entrega_consumible = EntregaConsumible(
                     fecha_entrega=timezone.now(),
                     responsable_Entrega=responsable_Entrega,
-                    nombre_solicitante=nombre_solicitante,
-                    nombreProducto=nombreProducto,
+                    nombre_solicitante=nombre_solicitante,            
                     idC=inventarioConsumible,
                     cantidad_prestada=cantidad_solicitada,
                     observaciones_prestamo=observaciones_prestamo,
@@ -718,6 +751,7 @@ def formEntregasConsumibles_view(request):
 
 
 # Rellenar info del elemento consumible seleccionado
+@login_required
 def get_element_consum_info(request):
     consumible_id = request.GET.get("consumibleId", None)
     element_id = request.GET.get("id", None)
@@ -750,14 +784,18 @@ def get_element_consum_info(request):
         )
 
 
-# @login_required
+@login_required
 def calendario(request):
-    prestamos = Prestamo.objects.all()
+    prestamos = Prestamo.objects.select_related('nombreRecibe', 'serialSenaElemento__producto').all()
     eventos = []
 
     for prestamo in prestamos:
+        nombre_usuario = f"{prestamo.nombreRecibe.nombres} {prestamo.nombreRecibe.apellidos}"
+        nombre_producto = prestamo.serialSenaElemento.producto.nombre
+        titulo_evento = f"{nombre_usuario} - {nombre_producto}"
+
         evento = {
-            "title": prestamo.observacionesPrestamo,
+            "title": titulo_evento,
             "start": prestamo.fechaEntrega.isoformat(),
             "end": (prestamo.fechaDevolucion + timedelta(days=1)).isoformat(),
         }
@@ -766,8 +804,8 @@ def calendario(request):
     return render(request, "superAdmin/calendario.html", {"eventos": eventos})
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def formElementos_view(request):
     form_data = {}
     if request.method == "POST":
@@ -851,7 +889,7 @@ def formElementos_view(request):
     return render(request, "superAdmin/formElementos.html")
 
 
-# @login_required
+@login_required
 def consultarElementos(request):
     inventario = InventarioDevolutivo.objects.select_related("producto").all()
     elementosconsu = InventarioConsumible.objects.select_related("productoConsumible").all()
@@ -995,9 +1033,9 @@ def user_logout(request):
     return redirect("login_view")
 
 
-# @login_required
+@login_required
 def consultarTransacciones_view(request):
-    prestamos = Prestamo.objects.all()
+    prestamos = Prestamo.objects.select_related("nombreRecibe", "nombreEntrega").all()
     for prestamo in prestamos:
         prestamo.nombre_del_producto = prestamo.serialSenaElemento.producto.nombre
         # Comprobación de la fecha de devolución PERO VA DE LA MANO CON LA LOGICA CUANDO SE FINALICE EL PRODUCTO
@@ -1019,8 +1057,8 @@ def consultarTransacciones_view(request):
     return render(request, "superAdmin/consultarTransacciones.html", data)
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def editarPrestamo_view(request, id):
     # Obtener el objeto Prestamo por su ID
     prestamo = get_object_or_404(Prestamo, id=id)
@@ -1030,8 +1068,8 @@ def editarPrestamo_view(request, id):
         # Obtener datos del formulario
         fecha_entrega = request.POST.get("txt_fechaentrega")
         fecha_devolucion = request.POST.get("txt_fechaDevolucion")
-        # nombre_entrega = request.POST.get("txt_nombreEntrega")
-        # nombre_recibe = request.POST.get("txt_nombreRecibe")
+        nombre_entrega = request.POST.get("txt_nombreEntrega")
+        nombre_recibe = request.POST.get("txt_nombreRecibe")
         nombre_elemento = request.POST.get("txt_nombreElemento")        
         valor_unidad = request.POST.get("txt_valorUnidadElemento")
         observaciones_prestamo = request.POST.get("txt_observacionesPrestamo")
@@ -1041,15 +1079,17 @@ def editarPrestamo_view(request, id):
             # Actualizar los campos del objeto Prestamo con los datos del formulario
             prestamo.fechaEntrega = fecha_entrega
             prestamo.fechaDevolucion = fecha_devolucion
-            # prestamo.nombreEntrega = nombre_entrega
-            # prestamo.nombreRecibe = nombre_recibe
-            # prestamo.nombreElemento = nombre_elemento            
+            prestamo.nombreEntrega.numeroIdentificacion = nombre_entrega
+            prestamo.nombreRecibe.numeroIdentificacion = nombre_recibe
+            prestamo.nombreElemento = nombre_elemento            
             prestamo.valorUnidadElemento = valor_unidad
             prestamo.observacionesPrestamo = observaciones_prestamo
             prestamo.estadoPrestamo = estado_prestamo
             # Resto de la lógica de actualización
 
             prestamo.save()
+            
+            messages.success(request, "El prestamo se ha editado exitosamente")
 
             consultar_transacciones_url = reverse("consultarTransacciones")
             return redirect(f"{consultar_transacciones_url}?opcion=prestamo")
@@ -1076,8 +1116,8 @@ def editarPrestamo_view(request, id):
     )
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def editarEntrega_view(request, id):
     # Obtener el objeto Prestamo por su ID
     entrega = get_object_or_404(EntregaConsumible, id=id)
@@ -1095,6 +1135,8 @@ def editarEntrega_view(request, id):
             # Resto de la lógica de actualización
 
             entrega.save()
+            
+            messages.success(request, "La Entrega se ha editado exitosamente")
 
             consultar_transacciones_url = reverse("consultarTransacciones")
             return redirect(f"{consultar_transacciones_url}?opcion=entregas")
@@ -1121,8 +1163,8 @@ def editarEntrega_view(request, id):
     )
 
 
-# @login_required
-# @verificar_cuentadante
+@login_required
+@verificar_cuentadante
 def finalizarPrestamo_view(request, id):
     prestamo = get_object_or_404(Prestamo, id=id)
 
@@ -1142,6 +1184,7 @@ def finalizarPrestamo_view(request, id):
         request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
     )
 
+@login_required
 def reporteelementosactivos(request):
     fecha_inicio = request.GET.get('fecha_inicio', None)
     fecha_fin = request.GET.get('fecha_fin', None)
@@ -1166,7 +1209,7 @@ def reporteelementosactivos(request):
         request,  "superAdmin/reporteelementosactivos.html" , data
         )
     
-   
+@login_required 
 def reporteelementosprestamo(request):
     fecha_inicio = request.GET.get('fecha_inicio', None)
     fecha_fin = request.GET.get('fecha_fin', None)
@@ -1188,7 +1231,7 @@ def reporteelementosprestamo(request):
         return render (request, "superAdmin/reporteelementosprestamo.html" , data) 
         
    
-   
+@login_required
 def reporteelementosbajas(request):
     
     fecha_inicio = request.GET.get('fecha_inicio', None)

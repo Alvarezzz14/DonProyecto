@@ -34,16 +34,12 @@
                     <input type="text" class="inputform" placeholder="©" name="txt_nombre_solicitante" value="{{entrega.nombre_solicitante}}" required readonly>
                     <label for="nombre_solicitante" class="labelform">Adquiriente</label>
                 </div>
-            </div>
-            <div class="container-1">
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="©" name="txt_nombreElemento" value="{{entrega.nombreElemento}}" required readonly>
-                    <label for="nombreElemento" class="labelform">Elemento</label>
-                </div>            
-                <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="txt_serialSenaElemento" value="{{entrega.serialSenaElemento}}" required readonly>
+                    <input type="text" class="inputform" placeholder="a" name="txt_serialSenaElemento" value="{{entrega.idC}}" required readonly>
                     <label for="serialSenaElemento" class="labelform">Serial Elemento </label>
                 </div>
+            </div>
+            <div class="container-1">          
             </div>
             <div class="container-1">                                
                 <div class="inputContainer">
@@ -61,7 +57,7 @@
             <div class="container-1">                
                 <div class="container-botones">
                     <button type="submit" class="submitBtn">GUARDAR</button>
-                    <button type="button" class="submitBtn">CANCELAR</button>
+                    <a href="{% url 'consultarTransacciones' %}"><button type="button" class="submitBtn">CANCELAR</button></a>
 
                 </div>
             </div>
