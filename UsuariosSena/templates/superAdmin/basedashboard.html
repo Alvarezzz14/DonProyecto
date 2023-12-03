@@ -159,9 +159,9 @@ Home SUAdmin
                                         
                                     </div>
 
-                                    <form method="post" action="{% url 'enviar_correo_desde_boton' id=Prestamos.id %}">
+                                    <form  id="enviarCorreoForm"  method="post" action="{% url 'enviar_correo_desde_boton' id=Prestamos.id %}">
                                       {% csrf_token %}
-                                      <button type="submit">Enviar Correo</button>
+                                      <button title="Notificar al EMAIL" type="submit" onclick="mostrarSweetAlert()" >Enviar Correo</button>
                                     </form>
                                     {% endif %}
                                     <div class="caja-texto-notificaciones">
@@ -176,6 +176,7 @@ Home SUAdmin
                                 </div>
                                 
                             </div>
+
                             {% endfor %}
                         {% else %}
                         <h1>NO TENEMOS PRESTAMOS PENDIENTES</h1>
@@ -233,6 +234,30 @@ Home SUAdmin
 
         {% endblock content %}
 
+
+
+{% block extrajs %}
+
+<script src="{% static 'js/dashboard.js' %}"></script>  
+<script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
+
+<script>
+  function mostrarSweetAlert() {
+      Swal.fire({
+          title: '¿Deseas notificar al usuario por correo?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, enviar correo',
+          cancelButtonText: 'Cancelar',
+      }).then((result) => {
+          if (result.isConfirmed) {
+              // Si el usuario confirma, envía el formulario
+              document.getElementById('enviarCorreoForm').submit();
+          }
+      });
+  }
+</script>
+  
+{% endblock extrajs %}
+  
    
-   <script src="{% static 'js/dashboard.js' %}"></script>  
-   <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>

@@ -150,7 +150,7 @@ Consultar Transaciones
                   <span
                     class="text-center inline-flex p-2 text-[0.8rem] font-semibold leading-5 text-red-800 bg-red-100 rounded-full">
                     Vencido</span>
-                  {% elif Prestamos.estadoPrestamo == 'FINALIZADO' %}
+                  {% elif Prestamos.estadoPrestamo == 'FINALIZADO' or Prestamos.estadoPrestamo == 'Finalizado' %}
                   <span
                     class="text-center inline-flex p-2 text-[0.8rem] font-semibold leading-5 text-slate-800 bg-slate-100 rounded-full">
                     Finalizado</span>

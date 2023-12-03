@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Exists, OuterRef
 from .forms import (
@@ -573,7 +574,7 @@ def formPrestamosDevolutivos_view(request):
             
             #Enviar Correo De Notificacion a la hora de Realizar el prestamo
             
-            enviar_correo_notificacion(prestamo_id)
+            enviar_correo_notificacion(request, prestamo_id)
             
             # Disminuir la cantidad de elementos disponibles
             if inventario.producto.categoria == "D":
@@ -1257,28 +1258,27 @@ def reporteelementosbajas(request):
             request,  "superAdmin/reporteelementosbajas.html" , data
         )
 
-    
 
-from django.core.mail import send_mail
-
-def enviar_correo_notificacion(id):
+def enviar_correo_notificacion(request, id):
     # Obtener el objeto de la base de datos usando el ID
-    prestamo = get_object_or_404(Prestamo, id=id)
+    prestamo = Prestamo.objects.get(id=id)
     
-    nombre_recibe = prestamo.nombreRecibe
+    nombre_recibe = prestamo.nombreRecibe.nombres
+    apelido_recibe = prestamo.nombreRecibe.apellidos
+    nombreCompleto = nombre_recibe + apelido_recibe
     fecha_entrega = prestamo.fechaEntrega
     fecha_devolucion = prestamo.fechaDevolucion
-    nombre_producto = prestamo.nombreProducto
-    serial_sena = prestamo.serialSenaElemento
+    nombre_producto = prestamo.serialSenaElemento.producto.nombre
+    serial_sena = prestamo.serialSenaElemento.serial
 
     # Lógica para determinar el asunto y el cuerpo del correo usando datos del objeto
     asunto = f'Notificacion Prestamo Elemento Sena CDITI Area de Software'
     cuerpo = (
-        f'Hola {nombre_recibe},\n\n'
+        f'Hola {nombreCompleto},\n\n'
         f'Notificacion del Prestamo Adquirido:\n'
         f'Fecha de entrega: {fecha_entrega}\n'
         f'Fecha de devolución: {fecha_devolucion}\n'
-        f'Nombre del producto: {nombre_producto}\n'
+        f'Nombre del Elemento: {nombre_producto}\n'
         f'Serial Sena: {serial_sena}'
     )
 
@@ -1290,16 +1290,43 @@ def enviar_correo_notificacion(id):
 
     # Enviar el correo
     send_mail(asunto, cuerpo, remitente, destinatario, fail_silently=False)
-
+    messages.success(request, 'Notificacion de Prestamo enviada al correo')
     # Mostrar alerta SweetAlert después de enviar el correo directamente en la misma vista
-    return redirect({'correo_enviado_exitosamente': True})
+    return "Notificacion de Prestamo Enviada al Correo"
 
 
 
 def enviar_correo_desde_boton(request, id):
-    # Llamar a la función para enviar el correo
     
-    enviar_correo_notificacion(id)
+    prestamo = Prestamo.objects.get(id=id)
+    
+    nombre_recibe = prestamo.nombreRecibe.nombres
+    apelido_recibe = prestamo.nombreRecibe.apellidos
+    nombreCompleto = nombre_recibe + apelido_recibe
+    fecha_entrega = prestamo.fechaEntrega
+    fecha_devolucion = prestamo.fechaDevolucion
+    nombre_producto = prestamo.serialSenaElemento.producto.nombre
+    serial_sena = prestamo.serialSenaElemento.serial
 
-    # Redirigir a la página principal o a donde desees
-    return render(request, 'SuperAdmin/dashboard.html', {'correo_enviado_exitosamente': True})
+    # Lógica para determinar el asunto y el cuerpo del correo usando datos del objeto
+    asunto = f'***Recordatorio Devolucion Elemento Sena CDITI Area de Software***'
+    cuerpo = (
+        f'Hola {nombreCompleto},\n\n'
+        f'**** Recordatorio de la Devolucion del elemento Adquirido:*****\n'
+        f'Fecha de entrega: {fecha_entrega}\n'
+        f'Fecha de devolución: {fecha_devolucion}\n'
+        f'Nombre del Elemento: {nombre_producto}\n'
+        f'Serial Sena: {serial_sena}'
+    )
+
+    # Utilizar el campo 'mail' del objeto como destinatario
+    destinatario = [prestamo.nombreRecibe.email]
+
+    # Puedes personalizar estos valores según tus necesidades
+    remitente = 'alertasinventariosena@gmail.com'
+
+    # Enviar el correo
+    send_mail(asunto, cuerpo, remitente, destinatario, fail_silently=False)
+    
+    # Mostrar alerta SweetAlert después de enviar el correo directamente en la misma vista
+    return redirect ('homedash')
