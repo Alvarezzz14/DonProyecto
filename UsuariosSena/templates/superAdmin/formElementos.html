@@ -25,7 +25,7 @@ Registrar Elementos
         <div class="container-1">
             <!-- Campos para Producto -->
             <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="Nombre del Producto" name="nombre"
+                <input type="text" class="inputform" placeholder="Nombre del Producto" pattern="^\S.*$" name="nombre"
                     value="{{ form_data.nombre }}" required>
                 <label for="nombre" class="labelform">Nombre del Producto</label>
             </div>
@@ -46,17 +46,17 @@ Registrar Elementos
                 </select>
             </div>
             <div class="selectContainer">
-                <input type="number" class="inputcantidad" name="cantidadElemento" value="{{ cantidadElemento }}"
+                <input type="number" class="inputcantidad" name="cantidadElemento" pattern="^\S.*$" value="{{ cantidadElemento }}"
                     id="cantidadElemento" min="1" required>
                 <label for="cantidadElemento" class="labelcantidad">Cantidad</label>
             </div>
             <div class="inputContainervalor">
-                <input type="text" class="inputformvalor" placeholder="a" name="valor_unidad"
+                <input type="text" class="inputformvalor" pattern="^\S.*$" placeholder="a" name="valor_unidad"
                     value="{{ form_data.valor_unidad }}" id="valorUnidad" required>
                 <label for="valor_unidad" class="labelformvalor">Valor Unidad</label>
             </div>
             <div class="inputContainervalor">
-                <input type="text" class="inputformvalor" placeholder="a" name="valorTotalElemento"
+                <input type="text" class="inputformvalor" pattern="^\S.*$" placeholder="a" name="valorTotalElemento"
                     id="valorTotalElemento" readonly>
                 <label for="valorTotalElemento" class="labelformvalor">Valor Total</label>
             </div>
@@ -65,24 +65,24 @@ Registrar Elementos
         <div class="container-1">
             <!-- Campos para Inventario -->
             <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="Número de Serie" name="serial"
+                <input type="text" class="inputform" pattern="^\S.*$" placeholder="Número de Serie" name="serial"
                     value="{{ form_data.serial }}" id="serialInput" required>
                 <label for="serial" class="labelform">Número de Serie</label>
             </div>
             <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="Descripción del Producto" name="descripcion"
+                <input type="text" class="inputform" pattern="^\S.*$" placeholder="Descripción del Producto" name="descripcion"
                     value="{{ form_data.descripcion }}" required>
                 <label for="descripcion" class="labelform">Características del Producto</label>
             </div>
 
             <div class="inputContainer">
-                <input type="text" class="inputform" placeholder="Observaciones" name="observacion"
+                <input type="text" class="inputform" pattern="^\S.*$" placeholder="Observaciones" name="observacion"
                     value="{{ form_data.observacion }}" required>
                 <label for="observacion" class="labelform">Observaciones</label>
             </div>
 
             <div class="selectorimagen">
-                <input type="file" accept="image/*" class="inputsubirfoto" name="factura">
+                <input type="file" accept="image/*" pattern="^\S.*$" class="inputsubirfoto" name="factura">
                 <label for="factura" class="labelsubirfoto">Adjuntar Soporte</label>
             </div>
         </div>
