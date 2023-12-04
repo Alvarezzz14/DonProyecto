@@ -192,11 +192,11 @@ Consultar Elementos
                     </svg>
                   </a>
                 </button>
-                <form action="{% url 'hinhabilitar_elemento_consumible' id=elemento.id %}" method="post">
-                  {% csrf_token %}
-                  <button title="Inhabilitar Elemento" class="" data-id="">   
-                    <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">                
-                  </button>
+                  <button title="Inhabilitar Elemento" onclick="botoninhabilitar('{{elemento.productoConsumible.id}}')">
+  
+                    <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">
+                  
+                </button>
                 </form>
                 
                 {% endif %}
@@ -371,7 +371,7 @@ Consultar Elementos
                   </svg>
                 </a>
               </button>
-              <button hidden title="Inhabilitar Elemento" onclick="botonEliminar('{{Entregas.id}}')">
+              <button title="Inhabilitar Elemento" onclick="botonEliminar('{{elemento.serial}}')">
   
                   <img src="{% static 'img/finalizar.png' %}" width="25px" alt="">
                 
@@ -494,6 +494,46 @@ Consultar Elementos
 
 {% endblock %}
 {% block extrajs %}
+<script>
+  const botonEliminar = (serial) => {
+    Swal.fire({
+      "title": "¿Estás seguro de inhabilitar el elemento?",
+      "text": "El elemento sera dado de baja",
+      "icon": "question",
+      "showCancelButton": true,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Inhabilitar",
+      "reverseButtons": true,
+      "confirmButtonColor": "#fc7323",
+      "iconColor": "#fc7323",
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/inhabilitar_elemento_devo/" + serial;
+        }
+      })
+  }
+</script>
+<script>
+  const botoninhabilitar = (id) => {
+    Swal.fire({
+      "title": "¿Estás seguro de inhabilitar el elemento?",
+      "text": "El elemento sera dado de baja",
+      "icon": "question",
+      "showCancelButton": true,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Inhabilitar",
+      "reverseButtons": true,
+      "confirmButtonColor": "#fc7323",
+      "iconColor": "#fc7323",
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/hinhabilitar_elemento_consumible/" + id;
+        }
+      })
+  }
+</script>
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
 
 <script>

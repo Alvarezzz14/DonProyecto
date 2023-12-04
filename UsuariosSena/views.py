@@ -424,6 +424,18 @@ def inhabilitar_elemento_consumible(request, id):
     # Puedes agregar más lógica o mensajes según sea necesario
     return redirect("consultarElementos")
 
+# @login_required
+# @verificar_superadmin
+def inhabilitar_elemento_devo(request, serial):
+    devolutivo = get_object_or_404(InventarioDevolutivo, serial=serial)
+    # Cambiar el estado a "Baja"
+    devolutivo.producto.estado = 'Baja'
+    devolutivo.producto.save()
+    messages.success(request, "Elemento inhabilitado Correctamente")
+    # Puedes agregar más lógica o mensajes según sea necesario
+    return redirect("consultarElementos")
+
+
 
 # def inhabilitar_elemento_devolutivo(request, id):
 #     devolutivo = get_object_or_404(ProductosInventarioDevolutivo, id=id)
