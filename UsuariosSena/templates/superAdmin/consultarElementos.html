@@ -386,11 +386,7 @@ Consultar Elementos
           {% endfor %}
           </tbody>
         </table>
-        {% comment %} <div class="flex w-20 gap-4 justify-end">
-          <a href="{% url 'generar_pdf_tipo_inventario' % }tipo_inventario=ElementosDevolutivos" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
-          <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
-              alt=""></a>
-          </div> {% endcomment %}
+        
         <div id="userModal" class="modal">
           <div class="modal-content">
             <thead>
@@ -434,7 +430,6 @@ Consultar Elementos
             </div>
           </div>
         
-  
       <div class="flex w-20 gap-4 justify-end">
       <a href="{% url 'generar_pdf_tipo_inventario' %}tipo_inventario=elementosconsumibles" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
       <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
