@@ -316,6 +316,9 @@ Consultar Transaciones
           <a href="{% url 'generar_pdf' %}" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
           <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}" alt=""></a>
         </div>
+          
+        {% endif %}
+          
         <!-- Modal para mostrar la información del usuario -->
 
         <div id="userModal" class="modal">
