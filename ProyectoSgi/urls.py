@@ -138,6 +138,7 @@ urlpatterns = [
     
 path('hinhabilitar_elemento_consumible/<int:id>/', views.inhabilitar_elemento_consumible, name='hinhabilitar_elemento_consumible'),
 
+# path('hinhabilitar_elemento_devolutivo/<int:id>/', views.inhabilitar_elemento_devolutivo, name='hinhabilitar_elemento_devolutivo'),
 
 ]
 

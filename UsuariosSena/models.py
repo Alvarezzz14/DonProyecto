@@ -131,6 +131,7 @@ class ProductosInventarioConsumible(models.Model):
         return self.nombreElemento
 
 
+
 class InventarioConsumible(models.Model):
     productoConsumible = models.ForeignKey(
         ProductosInventarioConsumible, on_delete=models.CASCADE

@@ -45,6 +45,20 @@ from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Image
 
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image, Paragraph, Spacer
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from io import BytesIO
+from datetime import datetime
+from svglib.svglib import svg2rlg
+from django.http import HttpResponse
+from UsuariosSena.models import InventarioDevolutivo
+from UsuariosSena.models import ProductosInventarioDevolutivo
+import os
+
+
 # Librería excel
 import xlsxwriter
 # Create your views here.
@@ -421,6 +435,21 @@ def inhabilitar_elemento_consumible(request, id):
     messages.success(request, "Elemento inhabilitado Correctamente")
     # Puedes agregar más lógica o mensajes según sea necesario
     return redirect("consultarElementos")
+
+
+# def inhabilitar_elemento_devolutivo(request, id):
+#     devolutivo = get_object_or_404(ProductosInventarioDevolutivo, id=id)
+#     # Cambiar el estado a "Baja"
+#     devolutivo.estadoElemento = 'Baja'
+#     devolutivo.save()
+#     messages.success(request, "Elemento inhabilitado Correctamente")
+#     # Puedes agregar más lógica o mensajes según sea necesario
+#     return redirect("consultarElementos")
+
+
+
+
+
 
 
 @login_required
@@ -904,24 +933,53 @@ def consultarElementos(request):
 def generar_pdf(request):
     buffer = BytesIO()
     response = HttpResponse(content_type="application/pdf")
-    response[
-        "Content-Disposition"
-    ] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.pdf"'
+    response["Content-Disposition"] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.pdf"'
 
     doc = SimpleDocTemplate(
         buffer,
-        rightMargin=inch,
-        leftMargin=inch,
-        topMargin=inch,
-        bottomMargin=inch,
-        pagesize=(21.59 * inch, 27.94 * inch),
+        rightMargin=0.5 * inch,
+        leftMargin=0.5 * inch,
+        topMargin=0.5 * inch,
+        bottomMargin=0.5 * inch,
+        pagesize=letter,
     )
 
     elementos = []
+
+    logo_path = 'UsuariosSena\static\img\logo-sena-negro-png-2022.png'
+    
+    # Imprimir la ruta absoluta
+    print(f'Ruta absoluta: {logo_path}')
+
+    # Verifica si el archivo existe antes de cargarlo
+    if os.path.exists(logo_path):
+        # Cargar la imagen PNG
+        logo = Image(logo_path, width=0.5 * inch, height=0.5 * inch)
+        logo.hAlign = 'LEFT'  # Ajusta la alineación según tus necesidades
+        elementos.append(logo)
+        # Añadir espacio después del logo
+        
+    else:
+        return HttpResponse("Error: El archivo de imagen no existe.")
+    
+    # Añadir título al documento
+    estilo_titulo = ParagraphStyle(
+        'Title',
+        parent=getSampleStyleSheet()['Title'],
+        spaceAfter=6,  # Ajusta según tus necesidades
+        fontSize=16,  # Ajusta el tamaño de la letra del título
+    )
+    titulo_para = Paragraph("Elementos del Inventario", estilo_titulo)
+    elementos.append(titulo_para)
+
+    # Ruta absoluta a la imagen PNG
+
+
+    # Construir la tabla de datos
     data = [
         [
-            "Fecha Registro",
-            "Nombre Producto",
+            "F. Registro",
+            "Producto",
             "Categoría",
             "Estado",
             "Descripción",
@@ -932,6 +990,7 @@ def generar_pdf(request):
         ]
     ]
 
+    # Agrega datos al arreglo 'data'
     for inventario in InventarioDevolutivo.objects.select_related("producto").all():
         producto = inventario.producto
         data.append(
@@ -944,32 +1003,33 @@ def generar_pdf(request):
                 producto.valor_unidad,
                 inventario.serial,
                 inventario.observacion,
-                "Factura",  # Aquí puedes añadir una lógica para manejar la imagen de la factura
+                "Factura",  # Puedes añadir lógica para manejar la imagen de la factura
             ]
         )
 
-    table = Table(data, colWidths=[1.5 * inch] * 9)
+    # Construir la tabla
+    table = Table(data, colWidths=[0.9 * inch] * 9)
     table_style = TableStyle(
         [
-            ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+            ("BACKGROUND", (0, 0), (-1, 0), colors.green),  # Establece el fondo para la fila del título
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
             ("ALIGN", (0, 0), (-1, -1), "CENTER"),
             ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-            ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
             ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
             ("GRID", (0, 0), (-1, -1), 1, colors.black),
         ]
     )
-
     table.setStyle(table_style)
     elementos.append(table)
+
     doc.build(elementos)
 
+    # Obtiene el contenido del buffer y lo envía en la respuesta
     pdf = buffer.getvalue()
     buffer.close()
     response.write(pdf)
     return response
-
 
 def generar_excel(request):
     buffer = BytesIO()
@@ -1231,7 +1291,7 @@ def reporteelementosprestamo(request):
         
         return render (request, "superAdmin/reporteelementosprestamo.html" , data) 
         
-   
+
 @login_required
 def reporteelementosbajas(request):
     
