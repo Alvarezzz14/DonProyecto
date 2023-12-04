@@ -12,10 +12,10 @@
 
 .form {
 background-color: white;
-
 border-radius: 8px;
 padding: 20px 10px;
 box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
+width: 98%;
 }
 
 .title {
