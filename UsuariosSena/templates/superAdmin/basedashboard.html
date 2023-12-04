@@ -161,7 +161,10 @@ Home SUAdmin
 
                                         <form  id="enviarCorreoForm"  method="post" action="{% url 'enviar_correo_desde_boton' id=Prestamos.id %}">
                                             {% csrf_token %}
-                                            <button title="Notificar al EMAIL" type="submit" onclick="mostrarSweetAlert()" >Recordar</button>
+                                            <div class="recordar">
+                                                <button title="Notificar al EMAIL" type="submit" onclick="mostrarSweetAlert()" class="recordar" >Recordar</button>
+                                            </div>
+                                            
                                         </form>
                                         {% endif %}
 

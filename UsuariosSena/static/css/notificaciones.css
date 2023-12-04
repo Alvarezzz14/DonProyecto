@@ -20,6 +20,13 @@
     transition: all 0.5s;
     
 }
+.recordar button{
+    padding: 10px 30px;
+    background-color: rgb(181, 215, 244);
+    border: none;
+    font-size: 11px;
+    margin: 5px;
+}
 
 .area-notificaciones {
     
@@ -61,6 +68,14 @@
     justify-content: flex-start;
 
 }
+
+
+.area-notificaciones::-webkit-scrollbar {
+    width: 30px;
+    height: 5px;
+    background: #fc7323;
+    overflow: hidden;
+  }
 
 .logo-notificaciones {
     width: 4rem;
