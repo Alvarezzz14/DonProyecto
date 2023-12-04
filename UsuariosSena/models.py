@@ -192,6 +192,7 @@ class Prestamo(models.Model):
     valorUnidadElemento = models.IntegerField()
     firmaDigital = models.ImageField(upload_to="firmaDigital/", blank=True, null=True)
     observacionesPrestamo = models.TextField()
+    observacionesEntrega = models.TextField(blank=True, null=False)
 
     def __str__(self):
         return f"Prestamo devolutivo del producto {self.serialSenaElemento.producto.nombre}"
@@ -199,6 +200,7 @@ class Prestamo(models.Model):
     class Meta:
         verbose_name = "Préstamo"
         verbose_name_plural = "Préstamos"
+
 
 
 class EntregaConsumible(models.Model):

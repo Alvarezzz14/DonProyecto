@@ -166,18 +166,15 @@ Consultar Transaciones
                 </button>
   
                   {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'VENCIDO'  %}
-                  
-                  <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
-
-                    <button type="submit" title="Finalizar Prestamo">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </form>
+                      <!-- Agrega el botón para finalizar el préstamo -->
+                      <button id= "openModalBtn" onclick="openFinallyModal()" title="Finalizar Prestamo">
+                          <img src="{% static 'img/finalizar.png' %}" width="40px" alt="">
+                      </button>
+                    <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}"  id="finalizarPrestamoForm">
+                      {% csrf_token %}
+                      <input type="text" name="observacionesEntrega" id="observacionesEntrega">
+                      <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
+                    </form>
 
                   {% endif %}
               </td>
@@ -355,91 +352,129 @@ Consultar Transaciones
               </table>
             </div>
           </div>
-        </div>
 
-        {% endif %}
+{% endblock %}
 
-        {% block extrajs %}
+ {% block extrajs %}
 
-        <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
+<script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
+{% comment %} <script src="{% static 'js/scriptFinalizarPrestamo.js' %}"></script> {% endcomment %}
 
-        <script>
-          // Función para abrir el modal y mostrar la información del usuario
-          {% if opcion_seleccionada == 'prestamo' %}
-          function openModal(userData) {
-            const modal = document.getElementById('userModal');
+<script>
+  // Función para abrir el modal y mostrar la información del usuario
+  {% if opcion_seleccionada == 'prestamo' %}
+  function openModal(userData) {
+    const modal = document.getElementById('userModal');
 
-            const userDataArray = userData.split(',');
-
-
-
-            const entregaField = document.getElementById('entregaField');
-            const devolucionField = document.getElementById('devolucionField');
-            const emisorField = document.getElementById('emisorField');
-            const adquirienteField = document.getElementById('adquirienteField');
-            const elementoField = document.getElementById('elementoField');
-            const serialField = document.getElementById('serialField');
-            const valorField = document.getElementById('valorField');
-            const observacionesField = document.getElementById('observacionesField');
-            const estadoField = document.getElementById('estadoField');
-
-
-            entregaField.value = userDataArray[0];
-            devolucionField.value = userDataArray[1];
-            emisorField.value = userDataArray[2];
-            adquirienteField.value = userDataArray[3];
-            elementoField.value = userDataArray[4];
-            serialField.value = userDataArray[5];
-            valorField.value = userDataArray[6];
-            observacionesField.value = userDataArray[7];
-            estadoField.value = userDataArray[8];
-            modal.style.display = 'block';
-
-            console.log(userDataArray)
-          }
-
-          {% elif opcion_seleccionada == 'entregas' %}
-          function openModal(userData) {
-            console.log('userData: ', userData);
-            const modal = document.getElementById('userModal');
-            console.log(modal)
-
-            const userDataArray = userData.split(',');
-            const entregaField = document.getElementById('entregaField');
-            const emisorField = document.getElementById('emisorField');
-            const adquirienteField = document.getElementById('adquirienteField');
-            const serialField = document.getElementById('serialField');  // Corregido aquí
-            const cantidadField = document.getElementById('cantidadField');
-            const observacionesField = document.getElementById('observacionesField');
-
-            entregaField.value = userDataArray[0];
-            emisorField.value = userDataArray[1];
-            adquirienteField.value = userDataArray[2];
-            serialField.value = userDataArray[3];  // Corregido aquí
-            cantidadField.value = userDataArray[5];
-            observacionesField.value = userDataArray[6];  // Corregido aquí
-            modal.style.display = 'block';
-            console.log(userDataArray);
-          }
-          {% endif %}
-
-
-          // Función para cerrar el modal
-          function closeModal() {
-            const modal = document.getElementById('userModal');
-            modal.style.display = 'none';
-          }
-
-          // Cierra el modal si se hace clic fuera de él
-          window.onclick = function (event) {
-            const modal = document.getElementById('userModal');
-            if (event.target == modal) {
-              modal.style.display = 'none';
-            }
-          }
-        </script>
-        {% endblock extrajs %}
+    const userDataArray = userData.split(',');
 
 
 
-        {% endblock %}
+  const entregaField = document.getElementById('entregaField');
+  const devolucionField = document.getElementById('devolucionField');
+  const emisorField = document.getElementById('emisorField');
+  const adquirienteField = document.getElementById('adquirienteField');
+  const elementoField = document.getElementById('elementoField');
+  const serialField = document.getElementById('serialField');
+  const valorField = document.getElementById('valorField');
+  const observacionesField = document.getElementById('observacionesField');
+  const estadoField = document.getElementById('estadoField');
+
+
+  entregaField.value = userDataArray[0];
+  devolucionField.value = userDataArray[1];
+  emisorField.value = userDataArray[2];
+  adquirienteField.value = userDataArray[3];
+  elementoField.value = userDataArray[4];
+  serialField.value = userDataArray[5];
+  valorField.value = userDataArray[6];
+  observacionesField.value = userDataArray[7];
+  estadoField.value = userDataArray[8];
+  modal.style.display = 'block';
+
+  console.log(userDataArray)
+  }
+
+  {% elif opcion_seleccionada == 'entregas' %}
+  function openModal(userData) {
+    console.log('userData: ',userData);
+    const modal = document.getElementById('userModal');
+    console.log(modal)
+  
+    const userDataArray = userData.split(',');
+    const entregaField = document.getElementById('entregaField');
+    const emisorField = document.getElementById('emisorField');
+    const adquirienteField = document.getElementById('adquirienteField');
+    const serialField = document.getElementById('serialField');  // Corregido aquí
+    const cantidadField = document.getElementById('cantidadField');
+    const observacionesField = document.getElementById('observacionesField');
+  
+    entregaField.value = userDataArray[0];
+    emisorField.value = userDataArray[1];
+    adquirienteField.value = userDataArray[2];
+    serialField.value = userDataArray[3];  // Corregido aquí
+    cantidadField.value = userDataArray[5];
+    observacionesField.value = userDataArray[6];  // Corregido aquí
+    modal.style.display = 'block';
+    console.log(userDataArray);
+  }
+  {% endif %}
+  
+
+  function openFinallyModal() {
+    
+    Swal.fire({
+        "title": "¿Estás seguro de Finalizar el Préstamo?",
+        "text": "El Elemento Devolutivo Retornara al Inventario como Disponible",
+        "icon": "question",
+        "showCancelButton": true,
+        "cancelButtonText": "Cancelar",
+        "confirmButtonText": "Aceptar",
+        "reverseButtons": true,
+        "confirmButtonColor": "#fc7323",
+        "iconColor": "#fc7323",
+        "input": 'textarea'
+      
+    }).then((result) => {
+        if (result.isConfirmed) {
+            //X Si el usuario hace clic en "Sí, confirmar", enviar el formulario
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              },
+            });
+
+            Toast.fire({
+              icon: "success",
+              title: "Prestamo Finalizado!"
+            }).then(_ => {
+              document.getElementById("observacionesEntrega").value = result.value;
+              document.getElementById('finalizarPrestamoForm').submit();
+            })
+
+        }
+    });
+  }
+
+  // Función para cerrar el modal
+  function closeModal() {
+    const modal = document.getElementById('userModal');
+    modal.style.display = 'none';
+  }
+
+  // Cierra el modal si se hace clic fuera de él
+  window.onclick = function (event) {
+    const modal = document.getElementById('userModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+</script>
+{% endblock extrajs %}
+
