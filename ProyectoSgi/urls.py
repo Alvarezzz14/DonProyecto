@@ -95,8 +95,8 @@ urlpatterns = [
     path("consultarTransacciones/", views.consultarTransacciones_view, name="consultarTransacciones",
     ),
     path("formElementos/", views.formElementos_view, name="formElementos_view"),
-    #path("generar_pdf/", views.generar_pdf, name="generar_pdf"),
-    path('generar_pdf/<str:tipo_inventario>/', views.generar_pdf, name='generar_pdf_tipo_inventario'),
+    path('generar_pdf_devolutivos/', views.generar_pdf_devolutivos, name='generar_pdf_devolutivos'),
+    path('generar_pdf_consumibles/', views.generar_pdf_consumibles, name='generar_pdf_consumibles'),
     path("generar_excel/", views.generar_excel, name="generar_excel"),
     path("logout/", views.user_logout, name="logout"),
     path(
