@@ -1044,8 +1044,7 @@ def finalizarPrestamo_view(request, id):
         request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
     )
 
-def generar_pdf(request,tipo_inventario):
-    tipo_inventario = request.GET.get('Elmentos', '')
+def generar_pdf_devolutivos(request):
 
     buffer = BytesIO()
     response = HttpResponse(content_type="application/pdf")
@@ -1077,7 +1076,7 @@ def generar_pdf(request,tipo_inventario):
         spaceAfter=6,
         fontSize=16,
     )
-    titulo_para = Paragraph("Elementos del Inventario", estilo_titulo)
+    titulo_para = Paragraph("Elementos del Inventario devolutivo", estilo_titulo)
     elementos.append(titulo_para)
 
     data = [
@@ -1095,23 +1094,9 @@ def generar_pdf(request,tipo_inventario):
     ]
     
     
-    data1 = [
-        [
-            "F. Registro",
-            "Producto",
-            "Categoría",
-            "Estado",
-            "Descripción",
-            "Valor Unidad",
-            "Serial",
-            "Observación",
-            "Factura",
-        ]
-    ]
 
     # Agrega datos al arreglo 'data' según la selección
-    if tipo_inventario == 'elementosdevolutivos':
-        for inventario in InventarioDevolutivo.objects.select_related("producto").all():
+    for inventario in InventarioDevolutivo.objects.select_related("producto").all():
             producto = inventario.producto
             data.append(
                 [
@@ -1126,28 +1111,7 @@ def generar_pdf(request,tipo_inventario):
                     "Factura",
                 ]
             )
-    elif tipo_inventario == 'elementosconsumibles':
-        for inventario in InventarioConsumible.objects.select_related("producto").all():
-            producto = inventario.producto
-            data1.append(
-                [
-                    inventario.fecha_Registro.strftime("%Y-%m-%d"),
-                    producto.productoConsumible.nombreElemento,
-                    producto.fechaAdquisicion,
-                    producto.cantidadElemento,
-                    producto.costoTotalElemento,
-                    producto.costoUnidadElemento,
-                    # producto.categoriaElemento,
-                    producto.estadoElemento,
-                    # producto.estado,
-                    producto.descripcionElemento,
-                    producto.disponible,
-                    # inventario.id,
-                    inventario.observacionElemento,
-                    "Factura",
-                ]
-            )
-
+    
     table = Table(data, colWidths=[0.9 * inch] * 9)
     table_style = TableStyle(
         [
@@ -1169,6 +1133,94 @@ def generar_pdf(request,tipo_inventario):
     buffer.close()
     response.write(pdf)
     return response
+
+
+
+
+def generar_pdf_consumibles(request):
+    
+    buffer = BytesIO()
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.pdf"'
+
+    doc = SimpleDocTemplate(
+        buffer,
+        rightMargin=0.5 * inch,
+        leftMargin=0.5 * inch,
+        topMargin=0.5 * inch,
+        bottomMargin=0.5 * inch,
+        pagesize=letter,
+    )
+
+    elementos = []
+
+    logo_path = 'UsuariosSena/static/img/logo-sena-negro-png-2022.png'
+
+    if os.path.exists(logo_path):
+        logo = Image(logo_path, width=0.5 * inch, height=0.5 * inch)
+        logo.hAlign = 'LEFT'
+        elementos.append(logo)
+    else:
+        return HttpResponse("Error: El archivo de imagen no existe.")
+
+    estilo_titulo = ParagraphStyle(
+        'Title',
+        parent=getSampleStyleSheet()['Title'],
+        spaceAfter=6,
+        fontSize=16,
+    )
+    titulo_para = Paragraph("Elementos del Inventario consumible", estilo_titulo)
+    elementos.append(titulo_para)
+
+    data = [
+        [
+            "F. Registro",
+            "Producto",
+            "Categoría",
+            "Estado",
+            "Descripción",
+            "Observación",
+            "Factura",
+        ]
+    ]
+    
+    # Agrega datos al arreglo 'data' según la selección
+    for inventario1 in InventarioConsumible.objects.select_related("productoConsumible").all():
+        producto1 = inventario1.productoConsumible
+        data.append(
+            [
+                inventario1.fechaAdquisicion.strftime("%Y-%m-%d"),
+                producto1.nombreElemento,
+                producto1.categoriaElemento,
+                producto1.estadoElemento,
+                producto1.descripcionElemento,
+                inventario1.observacionElemento,
+                "Factura",
+            ]
+        )
+    
+    table = Table(data, colWidths=[0.9 * inch] * 7)  # Ajusta el número de columnas según tus datos
+    table_style = TableStyle(
+        [
+            ("BACKGROUND", (0, 0), (-1, 0), colors.green),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
+            ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+            ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        ]
+    )
+    table.setStyle(table_style)
+    elementos.append(table)
+
+    doc.build(elementos)
+
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+    return response
+
 
 def generar_excel(request):
     buffer = BytesIO()

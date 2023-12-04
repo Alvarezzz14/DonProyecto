@@ -255,7 +255,7 @@ Consultar Elementos
               </div>
             </div>
             <div class="flex w-20 gap-4 justify-end">
-              <a href="{% url 'generar_pdf_tipo_inventario' %}tipo_inventario=elementosconsumibles" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
+              <a href="{% url 'generar_pdf_consumibles' %}" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
               <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
                   alt=""></a>
               </div>    
@@ -436,13 +436,12 @@ Consultar Elementos
               </table>
             </div>
           </div>
-        
+      </div>
       <div class="flex w-20 gap-4 justify-end">
-      <a href="{% url 'generar_pdf_tipo_inventario' %}tipo_inventario=elementosdevolutivos" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
-      <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
-          alt=""></a>
-      </div>
-      </div>
+        <a href="{% url 'generar_pdf_devolutivos' %}" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
+        <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
+            alt=""></a>
+        </div>
     </div>
   </div>
 {% endif %} 
