@@ -17,8 +17,6 @@ closeBtn.addEventListener('click', function() {
 // Agrega un evento click al botón de guardar para copiar el valor al input oculto y enviar el formulario
 confirmarBtn.addEventListener('click', function() {
     // Copia el valor de observacionesEntrega al input oculto
-    console.log('observacionesEntrega', document.getElementById('observacionesEntrega').value);
-    console.log('observacionesEntrega', observacionesInput);
     observacionesInput.value = document.getElementById('observacionesEntrega').value;
 
     // Envía el formulario

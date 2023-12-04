@@ -196,18 +196,15 @@ Consultar Transaciones
                   
                   
                   {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'VENCIDO'  %}
-                  
-                  <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}"  id="finalizarPrestamoForm">
-                    {% csrf_token %}
-                    <input type="text" name="observacionesEntrega" id="observacionesEntrega">
-                    <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
-                    <!-- Agrega el botón para finalizar el préstamo -->
-                    <button id= "openModalBtn" type="submit" title="Finalizar Prestamo">
-                        <img src="{% static 'img/finalizar.png' %}" width="40px" alt="">
-                    </button>
-                  </form>
-                    
-                  </form>
+                      <!-- Agrega el botón para finalizar el préstamo -->
+                      <button id= "openModalBtn" onclick="openFinallyModal()" title="Finalizar Prestamo">
+                          <img src="{% static 'img/finalizar.png' %}" width="40px" alt="">
+                      </button>
+                    <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}"  id="finalizarPrestamoForm">
+                      {% csrf_token %}
+                      <input type="text" name="observacionesEntrega" id="observacionesEntrega">
+                      <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
+                    </form>
 
                   {% endif %}
                     
@@ -407,6 +404,7 @@ Consultar Transaciones
 {% block extrajs %}
 
 <script src="{% static 'js/scriptConsultarUsuario.js' %}"></script>
+{% comment %} <script src="{% static 'js/scriptFinalizarPrestamo.js' %}"></script> {% endcomment %}
 
 <script>
   // Función para abrir el modal y mostrar la información del usuario
@@ -469,6 +467,47 @@ Consultar Transaciones
   {% endif %}
   
 
+  function openFinallyModal() {
+    
+    Swal.fire({
+        "title": "¿Estás seguro de Finalizar el Préstamo?",
+        "text": "El Elemento Devolutivo Retornara al Inventario como Disponible",
+        "icon": "question",
+        "showCancelButton": true,
+        "cancelButtonText": "Cancelar",
+        "confirmButtonText": "Aceptar",
+        "reverseButtons": true,
+        "confirmButtonColor": "#fc7323",
+        "iconColor": "#fc7323",
+        "input": 'textarea'
+      
+    }).then((result) => {
+        if (result.isConfirmed) {
+            //X Si el usuario hace clic en "Sí, confirmar", enviar el formulario
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              },
+            });
+
+            Toast.fire({
+              icon: "success",
+              title: "Prestamo Finalizado!"
+            }).then(_ => {
+              document.getElementById("observacionesEntrega").value = result.value;
+              document.getElementById('finalizarPrestamoForm').submit();
+            })
+
+        }
+    });
+  }
+
   // Función para cerrar el modal
   function closeModal() {
     const modal = document.getElementById('userModal');
@@ -482,23 +521,7 @@ Consultar Transaciones
       modal.style.display = 'none';
     }
   }
-
-  <script src="{% static 'js/scriptFinalizarPrestamo.js' %}"></script>
-  <section id="myModal" class="modal">
-        <section id="myModal" class="modal">
-          <div class="modal-content">
-              <h2>Finalizar préstamo</h2>
-              <label for="observacionesEntrega">Observaciones:</label>
-              <textarea id="observacionesEntrega" name="observacionesEntrega" rows="5" maxlength="200" placeholder="Escribe una descripción"></textarea>
-              <div class="botones-container">
-                  <button class="btn-no-guardar" id="closeModalBtn" type="button">Cancelar</button>
-                  <button class="btn-guardar" id="confirmarBtn" onclick="console.log(document.getElementById('finalizarPrestamoForm'))" type="button">Guardar</button>
-              </div>
-          </div>
-      </section>
-  
-  
-  </script>
+</script>
 {% endblock extrajs %}
 
 

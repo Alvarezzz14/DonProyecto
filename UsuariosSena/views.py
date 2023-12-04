@@ -1193,7 +1193,6 @@ def finalizarPrestamo_view(request, id):
         nuevo_estado = request.POST.get("txt_nuevo_estado")
         observaciones = request.POST.get("observacionesEntrega")
 
-        print('asdad', request.POST.get("observacionesEntrega"))
         try:
             # Almacena las observaciones
             prestamo.observacionesEntrega = observaciones
