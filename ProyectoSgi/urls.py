@@ -12,8 +12,8 @@ from django.contrib.auth.views import (
     PasswordResetDoneView,
     PasswordResetConfirmView,
     PasswordResetCompleteView,
+    
 )
-from django.urls import path
 
 
 urlpatterns = [
@@ -43,6 +43,15 @@ urlpatterns = [
         "actualizarElementoDevolutivo/<str:serial>",
         views.actualizarElementoDevolutivo,
         name="actualizarElementoDevolutivo",
+    ),
+    path('hinhabilitar_elemento_consumible/<int:id>/', 
+        views.inhabilitar_elemento_consumible, 
+        name='hinhabilitar_elemento_consumible'
+    ),
+    
+    path("inhabilitar_elemento_devo/<str:serial>/", 
+         views.inhabilitar_elemento_devo, 
+         name="inhabilitar_elemento_devo",
     ),
     
     path(
@@ -127,11 +136,6 @@ urlpatterns = [
         "reporteelementosbajas/", 
         views.reporteelementosbajas, name="reporteelementosbajas"
     ),
-
-
-    
-path('hinhabilitar_elemento_consumible/<int:id>/', views.inhabilitar_elemento_consumible, name='hinhabilitar_elemento_consumible'),
-
 
 ]
 
