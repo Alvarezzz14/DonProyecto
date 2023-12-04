@@ -4,20 +4,10 @@
 
 .signupFrm {
   display: flex;
-  justify-content: center;
-  align-items: center;
+
 }
-.imgretorno img {     /* imagen de retorno consultar elementos y usuarios */
-  width: 50px;       /* Ancho de la imagen */
-  height: auto;       /* Mantener la proporción original */
-  margin-left: 1800%;  /* Puedes ajustar este valor según tus necesidades */
-}
-.imgretorn img {      /* imagen de retorno transacciones*/
-  width: 50px;       /* Ancho de la imagen */
-  height: auto;       /* Mantener la proporción original */
-  margin-left: 1800%;  /* Puedes ajustar este valor según tus necesidades */
-  margin-bottom: 700%;
-}
+
+
 
 .form {
 
