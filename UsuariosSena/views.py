@@ -454,7 +454,7 @@ def eliminarUsuario_view(request, numeroIdentificacion):
 
 
 @login_required
-@verificar_superadmin
+@verificar_cuentadante
 def inhabilitar_elemento_consumible(request, id):
     consumible = get_object_or_404(ProductosInventarioConsumible, id=id)
     # Cambiar el estado a "Baja"
@@ -464,8 +464,8 @@ def inhabilitar_elemento_consumible(request, id):
     # Puedes agregar más lógica o mensajes según sea necesario
     return redirect("consultarElementos")
 
-# @login_required
-# @verificar_superadmin
+@login_required
+@verificar_cuentadante
 def inhabilitar_elemento_devo(request, serial):
     devolutivo = get_object_or_404(InventarioDevolutivo, serial=serial)
     # Cambiar el estado a "Baja"
