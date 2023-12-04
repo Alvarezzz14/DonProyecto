@@ -45,6 +45,7 @@ from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Image
 
+
 # Librería excel
 import xlsxwriter
 # Create your views here.
@@ -1058,6 +1059,7 @@ def consultarTransacciones_view(request):
     return render(request, "superAdmin/consultarTransacciones.html", data)
 
 
+
 @login_required
 @verificar_cuentadante
 def editarPrestamo_view(request, id):
@@ -1162,6 +1164,24 @@ def editarEntrega_view(request, id):
         "superAdmin/editarEntrega.html",
         {"entrega": entrega, "elemento": elemento},
     )
+    
+@login_required
+@verificar_cuentadante   
+def almacenar_observaciones_view(request, id):
+    if request.method == "POST":
+        observaciones = request.POST.get('observacionesEntrega', '')
+
+        try:
+            prestamo = Prestamo.objects.get(id=id)
+            prestamo.observacionesEntrega = observaciones
+            prestamo.save()
+            
+            # Puedes redirigir o devolver un JsonResponse según tus necesidades
+            return render(request,"superAdmin/consultarTransacciones.html",)
+        except Prestamo.DoesNotExist:
+            return render({'success': False, 'error': 'El préstamo no existe'})
+
+    return render(request,"superAdmin/consultarTransacciones.html",)
 
 
 @login_required
@@ -1171,12 +1191,22 @@ def finalizarPrestamo_view(request, id):
 
     if request.method == "POST":
         nuevo_estado = request.POST.get("txt_nuevo_estado")
+        observaciones = request.POST.get("txt_observacionesEntrega")
+
         try:
+            # Almacena las observaciones
+            prestamo.observacionesEntrega = observaciones
+            prestamo.save()
+
+            # Cambia el estado del préstamo
             prestamo.estadoPrestamo = nuevo_estado
             prestamo.save()
-            # Redirige a la vista 'consultarTransacciones' por su nombre de URL
-            consultar_transacciones_url = reverse("consultarTransacciones")
-            return redirect(f"{consultar_transacciones_url}?opcion=prestamo")
+
+            # Agrega una variable de contexto para indicar que el préstamo se ha finalizado
+            return render(
+                request,
+                "superAdmin/consultarTransacciones.html",
+            )
 
         except Exception as e:
             messages.error(request, f"Error al actualizar el estado del préstamo: {e}")
@@ -1184,6 +1214,31 @@ def finalizarPrestamo_view(request, id):
     return render(
         request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
     )
+
+@login_required
+@verificar_cuentadante
+# def finalizarPrestamo_view(request, id):
+#     prestamo = get_object_or_404(Prestamo, id=id)
+
+#     if request.method == "POST":
+#         nuevo_estado = request.POST.get("txt_nuevo_estado")
+#         try:
+#             prestamo.estadoPrestamo = nuevo_estado
+#             prestamo.save()
+
+#             # Agrega una variable de contexto para indicar que el préstamo se ha finalizado
+#             return render(
+#                 request,
+#                 "superAdmin/consultarTransacciones.html",
+#                 {"prestamo": prestamo, "prestamo_finalizado": True},
+#             )
+
+#         except Exception as e:
+#             messages.error(request, f"Error al actualizar el estado del préstamo: {e}")
+
+#     return render(
+#         request, "superAdmin/consultarTransacciones.html", {"prestamo": prestamo}
+#     )
 
 @login_required
 def reporteelementosactivos(request):

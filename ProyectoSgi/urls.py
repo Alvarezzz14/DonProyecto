@@ -15,7 +15,6 @@ from django.contrib.auth.views import (
 )
 from django.urls import path
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include(("UsuariosSena.urls", "usu"), namespace="usu")),
@@ -25,6 +24,9 @@ urlpatterns = [
     path("inventariodash/", views.inventariodash, name="inventariodash"),
     path("elementosdash/", views.elementosdash, name="elementosdash"),
     path("transacciondash/", views.transacciondash, name="transacciondash"),
+
+    path('almacenar_observaciones/<int:id>/', views.almacenar_observaciones_view, name='almacenar_observaciones_view'),
+
     path("regUsuario/", views.registroUsuario_view, name="registroUsuario_view"),
     path("editarUsuario/<int:numeroIdentificacion>/", views.editarUsuario_view, name="editarUsuario_view"
     ),
