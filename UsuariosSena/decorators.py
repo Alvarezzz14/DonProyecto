@@ -1,6 +1,6 @@
 from functools import wraps
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 
 def verificar_cuentadante(func):
     @wraps(func)
@@ -11,7 +11,7 @@ def verificar_cuentadante(func):
             return func(request, *args, **kwargs)
         else:
             # Si no tiene los permisos, redirigir a alguna página o mostrar un mensaje
-            return JsonResponse({'mensaje': 'No tiene permisos para acceder a esta vista.'}, status=403)
+            return render(request, 'permisos_denegados.html')
 
     return wrapper
 
@@ -25,6 +25,6 @@ def verificar_superadmin(func):
             return func(request, *args, **kwargs)
         else:
             # Si no tiene los permisos, redirigir a alguna página o mostrar un mensaje
-            return JsonResponse({'mensaje': 'No tiene permisos para acceder a esta vista.'}, status=403)
+            return render(request, 'permisos_denegados.html')
         
     return wrapper
