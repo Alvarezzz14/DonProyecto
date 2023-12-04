@@ -24,18 +24,14 @@ $(document).ready(function () {
                 type: 'GET',
                 data: { 'serialNumber': serialNumber },
                 success: function (response) {
-                    // Actualizar los campos
+                    // Actualizar los campos con la respuesta del servidor
                     $('input[name="nombreElemento"]').val(response.elementName);
                     $('input[name="valorUnidadElemento"]').val(response.valorUnidad);
 
-                    // Actualizar el campo de disponibles y el estado del formulario
-                    if (response.esPrestado || response.Stock <= 0) {
-                        actualizarEstadoFormulario(true); // Deshabilitar campos
-                        $('input[name="disponibles"]').val(''); // Limpiar campo de disponibles
-                    } else {
-                        actualizarEstadoFormulario(false); // Habilitar campos
-                        $('input[name="disponibles"]').val(response.Stock); // Mostrar stock disponible
-                    }
+                    // Verificar si el estado del préstamo es 'ACTIVO' o 'VENCIDO', y también verificar el stock
+                    var agotado = response.estadoPrestamo === "ACTIVO" || response.estadoPrestamo === "VENCIDO" || response.Stock <= 0;
+                    actualizarEstadoFormulario(agotado); // Habilitar o deshabilitar campos basado en si el elemento está prestado o agotado
+                    $('input[name="disponibles"]').val(agotado ? 'AGOTADO' : response.Stock); // Si está prestado o agotado, mostrar 'AGOTADO', si no, mostrar stock disponible
                 },
                 error: function (xhr, status, error) {
                     console.error("Error: ", error);

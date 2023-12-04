@@ -112,15 +112,18 @@ class InventarioDevolutivo(models.Model):
 class ProductosInventarioConsumible(models.Model):
     nombreElemento = models.CharField(max_length=25)
     categoriaElemento = models.CharField(
-        max_length=25, choices=[("Devolutivo", "Devolutivo"), ("Consumible", "Consumible")],
+        max_length=25,
+        choices=[("Devolutivo", "Devolutivo"), ("Consumible", "Consumible")],
     )
     estadoElemento = models.CharField(
-        max_length=25, choices=[
-    ("Garantia", "Garantia"), 
-    ("Baja", "Baja"), 
-    ("Disponible", "Disponible"), 
-    ("Prestamo", "Prestamo"),
-    ], default="Disponible"
+        max_length=25,
+        choices=[
+            ("Garantia", "Garantia"),
+            ("Baja", "Baja"),
+            ("Disponible", "Disponible"),
+            ("Prestamo", "Prestamo"),
+        ],
+        default="Disponible",
     )
     descripcionElemento = models.CharField(max_length=25)
     costoUnidadElemento = models.IntegerField()
@@ -168,17 +171,30 @@ class Prestamo(models.Model):
         null=True,
         to_field="numeroIdentificacion",
     )
-    
+
     serialSenaElemento = models.ForeignKey(
         "InventarioDevolutivo", on_delete=models.CASCADE, related_name="prestamos"
-    )    
-    estadoPrestamo =models.CharField(max_length=25, default="ACTIVO")    
-    valorUnidadElemento = models.IntegerField()    
+    )
+    serialSenaElemento = models.ForeignKey(
+        "InventarioDevolutivo", on_delete=models.CASCADE, related_name="prestamos"
+    )
+
+    # Método para finalizar préstamo y actualizar inventario
+    def finalizar_prestamo(self):
+        self.estadoPrestamo = "FINALIZADO"
+        producto = self.serialSenaElemento.producto
+        producto.disponibles += 1
+        producto.save()
+        self.save()
+
+    estado_actualizado = models.BooleanField(default=False)
+    estadoPrestamo = models.CharField(max_length=25, default="ACTIVO")
+    valorUnidadElemento = models.IntegerField()
     firmaDigital = models.ImageField(upload_to="firmaDigital/", blank=True, null=True)
     observacionesPrestamo = models.TextField()
 
     def __str__(self):
-        return f"Prestamo devolutivo de {self.cantidadElemento} unidades del producto {self.serialSenaElemento.producto.nombre}"
+        return f"Prestamo devolutivo del producto {self.serialSenaElemento.producto.nombre}"
 
     class Meta:
         verbose_name = "Préstamo"
@@ -201,11 +217,11 @@ class EntregaConsumible(models.Model):
         null=True,
         to_field="numeroIdentificacion",
     )
-    
+
     idC = models.ForeignKey(
         "InventarioConsumible", on_delete=models.CASCADE, related_name="entregas"
     )
-    
+
     cantidad_prestada = models.PositiveIntegerField()
     observaciones_prestamo = models.TextField()
     firmaDigital = models.ImageField(upload_to="firmaDigital/", blank=True, null=True)
