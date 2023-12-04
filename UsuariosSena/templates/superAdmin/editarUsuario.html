@@ -25,7 +25,7 @@
 
             <div class="container-1">
                 <div class="inputContainer">
-                    <input type="text" class="inputform" placeholder="a" name="nombre" value="{{user.nombres}}" required>
+                    <input type="text" class="inputform" placeholder="a" name="nombre" value="{{user.nombres}}" pattern="^\S.*$" required>
                     <label for="" class="labelform">Nombres</label>
                 </div>
                 <div class="inputContainer">
@@ -125,6 +125,10 @@
                         </select>
                     </div>
                 </div>
+
+            </div>
+            
+            <div class="container-1">
                 <div class="selectContainer">
                     <label for="tipoContrato" class="labelformselect">Tipo Contrato</label>
                     <div>
@@ -170,16 +174,13 @@
                         </select>
                     </div>
                 </div>
-
-
-            </div>
-            <div class="container-1">
                 <div class="cantidadContainer">
                     <input type="text" class="inputcantidad" name="duracionContrato" value="{{user.duracionContrato}}"
                         id="duracionContrato">
                     <label for="duracionContrato" class="labelcantidad">Duracion</label>
 
                 </div>
+                <!--
                 <div class="inputContainer">
                     <input type="password" class="inputform" placeholder="Contraseña" name="contraSena"  required>
                     <label for="contraSena" class="labelform">Contraseña</label>
@@ -188,6 +189,7 @@
                     <input type="password" class="inputform" placeholder="a" name="validacionContraSena" required>
                     <label for="validacionContraSena" class="labelform" name="validacionContraSena">Repetir Contraseña</label>
                 </div>
+                -->
                 <div class="selectorimagen">
                     <label for="foto" class="">Adjuntar Foto</label>
                     <input type="file" name="foto" class="inputsubirfoto">
