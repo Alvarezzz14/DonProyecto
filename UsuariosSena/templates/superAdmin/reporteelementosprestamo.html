@@ -18,7 +18,7 @@
         <div class="reporte_inventario">
             <h1>Elementos en prestamo</h1>
         </div>
-        <form method="GET" action="{% url 'reporteelementosprestamos' %}">
+        <form method="GET" action="{% url 'reporteelementosprestamos' %}" onsubmit="return validarFechas()">
             <div class="tabla_dinamica">
                 <div class="fecha_reporte">
                     <div class="fechas">
@@ -78,3 +78,34 @@
     </section>
 
     {% endblock content %}
+
+    {% block extrajs %}
+    <script>
+    function validarFechas() {
+        var fechaInicio = document.getElementsByName('fecha_inicio')[0].value;
+        var fechaFin = document.getElementsByName('fecha_fin')[0].value;
+    
+        // Verificar si ambas fechas están llenas
+        if (fechaInicio.trim() === '' || fechaFin.trim() === '') {
+            alert('Por favor, ingrese ambas fechas.');
+            return false; // Evitar el envío del formulario
+        }
+    
+        // Si ambas fechas están llenas, permitir el envío del formulario
+        return true;
+    }
+    
+    function validarFechasGenerarReporte() {
+        var fechaInicio = document.getElementsByName('fecha_inicio')[0].value;
+        var fechaFin = document.getElementsByName('fecha_fin')[0].value;
+    
+        if (fechaInicio.trim() === '' || fechaFin.trim() === '') {
+            alert('Por favor, seleccione ambas fechas para generar el reporte.');
+            return false; // Evitar la generación del reporte
+        }
+    
+        return true;
+    }
+    </script>
+    {% endblock extrajs %}
+    

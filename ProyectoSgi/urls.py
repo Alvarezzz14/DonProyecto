@@ -52,8 +52,8 @@ urlpatterns = [
     ),
     
     path("inhabilitar_elemento_devo/<str:serial>/", 
-         views.inhabilitar_elemento_devo, 
-         name="inhabilitar_elemento_devo",
+        views.inhabilitar_elemento_devo, 
+        name="inhabilitar_elemento_devo",
     ),
     
     path(

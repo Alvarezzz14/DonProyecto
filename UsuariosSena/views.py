@@ -1463,6 +1463,9 @@ def reporteelementosactivos(request):
         elementosdevo = InventarioDevolutivo.objects.select_related("producto").filter(
             fecha_Registro__range=[fecha_inicio, fecha_fin]
         )
+        if not elementosconsu.exists() and not elementosdevo.exists():
+            messages.error(request, "No se encontraron elementos para las fechas especificadas.")
+            return redirect("reporteelementosactivos")
         data = {
             "fecha_inicio": fecha_inicio,
             "fecha_fin": fecha_fin,
@@ -1488,6 +1491,9 @@ def reporteelementosprestamo(request):
         prestamos = Prestamo.objects.filter(
             fechaEntrega__range=[fecha_inicio, fecha_fin]
         )
+        if not prestamos.exists():
+            messages.error(request, "No se encontraron prestamo para las fechas especificadas.")
+            return redirect("reporteelementosprestamos")
         data = {
             "fecha_inicio": fecha_inicio,
             "fecha_fin": fecha_fin,
@@ -1511,7 +1517,6 @@ def reporteelementosbajas(request):
             "ElementosConsumibles": elementosconsu,
             "ElementosDevolutivos": elementosdevo,
         }
-
         return render(request, "superAdmin/reporteelementosbajas.html", data)
 
     if request.method == "GET":
@@ -1527,6 +1532,10 @@ def reporteelementosbajas(request):
             "ElementosConsumibles": elementosconsu,
             "ElementosDevolutivos": elementosdevo,
         }
+
+        if not elementosconsu.exists() and not elementosdevo.exists():
+            messages.error(request, "No se encontraron elementos para las fechas especificadas.")
+            return redirect("reporteelementosbajas")
 
         return render(request, "superAdmin/reporteelementosbajas.html", data)
 
