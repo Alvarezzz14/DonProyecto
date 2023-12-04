@@ -24,7 +24,7 @@ Consultar Transaciones
       <input type="search" class="w-full px-4 py-1 text-gray-800 rounded rounded-lg focus:outline-orange-500" id="filtroEdad"
         placeholder="Filtrar por: Prestamo... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
     </div>
-    <div class="imgretorno">
+    <div class="torno">
       <a href="/usuariodash/" >
         <img src="{% static 'img/flecha-atras.png' %}" alt="" >
     </a>
@@ -202,15 +202,17 @@ Consultar Transaciones
                   </button>
                   
                   
+                  
                   {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'VENCIDO'  %}
                   
                   <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
                     {% csrf_token %}
+                    
                     <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
-
-                    <button type="submit" title="Finalizar Prestamo">
-                      <img src="{% static 'img/fiaco.png' %}" width="4000px" alt="">
+                    <button type="submit" title="Finalizar Prestamo" >
+                      <img class="fiaco"src="{% static 'img/fiaco.png' %}" style="transform: scale(1.5); display: flex; align-items: center; position: relative; bottom: -4px;" alt="">
                     </button>
+                    
                   </form>
 
                   {% endif %}
