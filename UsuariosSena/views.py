@@ -1224,62 +1224,104 @@ def generar_pdf_consumibles(request):
 
 
 def generar_excel(request):
+    opcion_seleccionada = request.GET.get("opcion", None)
+
     buffer = BytesIO()
     workbook = xlsxwriter.Workbook(buffer, {"in_memory": True})
     worksheet = workbook.add_worksheet()
 
+    # Define the formats here
     header_format = workbook.add_format(
         {
             "bold": True,
             "align": "center",
             "valign": "vcenter",
-            "bg_color": "gray",
+            "bg_color": "#4CAF50",
+            "font_color": "white",
             "border": 1,
         }
     )
 
-    headers = [
-        "Fecha Registro",
-        "Nombre Producto",
-        "Categoría",
-        "Estado",
-        "Descripción",
-        "Valor Unidad",
-        "Serial",
-        "Observación",
-    ]
+    # Determine which data set to use
+    if opcion_seleccionada == "elementosconsu":
+        queryset = InventarioConsumible.objects.select_related(
+            "productoConsumible"
+        ).all()
+        headers = [
+            "Fecha Adquisición",
+            "Nombre Elemento",
+            "Categoría",
+            "Estado",
+            "Cantidad",
+            "Costo Unitario",
+            "Costo Total",
+            "Descripción",
+            "Observación",
+        ]
+    elif opcion_seleccionada == "elementosdevo":
+        queryset = InventarioDevolutivo.objects.select_related("producto").all()
+        headers = [
+            "Fecha Registro",
+            "Nombre Producto",
+            "Categoría",
+            "Estado",
+            "Valor Unidad",
+            "Descripción",
+            "Serial",
+            "Observación",
+        ]
+    else:
+        # Handle unexpected cases or set a default
+        queryset = None
+        headers = []
 
+    # Write the headers
     for col_num, header in enumerate(headers):
         worksheet.write(0, col_num, header, header_format)
 
-    row_num = 1
-    for inventario in InventarioDevolutivo.objects.select_related("producto").all():
-        producto = inventario.producto
-        worksheet.write(row_num, 0, inventario.fecha_Registro.strftime("%Y-%m-%d"))
-        worksheet.write(row_num, 1, producto.nombre)
-        worksheet.write(row_num, 2, producto.categoria)
-        worksheet.write(row_num, 3, producto.estado)
-        worksheet.write(row_num, 4, producto.descripcion)
-        worksheet.write(row_num, 5, producto.valor_unidad)
-        worksheet.write(row_num, 6, inventario.serial)
-        worksheet.write(row_num, 7, inventario.observacion)
-        row_num += 1
+    # Write the data
+    for row_num, item in enumerate(queryset, start=1):
+        # This will vary depending on the structure of your models and what data you want to write
+        if opcion_seleccionada == "elementosconsu":
+            worksheet.write(row_num, 0, str(item.fechaAdquisicion))
+            worksheet.write(row_num, 1, item.productoConsumible.nombreElemento)
+            worksheet.write(
+                row_num, 2, item.productoConsumible.get_categoriaElemento_display()
+            )
+            worksheet.write(
+                row_num, 3, item.productoConsumible.get_estadoElemento_display()
+            )
+            worksheet.write(row_num, 4, item.cantidadElemento)
+            worksheet.write(row_num, 5, item.productoConsumible.costoUnidadElemento)
+            worksheet.write(row_num, 6, item.costoTotalElemento)
+            worksheet.write(row_num, 7, item.productoConsumible.descripcionElemento)
+            worksheet.write(row_num, 8, item.observacionElemento)
+        elif opcion_seleccionada == "elementosdevo":
+            worksheet.write(row_num, 0, str(item.fecha_Registro))
+            worksheet.write(row_num, 1, item.producto.nombre)
+            worksheet.write(row_num, 2, item.producto.get_categoria_display())
+            worksheet.write(row_num, 3, item.producto.get_estado_display())
+            worksheet.write(row_num, 4, item.producto.valor_unidad)
+            worksheet.write(row_num, 5, item.producto.descripcion)
+            worksheet.write(row_num, 6, item.serial)
+            worksheet.write(row_num, 7, item.observacion)
 
-    for col_num, header in enumerate(headers):
-        worksheet.set_column(col_num, col_num, max(len(header), 15))
-
+    # Close the workbook
     workbook.close()
 
+    # Prepare the response, setting the content type and headers
     response = HttpResponse(
         buffer.getvalue(),
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
     response[
         "Content-Disposition"
-    ] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.xlsx"'
-    buffer.close()
-    return response
+    ] = f'attachment; filename="Elementos_{opcion_seleccionada}_{datetime.now().strftime("%Y%m%d%H%M%S")}.xlsx"'
 
+    # Close the buffer
+    buffer.close()
+
+    return response
 
 def user_logout(request):
     logout(request)

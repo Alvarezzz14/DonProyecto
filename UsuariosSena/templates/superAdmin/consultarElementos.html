@@ -439,8 +439,7 @@ Consultar Elementos
       </div>
       <div class="flex w-20 gap-4 justify-end">
         <a href="{% url 'generar_pdf_devolutivos' %}" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
-        <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
-            alt=""></a>
+        <a href="{% url 'generar_excel' %}?opcion={{ opcion_seleccionada }}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}" alt="Excel"></a>
         </div>
     </div>
   </div>
