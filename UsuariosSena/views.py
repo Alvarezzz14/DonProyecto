@@ -34,17 +34,6 @@ from django.urls import reverse
 from django.core.cache import cache
 
 # Importar biblioteca reportlab
-from io import BytesIO
-from django.http import HttpResponse
-from reportlab.lib.units import inch
-
-from reportlab.lib.pagesizes import letter, landscape
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-from reportlab.lib import colors
-from reportlab.platypus import Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import Image
-
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image, Paragraph, Spacer
 from reportlab.lib import colors
@@ -54,9 +43,7 @@ from io import BytesIO
 from datetime import datetime
 from svglib.svglib import svg2rlg
 from django.http import HttpResponse
-from UsuariosSena.models import InventarioDevolutivo
-from UsuariosSena.models import ProductosInventarioDevolutivo
-import os
+
 
 
 # Librería excel
