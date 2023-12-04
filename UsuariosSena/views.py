@@ -929,8 +929,9 @@ def consultarElementos(request):
     return render(request, "superAdmin/consultarElementos.html", data)
     
 
+def generar_pdf(request,tipo_inventario):
+    tipo_inventario = request.GET.get('Elmentos', '')
 
-def generar_pdf(request):
     buffer = BytesIO()
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="lista_elementos_{datetime.now().strftime("%Y%m%d%H%M%S")}.pdf"'
@@ -946,36 +947,24 @@ def generar_pdf(request):
 
     elementos = []
 
-    logo_path = 'UsuariosSena\static\img\logo-sena-negro-png-2022.png'
-    
-    # Imprimir la ruta absoluta
-    print(f'Ruta absoluta: {logo_path}')
+    logo_path = 'UsuariosSena/static/img/logo-sena-negro-png-2022.png'
 
-    # Verifica si el archivo existe antes de cargarlo
     if os.path.exists(logo_path):
-        # Cargar la imagen PNG
         logo = Image(logo_path, width=0.5 * inch, height=0.5 * inch)
-        logo.hAlign = 'LEFT'  # Ajusta la alineación según tus necesidades
+        logo.hAlign = 'LEFT'
         elementos.append(logo)
-        # Añadir espacio después del logo
-        
     else:
         return HttpResponse("Error: El archivo de imagen no existe.")
-    
-    # Añadir título al documento
+
     estilo_titulo = ParagraphStyle(
         'Title',
         parent=getSampleStyleSheet()['Title'],
-        spaceAfter=6,  # Ajusta según tus necesidades
-        fontSize=16,  # Ajusta el tamaño de la letra del título
+        spaceAfter=6,
+        fontSize=16,
     )
     titulo_para = Paragraph("Elementos del Inventario", estilo_titulo)
     elementos.append(titulo_para)
 
-    # Ruta absoluta a la imagen PNG
-
-
-    # Construir la tabla de datos
     data = [
         [
             "F. Registro",
@@ -989,29 +978,65 @@ def generar_pdf(request):
             "Factura",
         ]
     ]
+    
+    
+    data1 = [
+        [
+            "F. Registro",
+            "Producto",
+            "Categoría",
+            "Estado",
+            "Descripción",
+            "Valor Unidad",
+            "Serial",
+            "Observación",
+            "Factura",
+        ]
+    ]
 
-    # Agrega datos al arreglo 'data'
-    for inventario in InventarioDevolutivo.objects.select_related("producto").all():
-        producto = inventario.producto
-        data.append(
-            [
-                inventario.fecha_Registro.strftime("%Y-%m-%d"),
-                producto.nombre,
-                producto.categoria,
-                producto.estado,
-                producto.descripcion,
-                producto.valor_unidad,
-                inventario.serial,
-                inventario.observacion,
-                "Factura",  # Puedes añadir lógica para manejar la imagen de la factura
-            ]
-        )
+    # Agrega datos al arreglo 'data' según la selección
+    if tipo_inventario == 'elementosdevolutivos':
+        for inventario in InventarioDevolutivo.objects.select_related("producto").all():
+            producto = inventario.producto
+            data.append(
+                [
+                    inventario.fecha_Registro.strftime("%Y-%m-%d"),
+                    producto.nombre,
+                    producto.categoria,
+                    producto.estado,
+                    producto.descripcion,
+                    producto.valor_unidad,
+                    inventario.serial,
+                    inventario.observacion,
+                    "Factura",
+                ]
+            )
+    elif tipo_inventario == 'elementosconsumibles':
+        for inventario in InventarioConsumible.objects.select_related("producto").all():
+            producto = inventario.producto
+            data1.append(
+                [
+                    inventario.fecha_Registro.strftime("%Y-%m-%d"),
+                    producto.productoConsumible.nombreElemento,
+                    producto.fechaAdquisicion,
+                    producto.cantidadElemento,
+                    producto.costoTotalElemento,
+                    producto.costoUnidadElemento,
+                    # producto.categoriaElemento,
+                    producto.estadoElemento,
+                    # producto.estado,
+                    producto.descripcionElemento,
+                    producto.disponible,
+                    # inventario.id,
+                    inventario.observacionElemento,
+                    "Factura",
+                ]
+            )
 
-    # Construir la tabla
     table = Table(data, colWidths=[0.9 * inch] * 9)
     table_style = TableStyle(
         [
-            ("BACKGROUND", (0, 0), (-1, 0), colors.green),  # Establece el fondo para la fila del título
+            ("BACKGROUND", (0, 0), (-1, 0), colors.green),
             ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
             ("ALIGN", (0, 0), (-1, -1), "CENTER"),
             ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
@@ -1025,7 +1050,6 @@ def generar_pdf(request):
 
     doc.build(elementos)
 
-    # Obtiene el contenido del buffer y lo envía en la respuesta
     pdf = buffer.getvalue()
     buffer.close()
     response.write(pdf)

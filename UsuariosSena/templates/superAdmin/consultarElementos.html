@@ -59,11 +59,12 @@ Consultar Elementos
   </div>
   
   </form>
-
+{% if opcion_seleccionada == 'elementosconsu' %} 
   <div class="flex m-auto flex-col max-w-full overflow-x-auto mt-8">
     <div class="py-2 -my-2  sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
       <div class="inline-block w-max scroll-auto overflow-hidden align-middle sm:rounded-lg">
-{% if opcion_seleccionada == 'elementosconsu' %} 
+
+
         <!--Datatable se crea tabla con scrool maximo del contenedor disponible, con 12 enunciados en la cabecera-->
         <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas">
           <thead>
@@ -249,10 +250,13 @@ Consultar Elementos
                   </table>
                 </div>
               </div>
-            </div>                    
-
-
-{% elif opcion_seleccionada == 'elementosdevo' %} 
+            </div>
+            <div class="flex w-20 gap-4 justify-end">
+              <a href="{% url 'generar_pdf_tipo_inventario' %}tipo_inventario=elementosconsumibles" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
+              <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
+                  alt=""></a>
+              </div>           
+{% elif opcion_seleccionada == 'elementosdevo' %}x
 <!--Datatable se crea tabla con scrool maximo del contenedor disponible, con 12 enunciados en la cabecera-->
       <table class="table-auto  overflow-scroll-hidden w-full" id="tablaPersonas"> 
         <thead>
@@ -339,7 +343,7 @@ Consultar Elementos
                 </div>
                 {% else %}
                 <div class="text-[0.7rem]
-                 leading-5 text-gray-500" ><a href="#" >NoFactura</a>
+                leading-5 text-gray-500" ><a href="#" >NoFactura</a>
                 </div>  
             
             </td>
@@ -382,7 +386,11 @@ Consultar Elementos
           {% endfor %}
           </tbody>
         </table>
-
+        {% comment %} <div class="flex w-20 gap-4 justify-end">
+          <a href="{% url 'generar_pdf_tipo_inventario' % }tipo_inventario=ElementosDevolutivos" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
+          <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
+              alt=""></a>
+          </div> {% endcomment %}
         <div id="userModal" class="modal">
           <div class="modal-content">
             <thead>
@@ -426,21 +434,23 @@ Consultar Elementos
             </div>
           </div>
         
-{% endif %}         
+  
+      <div class="flex w-20 gap-4 justify-end">
+      <a href="{% url 'generar_pdf_tipo_inventario' %}tipo_inventario=elementosconsumibles" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
+      <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
+          alt=""></a>
+      </div>
       </div>
     </div>
   </div>
-  
+{% endif %} 
 
  
   
         <!-- Botones para generar PDF y Excel -->
-        <div class="flex w-20 gap-4 justify-end">
-          <a href="{% url 'generar_pdf' %}" class="btn btn-primary"><img src="{% static 'img/pdf.png' %}" alt=""></a>
-          <a href="{% url 'generar_excel' %}" class="btn btn-primary"><img src="{% static 'img/excel.png' %}"
-              alt=""></a>
-        </div>
-      
+        
+        
+        
     
 
 
