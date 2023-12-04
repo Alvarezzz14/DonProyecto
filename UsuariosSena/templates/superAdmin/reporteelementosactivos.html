@@ -19,28 +19,24 @@
             <h1>Elementos activos</h1>
         </div>
         <div class="tabla_dinamica">
-            
-        <form method="GET" action="{% url 'reporteelementosactivos' %}">
-            <div class="fecha_reporte">
-                <div class="fechas">
-                    <label for="fecha_inicio">Fecha inicio</label>
-                    <input type="date" name="fecha_inicio" placeholder="fecha inicio">
+            <form method="GET" action="{% url 'reporteelementosactivos' %}" onsubmit="return validarFechas()">
+                <div class="fecha_reporte">
+                    <div class="fechas">
+                        <label for="fecha_inicio">Fecha inicio</label>
+                        <input type="date" name="fecha_inicio" id="fecha_inicio" placeholder="fecha inicio">
+                    </div>
+                    
+                    <div class="fechas">
+                        <label for="fecha_fin">Fecha fin</label>
+                        <input type="date" id="fecha_fin" placeholder="fecha fin" name="fecha_fin">
+                    </div>
+                    
+                    <button type="submit" class="boton_reporte">Filtrar Fecha</button>
+                    <a href="{% url 'reporteelementosactivos' %}" onclick="return validarFechasGenerarReporte()">
+                        <button class="boton_reporte">Generar reporte</button>
+                    </a>
                 </div>
-                
-                <div class="fechas">
-                    <label for="fecha_fin">Fecha fin</label>
-                    <input type="date" placeholder="fecha fin" name="fecha_fin">
-                </div>
-                <a href="#"><button type="submit" class="boton_reporte">Filtrar Fecha</button></a>
-                <a href="{% url 'reporteelementosactivos' %}"><button class="boton_reporte">Generar reporte</button></a>
-                
-            </div>
-        </form>
-            
-        
-
-        
-        
+            </form>            
             <div class="tabla_reporte">
                 <table>
                     <tr>
@@ -52,7 +48,6 @@
                         <th>Serial</th>
                         <th>Observaciones</th>
                         
-
                     </tr>
                     {% for elemento in ElementosDevolutivos %}
                         
@@ -66,8 +61,7 @@
                         <td>Disponible</td>
                         <td>{{ elemento.producto.descripcion }}</td>
                         <td>{{ elemento.serial }}</td>
-                        <td>{{ elemento.observacion }}</td>           
-                                         
+                        <td>{{ elemento.observacion }}</td>                                                    
                     </tr>
                         {% endif %}
 
@@ -85,20 +79,44 @@
                     <td>Disponible</td>
                     <td>{{ elemento.productoConsumible.descripcionElemento }}</td>
                     <td>{{ elemento.cantidadElemento }}</td>
-                    <td>{{ elemento.observacionElemento }}</td>           
-                                     
+                    <td>{{ elemento.observacionElemento }}</td>                                                
                 </tr>
                 {% endif %}
 
                 {% endfor %}
                 </table>
-            </div>
-            
-        
-
-            
-            
+            </div>            
         </div>
     </section>
 
     {% endblock content %}
+
+{% block extrajs %}
+<script>
+function validarFechas() {
+    var fechaInicio = document.getElementById('fecha_inicio').value;
+    var fechaFin = document.getElementById('fecha_fin').value;
+
+    // Verificar si ambas fechas están llenas
+    if (fechaInicio.trim() === '' || fechaFin.trim() === '') {
+        alert('Por favor, ingrese ambas fechas.');
+        return false; // Evitar el envío del formulario
+    }
+
+    // Si ambas fechas están llenas, permitir el envío del formulario
+    return true;
+}
+function validarFechasGenerarReporte() {
+            var fechaInicio = document.getElementById('fecha_inicio').value;
+            var fechaFin = document.getElementById('fecha_fin').value;
+
+            if (fechaInicio.trim() === '' || fechaFin.trim() === '') {
+                alert('Por favor, seleccione ambas fechas para generar el reporte.');
+                return false; // Evitar la generación del reporte
+            }
+
+            return true;
+        }
+</script>
+
+{% endblock extrajs %}
