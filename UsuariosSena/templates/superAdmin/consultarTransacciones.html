@@ -164,17 +164,7 @@ Consultar Transaciones
                     </svg>
                   </a>
                 </button>
-
-
-                {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'VENCIDO' %}
-                <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
-                  {% csrf_token %}
-                  <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
-                  <button type="submit" title="Finalizar Prestamo">
-                    <img src="{% static 'img/finalizar.png' %}" width="40px" alt="">
-                  </button>
-                  
-                  
+  
                   {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'VENCIDO'  %}
                   
                   <form method="post" action="{% url 'finalizarPrestamo_view' id=Prestamos.id %}">
@@ -190,14 +180,6 @@ Consultar Transaciones
                   </form>
 
                   {% endif %}
-                    
-                  
-
-                </td>
-                {% endif %}
-
-
-
               </td>
               {% endif %}
             </tr>
