@@ -414,7 +414,6 @@ def inhabilitar_elemento_consumible(request, id):
     consumible = get_object_or_404(ProductosInventarioConsumible, id=id)
     # Cambiar el estado a "Baja"
     consumible.estadoElemento = 'Baja'
-    messages.confir()
     consumible.save()
     messages.success(request, "Elemento inhabilitado Correctamente")
     # Puedes agregar más lógica o mensajes según sea necesario
