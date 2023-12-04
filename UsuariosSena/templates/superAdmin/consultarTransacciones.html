@@ -24,6 +24,11 @@ Consultar Transaciones
       <input type="search" class="w-full px-4 py-1 text-gray-800 rounded rounded-lg focus:outline-orange-500" id="filtroEdad"
         placeholder="Filtrar por: Prestamo... Apellido... correo... " onkeyup="filtrarTabla()" x-model="search">
     </div>
+    <div class="imgretorno">
+      <a href="/usuariodash/" >
+        <img src="{% static 'img/flecha-atras.png' %}" alt="" >
+    </a>
+    </div>
     <div>
       <button type="submit" class="flex items-center bg-orange-500 justify-center w-12 h-12 text-white rounded-r-lg"
         :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'"
@@ -194,6 +199,7 @@ Consultar Transaciones
                       </svg>
                     </a>
                   </button>
+                  </button>
                   
                   
                   {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'VENCIDO'  %}
@@ -203,7 +209,7 @@ Consultar Transaciones
                     <input type="hidden" name="txt_nuevo_estado" value="FINALIZADO">
 
                     <button type="submit" title="Finalizar Prestamo">
-                      <img src="{% static 'img/finalizar.png' %}" width="40px" alt="">
+                      <img src="{% static 'img/fiaco.png' %}" width="4000px" alt="">
                     </button>
                   </form>
 

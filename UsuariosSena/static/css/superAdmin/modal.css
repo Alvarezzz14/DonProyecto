@@ -20,6 +20,7 @@
     max-width: 600px;
   }
 
+
   .close {
     float: right;
     font-size: 20px;
@@ -55,3 +56,20 @@
     width: 100%;
   }
 
+ 
+  .torno img {     /* imagen de retorno consultar elementos y usuarios */
+    width: 30px;       /* Ancho de la imagen */
+    position: absolute;
+    top: 0;
+    left: 87%;
+    margin: 30px;
+    
+     /* Mantener la proporción original */
+  }
+  
+  @media (max-width:900px){
+    .imgretorno img{
+      bottom: 80%;
+    }
+  }
+  
