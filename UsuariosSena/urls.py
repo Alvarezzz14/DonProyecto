@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('logout/', auth_views.LogoutView.as_view(template_name='indexLogin.html'), name='logout'),
+
 ]
 if settings.DEBUG:
     from django.conf.urls.static import static
