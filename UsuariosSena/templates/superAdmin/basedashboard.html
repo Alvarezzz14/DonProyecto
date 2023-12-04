@@ -116,10 +116,10 @@ Home SUAdmin
                         <div class="usuarios_dash">
                             <!-- Area de notificaciones plantilla-->
                             
-                            {% if Prestamos  %}
-                                
-                                
-                            {% for Prestamos  in Prestamos %}
+                {% if Prestamos  %}
+                    
+                        {% for Prestamos  in Prestamos %}
+                            {% if Prestamos.estadoPrestamo == 'ACTIVO' or Prestamos.estadoPrestamo == 'Vencido'  %}
                             <div class="area-notificaciones">                                                                                           
                                 <div class="contenido-notificaciones">
                                     <div class="logo-notificaciones">
@@ -159,11 +159,12 @@ Home SUAdmin
                                         
                                     </div>
 
-                                    <form  id="enviarCorreoForm"  method="post" action="{% url 'enviar_correo_desde_boton' id=Prestamos.id %}">
-                                      {% csrf_token %}
-                                      <button title="Notificar al EMAIL" type="submit" onclick="mostrarSweetAlert()" >Enviar Correo</button>
-                                    </form>
-                                    {% endif %}
+                                        <form  id="enviarCorreoForm"  method="post" action="{% url 'enviar_correo_desde_boton' id=Prestamos.id %}">
+                                            {% csrf_token %}
+                                            <button title="Notificar al EMAIL" type="submit" onclick="mostrarSweetAlert()" >Recordar</button>
+                                        </form>
+                                        {% endif %}
+
                                     <div class="caja-texto-notificaciones">
                                         <div>
                                             <h2>{{ Prestamos.fechaDevolucion }} <br>
@@ -171,16 +172,18 @@ Home SUAdmin
                                             </h2>                                                
                                             <p>{{ Prestamos.serialSenaElemento.producto.nombre }}</p>
                                             <p>{{ Prestamos.observacionesPrestamo }}</p>
+                                            <p>{{ Prestamos.estadoPrestamo }}</p>
                                         </div>
                                     </div>
                                 </div>
                                 
                             </div>
+                            {% endif %}
+                        {% endfor %}
 
-                            {% endfor %}
-                        {% else %}
+                {% else %}
                         <h1>NO TENEMOS PRESTAMOS PENDIENTES</h1>
-                        {% endif %}
+                {% endif %}
                         
                         </div>
                     </div>
