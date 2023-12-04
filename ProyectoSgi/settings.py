@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UsuariosSena',
-    'django_seed',
 ]
 
 AUTH_USER_MODEL="UsuariosSena.UsuariosSena" 
