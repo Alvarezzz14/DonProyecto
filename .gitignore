@@ -5,3 +5,5 @@ venv
 *.pyc
 UsuariosSena/migrations/0001_initial.py
 .env
+.vscode/
+.vscode
