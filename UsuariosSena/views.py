@@ -95,7 +95,7 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         logger.debug(f"uid: {kwargs['uidb64']}")
         logger.debug(f"token: {kwargs['token']}")
 
-        # Tu lógica existente aquí
+  
         return super().post(request, *args, **kwargs)
 
 
