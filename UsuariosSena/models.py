@@ -20,6 +20,8 @@ from django.contrib.auth.models import User
 
 class UsuariosSenaManager(BaseUserManager):
     def create_user(self, numeroIdentificacion, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("The Email field Must be set")
         user = self.model(
             numeroIdentificacion=numeroIdentificacion,
             email=self.normalize_email(email),
@@ -56,7 +58,7 @@ class UsuariosSena(AbstractUser):
     numeroIdentificacion = models.CharField(
         max_length=25, unique=True, primary_key=True
     )
-    email = models.EmailField(max_length=35)
+    email = models.EmailField(max_length=35, unique=True)
     celular = models.CharField(max_length=10)
     rol = models.CharField(max_length=25, choices=roles, default="I")
     cuentadante = models.CharField(
